@@ -1,12 +1,12 @@
 import React from "react";
-import Logo from "./Logo";
+import Logo from "@/components/logos/Caddi";
 import DesktopMenu from "./DesktopMenu";
 import DownloadButton from "./DownloadButton";
 import CartButton from "./CartButton";
 import MobileNavClient from "./Client/MobileNavClient";
 
 // Nav Links
-const navLinks = [
+export const navLinks = [
   {
     label: "Shop",
     dropdown: [
@@ -49,14 +49,14 @@ const navLinks = [
     ],
   },
   {
-    label: "About",
+    label: "Contact",
     href: "/",
   },
   {
-    label: "More",
+    label: "Info",
     dropdown: [
       {
-        label: "Contact",
+        label: "About",
         href: "#",
         icon: "contact",
       },
@@ -80,7 +80,7 @@ export default function Navigation({ className, padding }: { className?: string;
       <div className={`flex items-center justify-between ${className}`}>
         {/* Logo */}
         <div className="flex items-center">
-          <Logo />
+          <Logo className="h-12 w-auto -ml-2 hover:opacity-80 transition-all duration-100 ease-in-out-quad cursor-pointer"/>
         </div>
         {/* NavigationMenu (center, desktop only) */}
         <div className="flex-1 items-center justify-center md:flex hidden">

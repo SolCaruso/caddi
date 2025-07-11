@@ -62,8 +62,8 @@ export default function DesktopMenu({ navLinks }: { navLinks: any[] }) {
                 </NavigationMenuItem>
               );
             }
-            // More dropdown: column layout, each item is a row with icon and text
-            if (link.label === "More") {
+            // Info dropdown: column layout, each item is a row with icon and text
+            if (link.label === "Info") {
               return (
                 <NavigationMenuItem key={link.label}>
                   <NavigationMenuTrigger>{link.label}</NavigationMenuTrigger>
