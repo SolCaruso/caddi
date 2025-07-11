@@ -22,9 +22,8 @@ function ListItem({
   title,
   children,
   href,
-  icon,
   ...props
-}: React.ComponentPropsWithoutRef<"li"> & { href: string; icon?: IconKey }) {
+}: React.ComponentPropsWithoutRef<"li"> & { href: string }) {
   return (
     <li {...props}>
       <NavigationMenuLink asChild>
@@ -39,7 +38,19 @@ function ListItem({
   );
 }
 
-export default function DesktopMenu({ navLinks }: { navLinks: any[] }) {
+export default function DesktopMenu({ navLinks }: { 
+  navLinks: Array<{
+    label: string;
+    href?: string;
+    dropdown?: Array<{
+      label: string;
+      href: string;
+      description?: string;
+      featured?: boolean;
+      icon?: string;
+    }>;
+  }>;
+}) {
   return (
     <NavigationMenu viewport={false}>
       <NavigationMenuList>
@@ -52,7 +63,7 @@ export default function DesktopMenu({ navLinks }: { navLinks: any[] }) {
                   <NavigationMenuTrigger>{link.label}</NavigationMenuTrigger>
                   <NavigationMenuContent>
                     <ul className="flex flex-col gap-2 w-[320px]">
-                      {link.dropdown.map((item: any) => (
+                      {link.dropdown.map((item) => (
                         <ListItem key={item.label} href={item.href} title={item.label}>
                           {item.description}
                         </ListItem>
@@ -69,7 +80,7 @@ export default function DesktopMenu({ navLinks }: { navLinks: any[] }) {
                   <NavigationMenuTrigger>{link.label}</NavigationMenuTrigger>
                   <NavigationMenuContent>
                     <ul className="flex flex-col gap-2 w-[170px]">
-                      {link.dropdown.map((item: any) => (
+                      {link.dropdown.map((item) => (
                         <li key={item.label}>
                           <NavigationMenuLink asChild>
                             <Link href={item.href} className="flex flex-row items-center p-2 rounded-md hover:bg-accent transition-colors">
@@ -95,7 +106,7 @@ export default function DesktopMenu({ navLinks }: { navLinks: any[] }) {
                 <NavigationMenuTrigger>{link.label}</NavigationMenuTrigger>
                 <NavigationMenuContent>
                   <ul className="grid gap-2 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
-                    {link.dropdown.map((item: any, idx: number) =>
+                    {link.dropdown.map((item) =>
                       item.featured ? (
                         <li className="row-span-3" key={item.label}>
                           <NavigationMenuLink asChild>
