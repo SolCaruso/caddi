@@ -37,53 +37,62 @@ export default function MobileDrawer({ open, onOpenChange, navLinks }: NavDrawer
       </DrawerTrigger>
       <DrawerContent onCloseAutoFocus={(event: Event) => event.preventDefault()}>
         <div className="mx-auto w-full max-w-sm">
-          <div className="pr-4 pl-10 pb-12 pt-8 min-h-[230px] relative">
+          <div className="pb-12 pt-12 min-h-[350px] relative">
             <nav>
+              {/* Fixed back button at top left when a dropdown is open */}
               <AnimatePresence initial={false} mode="wait">
-                <motion.ul
-                  key="main"
-                  className="space-y-4 pt-6"
-                  initial={{ x: 0, opacity: 1 }}
-                  exit={{ x: -50, opacity: 0 }}
-                  animate={{ x: 0, opacity: 1 }}
-                  transition={{ duration: 0.2, ease: [0.455, 0.03, 0.515, 0.955] }}
-                >
-                  {navLinks.map((link) =>
-                    link.dropdown ? (
-                      <li key={link.label}>
-                        <button
-                          type="button"
-                          onClick={() => setMenu(link.label)}
-                          className="w-full text-left"
-                        >
-                          <DrawerTitle className="text-caddi-black hover:text-caddi-brown transition-colors">{link.label}</DrawerTitle>
-                        </button>
-                      </li>
-                    ) : (
-                      <li key={link.label}>
-                        <Link href={link.href || "#"} onClick={() => onOpenChange(false)}>
-                          <DrawerTitle className="text-caddi-black hover:text-caddi-brown transition-colors">{link.label}</DrawerTitle>
-                        </Link>
-                      </li>
-                    )
-                  )}
-                </motion.ul>
+                {menu && (
+                  <button
+                    type="button"
+                    onClick={() => setMenu(null)}
+                    className="absolute top-4 -left-3 text-caddi-black z-20 cursor-pointer"
+                    aria-label="Back"
+                  >
+                    <ChevronLeft />
+                  </button>
+                )}
+                {!menu && (
+                  <motion.ul
+                    key="main"
+                    className="space-y-4 pt-6"
+                    initial={{ x: 0, opacity: 1 }}
+                    animate={{ x: 0, opacity: 1 }}
+                    exit={{ x: -50, opacity: 0 }}
+                    transition={{ duration: 0.2, ease: [0.455, 0.03, 0.515, 0.955] }}
+                  >
+                    {navLinks.map((link) =>
+                      link.dropdown ? (
+                        <li key={link.label}>
+                          <button
+                            type="button"
+                            onClick={() => setMenu(link.label)}
+                            className="w-full text-left"
+                          >
+                            <DrawerTitle className="text-caddi-black hover:text-caddi-brown transition-colors">{link.label}</DrawerTitle>
+                          </button>
+                        </li>
+                      ) : (
+                        <li key={link.label}>
+                          <Link href={link.href || "#"} onClick={() => onOpenChange(false)}>
+                            <DrawerTitle className="text-caddi-black hover:text-caddi-brown transition-colors">{link.label}</DrawerTitle>
+                          </Link>
+                        </li>
+                      )
+                    )}
+                  </motion.ul>
+                )}
                 {navLinks.map(
                   (link) =>
                     menu === link.label && (
-                      <>
-                        <ChevronLeft
-                          onClick={() => setMenu(null)}
-                          className="absolute top-2 left-0 text-caddi-black z-10 cursor-pointer"
-                        />
-                        <motion.ul
-                          key={link.label}
-                          className="space-y-4 pt-4"
-                          initial={{ x: 50, opacity: 0 }}
-                          animate={{ x: 0, opacity: 1 }}
-                          exit={{ x: 50, opacity: 0 }}
-                          transition={{ duration: 0.2, ease: [0.455, 0.03, 0.515, 0.955] }}
-                        >
+                      <motion.div
+                        key={link.label}
+                        initial={{ x: 50, opacity: 0 }}
+                        animate={{ x: 0, opacity: 1 }}
+                        exit={{ x: 50, opacity: 0 }}
+                        transition={{ duration: 0.2, ease: [0.455, 0.03, 0.515, 0.955] }}
+                        className="pt-4"
+                      >
+                        <ul className="space-y-4">
                           {link.dropdown.map((item: any) => (
                             <li key={item.label} className="flex items-start space-x-2">
                               <Link href={item.href || "#"} onClick={() => onOpenChange(false)}>
@@ -94,8 +103,8 @@ export default function MobileDrawer({ open, onOpenChange, navLinks }: NavDrawer
                               </Link>
                             </li>
                           ))}
-                        </motion.ul>
-                      </>
+                        </ul>
+                      </motion.div>
                     )
                 )}
               </AnimatePresence>
