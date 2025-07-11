@@ -37,7 +37,7 @@ export default function MobileDrawer({ open, onOpenChange, navLinks }: NavDrawer
       </DrawerTrigger>
       <DrawerContent onCloseAutoFocus={(event: Event) => event.preventDefault()}>
         <div className="mx-auto w-full max-w-sm">
-          <div className="pb-12 pt-12 min-h-[350px] relative">
+          <div className="pb-12 pt-12 min-h-[350px] relative px-8 xs:px-0">
             <nav>
               {/* Fixed back button at top left when a dropdown is open */}
               <AnimatePresence initial={false} mode="wait">
@@ -45,7 +45,7 @@ export default function MobileDrawer({ open, onOpenChange, navLinks }: NavDrawer
                   <button
                     type="button"
                     onClick={() => setMenu(null)}
-                    className="absolute top-4 -left-3 text-caddi-black z-20 cursor-pointer"
+                    className="absolute top-4 left-6 xs:-left-3 text-caddi-black z-20 cursor-pointer"
                     aria-label="Back"
                   >
                     <ChevronLeft />
@@ -54,7 +54,7 @@ export default function MobileDrawer({ open, onOpenChange, navLinks }: NavDrawer
                 {!menu && (
                   <motion.ul
                     key="main"
-                    className="space-y-4 pt-6"
+                    className="space-y-4 pt-6 "
                     initial={{ x: 0, opacity: 1 }}
                     animate={{ x: 0, opacity: 1 }}
                     exit={{ x: -50, opacity: 0 }}
@@ -68,13 +68,13 @@ export default function MobileDrawer({ open, onOpenChange, navLinks }: NavDrawer
                             onClick={() => setMenu(link.label)}
                             className="w-full text-left"
                           >
-                            <DrawerTitle className="text-caddi-black hover:text-caddi-brown transition-colors">{link.label}</DrawerTitle>
+                            <DrawerTitle className="text-caddi-black text-lg hover:text-caddi-brown transition-colors">{link.label}</DrawerTitle>
                           </button>
                         </li>
                       ) : (
                         <li key={link.label}>
                           <Link href={link.href || "#"} onClick={() => onOpenChange(false)}>
-                            <DrawerTitle className="text-caddi-black hover:text-caddi-brown transition-colors">{link.label}</DrawerTitle>
+                            <DrawerTitle className="text-caddi-black text-lg hover:text-caddi-brown transition-colors">{link.label}</DrawerTitle>
                           </Link>
                         </li>
                       )

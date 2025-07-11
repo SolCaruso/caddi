@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import Navigation from "@/components/nav/Navigation";
+import Footer from "@/components/footer/Footer";
 
 export const metadata: Metadata = {
   title: "Caddi AI Inc.",
@@ -12,14 +13,18 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
+  const LayoutPadding: string = "px-4 lg:px-6" 
+
   return (
-    <html lang="en">
+    <html lang="en" className='h-full mx-auto'>
       <head>
         <link rel="stylesheet" href="https://use.typekit.net/eaa4cih.css" />
       </head>
-      <body className="font-proxima-nova antialiased">
-        <Navigation className='max-w-8xl mx-auto'/>
+      <body className="font-proxima-nova antialiased h-full mx-auto flex flex-col">
+        <Navigation className='max-w-8xl mx-auto' padding={LayoutPadding}/>
         {children}
+        <Footer className='max-w-8xl mx-auto' padding={LayoutPadding}/>
       </body>
     </html>
   );

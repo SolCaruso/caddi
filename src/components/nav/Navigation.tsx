@@ -74,9 +74,9 @@ const navLinks = [
   },
 ];
 
-export default function Navigation({ className }: { className?: string }) {
+export default function Navigation({ className, padding }: { className?: string; padding?: string }) {
   return (
-    <nav className="w-full py-2 px-2 relative">
+    <nav className={`w-full py-2 ${padding}`}>
       <div className={`flex items-center justify-between ${className}`}>
         {/* Logo */}
         <div className="flex items-center">
