@@ -103,7 +103,7 @@ export default function MobileDrawer({ open, onOpenChange, navLinks }: NavDrawer
                         className="pt-4"
                       >
                         <ul className="space-y-4">
-                          {link.dropdown.map((item) => (
+                          {link.dropdown?.map((item) => (
                             <li key={item.label} className="flex items-start space-x-2">
                               <Link href={item.href || "#"} onClick={() => onOpenChange(false)}>
                                 <DrawerTitle className="text-caddi-black hover:text-caddi-brown transition-colors">{item.label}</DrawerTitle>
