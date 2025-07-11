@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import Nav from "@/components/header/Nav";
+import Navigation from "@/components/nav/Navigation";
 
 export const metadata: Metadata = {
   title: "Caddi AI Inc.",
@@ -18,7 +18,7 @@ export default function RootLayout({
         <link rel="stylesheet" href="https://use.typekit.net/eaa4cih.css" />
       </head>
       <body className="font-proxima-nova antialiased">
-        <Nav className='max-w-8xl mx-auto'/>
+        <Navigation className='max-w-8xl mx-auto'/>
         {children}
       </body>
     </html>
