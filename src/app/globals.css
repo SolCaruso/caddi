@@ -2,25 +2,60 @@
 
 :root {
   --background: #ffffff;
-  --foreground: #171717;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  /* Colors */
+  --color-caddi-blue: #2F415B;
+  --color-caddi-light: #F5F5F7;
+  --color-caddi-dark: #E8E8ED;
+  --color-caddi-black: #1D1D1F;
+  --color-caddi-brown: #bd9576;
+
+  /* Fonts */
+  --font-family-proxima-nova: "proxima-nova", sans-serif;
+  --font-family-proxima-nova-extra-condensed: "proxima-nova-extra-condensed", sans-serif;
+  --font-sans: var(--font-family-proxima-nova);
+
+  /* Max Width */
+  --max-width-8xl: 1440px;
+
+  /* Custom Easing Curves */
+  --ease-in-quad:    cubic-bezier(.55, .085, .68, .53);
+  --ease-in-cubic:   cubic-bezier(.550, .055, .675, .19);
+  --ease-in-quart:   cubic-bezier(.895, .03, .685, .22);
+  --ease-in-quint:   cubic-bezier(.755, .05, .855, .06);
+  --ease-in-expo:    cubic-bezier(.95, .05, .795, .035);
+  --ease-in-circ:    cubic-bezier(.6, .04, .98, .335);
+
+  --ease-out-quad:   cubic-bezier(.25, .46, .45, .94);
+  --ease-out-cubic:  cubic-bezier(.215, .61, .355, 1);
+  --ease-out-quart:  cubic-bezier(.165, .84, .44, 1);
+  --ease-out-quint:  cubic-bezier(.23, 1, .32, 1);
+  --ease-out-expo:   cubic-bezier(.19, 1, .22, 1);
+  --ease-out-circ:   cubic-bezier(.075, .82, .165, 1);
+
+  --ease-in-out-quad: cubic-bezier(.455, .03, .515, .955);
+  --ease-in-out-cubic:cubic-bezier(.645, .045, .355, 1);
+  --ease-in-out-quart:cubic-bezier(.77, 0, .175, 1);
+  --ease-in-out-quint:cubic-bezier(.86, 0, .07, 1);
+  --ease-in-out-expo: cubic-bezier(1, 0, 0, 1);
+  --ease-in-out-circ: cubic-bezier(.785, .135, .15, .86);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-family-proxima-nova), system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
+
+.font-proxima-nova {
+  font-family: var(--font-family-proxima-nova);
+}
+
+.font-proxima-nova-extra-condensed {
+  font-family: var(--font-family-proxima-nova-extra-condensed);
+}
+
+
