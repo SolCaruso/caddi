@@ -14,7 +14,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
 
-  const LayoutPadding: string = "px-4 lg:px-6" 
+  const LayoutPadding: string = "px-4 xl:px-6" 
 
   return (
     <html lang="en" className='h-full mx-auto'>
