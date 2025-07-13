@@ -4,9 +4,11 @@
 @theme inline {
 
   /* Breakpoints */
+  --breakpoint-2xs: 370px;
   --breakpoint-xs: 420px;
   --breakpoint-3xl: 120rem;
   --breakpoint-4xl: 161.25rem;
+  --breakpoint-5xl: 192rem;
 
   /* Colors */
   --color-caddi-blue: #2F415B;
