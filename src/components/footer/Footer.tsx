@@ -57,6 +57,8 @@ const social = [
                   </div>
                 </div>
 
+
+                {/* Mobile Navigation */}
                 <div className='font-semibold flex gap-y-1 flex-wrap max-w-md justify-center xl:hidden'>
                   <Link href='' className='px-4.5 py-1.5 hover:bg-caddi-dark/50 hover:text-caddi-brown rounded-lg transition-all duration-100 ease-in-out-quad'>Shop</Link>
                   <Link href='' className='px-4.5 py-1.5 hover:bg-caddi-dark/50 hover:text-caddi-brown rounded-lg transition-all duration-100 ease-in-out-quad'>Download App</Link>
@@ -66,6 +68,8 @@ const social = [
                   <Link href='' className='px-4.5 py-1.5 hover:bg-caddi-dark/50 hover:text-caddi-brown rounded-lg transition-all duration-100 ease-in-out-quad'>Divot Tools</Link>
                 </div>
 
+
+                {/* Desktop Navigation */}
                 <div>
                   <Logo className='h-12 w-auto xl:-ml-2 xl:-mt-2 hover:opacity-100 opacity-80 transition-all duration-100 ease-in-out-quad cursor-pointer mb-10 xl:mb-5 block xl:hidden'/>
                   <h3 className="text-base font-semibold text-caddi-blue">Caddi AI Inc.</h3>
