@@ -43,7 +43,7 @@ const social = [
           <div className={`bg-caddi-light ${className}`}>
             <div className="flex justify-between xl:flex-row flex-col gap-32">
 
-              <div className="flex xl:gap-32 gap-16 flex-col xl:flex-row items-center text-center xl:items-left xl:text-left">
+              <div className="flex xl:gap-32 gap-16 flex-col xl:flex-row items-center text-center xl:items-start xl:text-left">
 
                 <div>
                   <Logo className='h-12 w-auto xl:-ml-2 xl:-mt-2 hover:opacity-100 opacity-80 transition-all duration-100 ease-in-out-quad cursor-pointer mb-5 xl:block hidden'/>
