@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 
 const slides = [
@@ -76,22 +75,24 @@ export default function ForeCaddi() {
         <div className="mx-auto w-full">
           <h2 className="text-caddi-blue text-3xl font-proxima-nova-extra-condensed font-bold mb-8 uppercase">Forecaddie Golf App</h2>
         </div>
-        <div className="w-full rounded-xl bg-caddi-light py-12 flex flex-col md:flex-row gap-10 md:gap-0 items-center md:items-start mx-auto">
+        <div className="w-full rounded-xl bg-caddi-light py-18 px-12 flex flex-col md:flex-row gap-10 md:gap-0 items-center md:items-start mx-auto">
           {/* Left: Text & Selector */}
           <div className="flex-1 flex flex-col justify-center md:pl-8 max-w-xl">
-            <h2 className="text-caddi-blue text-4xl md:text-5xl font-semibold mb-6 ">{slide.heading}</h2>
+            <h2 className="text-caddi-blue text-4xl md:text-5xl font-semibold mb-10">{slide.heading}</h2>
             {/* Selector Nav */}
-            <div className="flex gap-2 mb-8 bg-caddi-dark rounded-full p-1 w-fit">
+            <div className="flex gap-2 mb-12 bg-caddi-dark rounded-full p-2 w-fit">
               {slide.subnav.map((label, idx) => (
-                <Button
+                <button
                   key={label}
-                  variant={activeIdx === idx ? "default" : "ghost"}
-                  size="sm"
-                  className={`rounded-full px-5 font-semibold transition-all ${activeIdx === idx ? "bg-caddi-blue text-white" : "text-caddi-blue"}`}
+                  className={`rounded-full px-5 py-2 font-semibold transition-all text-nowrap cursor-pointer ${
+                    activeIdx === idx 
+                      ? "bg-caddi-blue text-white" 
+                      : "text-caddi-blue"
+                  }`}
                   onClick={() => setActiveIdx(idx)}
                 >
                   {label}
-                </Button>
+                </button>
               ))}
             </div>
             {/* Content */}
@@ -109,7 +110,7 @@ export default function ForeCaddi() {
           </div>
           {/* Right: Image */}
           <div className="flex-1 flex justify-center items-center">
-            <div className="relative w-[340px] h-[480px] md:w-[400px] md:h-[560px] lg:w-[440px] lg:h-[600px] xl:w-[780px] xl:h-[540px]">
+            <div className="relative w-[340px] h-[480px] md:w-[400px] md:h-[560px] lg:w-[440px] lg:h-[600px] xl:w-[680px] xl:h-[440px]">
               <Image
                 src={slide.image}
                 alt={slide.label}
