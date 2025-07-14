@@ -59,9 +59,9 @@ export default function VerticalCards() {
           {cards.map((card, idx) => (
             <CarouselItem
               key={idx}
-              className={`${idx === 0 ? "" : "pl-6"} cursor-pointer basis-[90vw] sm:basis-[60vw] md:basis-[40vw] lg:basis-[350px] 2xl:basis-[500px] flex-shrink-0 aspect-[3/4] min-h-[350px] lg:min-h-[550px] max-w-[350px] 2xl:max-w-[550px]`}
+              className={`${idx === 0 ? "" : "pl-6"}  basis-[90vw] sm:basis-[60vw] md:basis-[40vw] lg:basis-[280px] xl:basis-[320px] 2xl:basis-[500px] flex-shrink-0 aspect-[3/4] min-h-[220px] lg:min-h-[320px] xl:min-h-[400px] 3xl:min-h-[550px] max-w-[280px] xl:max-w-[320px] 3xl:max-w-[550px]`}
             >
-              <div className="relative rounded-lg overflow-hidden group w-full h-full flex flex-col justify-end select-none">
+              <div className="relative rounded-lg overflow-hidden group w-full h-full flex flex-col justify-end select-none cursor-pointer">
                 {/* Blurred background */}
                 <Image
                   src={card.bg}
