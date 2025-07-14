@@ -40,7 +40,7 @@ export default function VerticalCards() {
   const cards = Array.from({ length: 8 }, (_, i) => cardData[i % 2])
 
   return (
-    <section className="w-full py-12">
+    <section className="w-full py-12 mb-20">
       <div className="mx-auto max-w-8xl w-full px-4">
         <h2 className="text-caddi-blue text-3xl font-proxima-nova-extra-condensed font-bold mb-8">
           DIVOT TOOLS
@@ -71,8 +71,10 @@ export default function VerticalCards() {
                   priority={idx < 2}
                   draggable={false}
                 />
+                {/* Hover overlay (now just above background, below overlay image) */}
+                <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 z-10 pointer-events-none transition-all duration-200 ease-in-out-quad" />
                 {/* Overlay image */}
-                <div className="absolute inset-0 flex items-center justify-center">
+                <div className="absolute inset-0 flex items-center justify-center z-20">
                   <Image
                     src={card.overlay}
                     alt="Divot tool"
@@ -89,9 +91,12 @@ export default function VerticalCards() {
                   </span>
                 </div>
                 {/* Plus icon */}
-                <div className="absolute bottom-4 right-4 z-10">
-                  <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-white/80 text-caddi-blue text-2xl font-bold shadow-md group-hover:bg-white transition">
-                    +
+                <div className="absolute bottom-4 right-4 z-20">
+                  <span className="inline-flex items-center justify-center w-8 h-8 rounded-full border border-white text-white text-2xl font-semibold hover:border-transparent bg-transparent group-hover:bg-caddi-brown group-hover:border-caddi-brown transition-all duration-200 ease-in-out-quad">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M10 5V15" stroke="white" strokeWidth="1.5" strokeLinecap="round"/>
+                      <path d="M5 10H15" stroke="white" strokeWidth="1.5" strokeLinecap="round"/>
+                    </svg>
                   </span>
                 </div>
               </div>

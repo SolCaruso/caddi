@@ -29,7 +29,7 @@ export default function Hero() {
 
                     <div className="flex flex-row gap-4 justify-center xl:justify-start">
 
-                        <Link href='/' className="bg-white text-black px-8 sm:px-12 py-2 sm:py-2.5 rounded-full text-nowrap font-semibold hover:bg-gray-200 cursor-pointer transition-all duration-100 ease-in-out-quad">                            
+                        <Link href='/' className="bg-white text-black px-8 sm:px-12 py-2 sm:py-2.5 rounded-full text-nowrap font-semibold hover:bg-caddi-brown hover:text-white cursor-pointer transition-all duration-200 ease-in-out-quad">                            
                             Shop Now
                         </Link>
 
