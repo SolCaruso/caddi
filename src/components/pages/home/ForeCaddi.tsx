@@ -100,7 +100,7 @@ export default function ForeCaddi() {
               <h3 className="text-lg font-semibold mb-2 text-caddi-blue">{slide.content.title}</h3>
               <p className="text-black/50 mb-4 text-base font-light">{slide.content.description}</p>
               <ul className="list-disc pl-5 space-y-1 font-medium text-black/50">
-                {slide.content.details.map((item, i) => (
+                {slide.content.details.map((item) => (
                   <li key={item} className="font-medium text-black/50">
                     {item}
                   </li>
