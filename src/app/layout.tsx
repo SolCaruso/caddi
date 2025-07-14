@@ -14,17 +14,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
 
-  const LayoutPadding: string = "px-4 xl:px-6" 
-
   return (
     <html lang="en" className='h-full mx-auto'>
       <head>
         <link rel="stylesheet" href="https://use.typekit.net/eaa4cih.css" />
       </head>
       <body className="font-proxima-nova antialiased h-full mx-auto flex flex-col">
-        <Navigation className='max-w-8xl mx-auto' padding={LayoutPadding}/>
+        <Navigation />
         {children}
-        <Footer className='max-w-8xl mx-auto' padding={LayoutPadding}/>
+        <Footer />
       </body>
     </html>
   );

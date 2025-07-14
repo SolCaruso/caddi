@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 import Image from "next/image"
 import { motion, AnimatePresence } from "motion/react"
 import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel"
+import { Container } from "@/components/ui/container"
 
 const cardData = [
   {
@@ -40,16 +41,16 @@ export default function VerticalCards() {
   const cards = Array.from({ length: 8 }, (_, i) => cardData[i % 2])
 
   return (
-    <section className="w-full py-12 mb-20">
-      <div className="mx-auto max-w-8xl w-full px-4">
+    <section className="w-full py-12 mb-12">
+      <Container>
         <h2 className="text-caddi-blue text-3xl font-proxima-nova-extra-condensed font-bold mb-8">DIVOT TOOLS</h2>
-      </div>
-
+      </Container>
+      
       <Carousel opts={{ align: "start", slidesToScroll }} className="w-full">
         <CarouselContent
           className="-ml-0"
           style={{
-            paddingLeft: "max(1rem, calc((100vw - 93rem) / 2 + 1rem))",
+            paddingLeft: "max(1rem, calc((100vw - 92rem) / 2 + 1rem))",
           }}
         >
           {cards.map((card, idx) => (
@@ -102,11 +103,11 @@ export default function VerticalCards() {
                     {hoveredCard === idx && (
                       <motion.span
                         key="see-more"
-                        initial={{ opacity: 0, x: 16 }}
+                        initial={{ opacity: 0, x: 12 }}
                         animate={{ opacity: 1, x: 0 }}
-                        exit={{ opacity: 0, x: 16 }}
-                        transition={{ duration: 0.22, ease: [0.55, 0.085, 0.68, 0.53], delay: 0.2 }}
-                        className="font-proxima-nova-extra-condensed text-white mr-1 font-extrabold"
+                        exit={{ opacity: 0, x: 12 }}
+                        transition={{ duration: 0.22, ease: [0.55, 0.085, 0.68, 0.53] }}
+                        className="font-proxima-nova-extra-condensed text-white mr-1 font-extrabold text-sm 3xl:text-base"
                       >
                         LEARN MORE
                       </motion.span>
@@ -114,7 +115,7 @@ export default function VerticalCards() {
                   </AnimatePresence>
 
                   <motion.span
-                    className="inline-flex items-center justify-center w-8 h-8 rounded-full border border-white text-white text-2xl font-semibold bg-transparent group-hover:bg-caddi-brown group-hover:border-caddi-brown"
+                    className="inline-flex items-center justify-center w-7 h-7 3xl:w-8 3xl:h-8 rounded-full border border-white text-white text-2xl font-semibold bg-transparent group-hover:bg-caddi-brown group-hover:border-caddi-brown"
                     initial={{ scale: 1 }}
                     animate={{
                       scale: hoveredCard === idx ? [1, 0.97, 1.12] : [1, 1.02, 1],
@@ -147,7 +148,7 @@ export default function VerticalCards() {
           <CarouselItem
             aria-hidden="true"
             tabIndex={-1}
-            className="pointer-events-none flex-shrink-0 basis-0 sm:basis-0 md:basis-0 lg:basis-[calc((100vw-93rem)/2+1rem)]"
+            className="pointer-events-none flex-shrink-0 basis-0 sm:basis-0 md:basis-0 lg:basis-[calc((100vw-90rem)/2+1rem)]"
           />
         </CarouselContent>
       </Carousel>

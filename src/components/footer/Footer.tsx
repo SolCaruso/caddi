@@ -2,6 +2,7 @@ import Logo from '@/components/logos/Caddi'
 import { navLinks } from '@/components/nav/Navigation'
 import Link from 'next/link'
 import { SVGProps } from 'react'
+import { Container } from '@/components/ui/container'
 
 const social = [
       {
@@ -36,11 +37,11 @@ const social = [
       },
     ]
   
-  export default function Footer({className, padding}:{className?:string; padding?: string}) {
+  export default function Footer() {
     return (
       <footer className='bg-caddi-light w-full'>
-        <div className={`${padding} pb-8 pt-24 xl:pt-32`}>
-          <div className={`bg-caddi-light ${className}`}>
+        <div className="pb-8 pt-24 xl:pt-32">
+          <Container>
             <div className="flex justify-between xl:flex-row flex-col gap-32">
 
               <div className="flex xl:gap-32 gap-16 flex-col xl:flex-row items-center text-center xl:items-start xl:text-left">
@@ -137,7 +138,7 @@ const social = [
             <div className="xl:mt-16 xl:pt-9 xl:border-t xl:border-gray-900/10 my-12 xl:mb-0 text-center xl:text-left ">
               <p className="text-xs/6 xl:text-sm/6 text-gray-600">&copy; {new Date().getFullYear()} Caddi AI, Inc. All rights reserved.</p>
             </div>
-          </div>
+          </Container>
         </div>
       </footer>
     )

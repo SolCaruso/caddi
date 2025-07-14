@@ -4,6 +4,7 @@ import DesktopMenu from "./DesktopMenu";
 import DownloadButton from "./DownloadButton";
 import CartButton from "./CartButton";
 import MobileNavClient from "./Client/MobileNavClient";
+import { Container } from "@/components/ui/container";
 
 // Nav Links
 export const navLinks = [
@@ -74,43 +75,45 @@ export const navLinks = [
   },
 ];
 
-export default function Navigation({ className, padding }: { className?: string; padding?: string }) {
+export default function Navigation() {
   return (
-    <nav className={`w-full py-4 md:py-2 relative z-10 ${padding}`}>
-      <div className={`flex items-center justify-between ${className}`}>
-        {/* Desktop Layout */}
-        <div className="hidden md:flex items-center w-full">
-          {/* Logo */}
-          <div className="flex items-center">
-            <Logo className="h-12 w-auto -ml-2 hover:opacity-80 transition-all duration-100 ease-in-out-quad cursor-pointer"/>
+    <nav className="w-full py-4 md:py-2 relative z-10 bg-white">
+      <Container>
+        <div className="flex items-center justify-between">
+          {/* Desktop Layout */}
+          <div className="hidden md:flex items-center w-full">
+            {/* Logo */}
+            <div className="flex items-center">
+              <Logo className="h-12 w-auto -ml-2 hover:opacity-80 transition-all duration-100 ease-in-out-quad cursor-pointer"/>
+            </div>
+            {/* NavigationMenu (center) */}
+            <div className="flex-1 items-center justify-center flex">
+              <DesktopMenu navLinks={navLinks} />
+            </div>
+            {/* Download Button & Cart */}
+            <div className="items-center gap-4 flex">
+              <DownloadButton />
+              <CartButton />
+            </div>
           </div>
-          {/* NavigationMenu (center) */}
-          <div className="flex-1 items-center justify-center flex">
-            <DesktopMenu navLinks={navLinks} />
-          </div>
-          {/* Download Button & Cart */}
-          <div className="items-center gap-4 flex">
-            <DownloadButton />
-            <CartButton />
+          
+          {/* Mobile Layout */}
+          <div className="flex md:hidden items-center w-full">
+            {/* Hamburger (left) */}
+            <div className="flex items-center">
+              <MobileNavClient navLinks={navLinks} />
+            </div>
+            {/* Logo (center) */}
+            <div className="absolute left-1/2 transform -translate-x-1/2">
+              <Logo className="h-12 w-auto hover:opacity-80 transition-all duration-100 ease-in-out-quad cursor-pointer"/>
+            </div>
+            {/* Cart Button (right) */}
+            <div className="flex items-center ml-auto">
+              <CartButton/>
+            </div>
           </div>
         </div>
-        
-        {/* Mobile Layout */}
-        <div className="flex md:hidden items-center w-full">
-          {/* Hamburger (left) */}
-          <div className="flex items-center">
-            <MobileNavClient navLinks={navLinks} />
-          </div>
-          {/* Logo (center) */}
-          <div className="absolute left-1/2 transform -translate-x-1/2">
-            <Logo className="h-12 w-auto hover:opacity-80 transition-all duration-100 ease-in-out-quad cursor-pointer"/>
-          </div>
-          {/* Cart Button (right) */}
-          <div className="flex items-center ml-auto">
-            <CartButton/>
-          </div>
-        </div>
-      </div>
+      </Container>
     </nav>
   );
 } 
