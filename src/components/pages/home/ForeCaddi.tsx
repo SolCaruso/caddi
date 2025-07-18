@@ -90,7 +90,7 @@ export default function ForeCaddi() {
         <div className="mx-auto w-full">
           <h2 className="text-caddi-blue text-3xl font-proxima-nova-extra-condensed font-bold mb-8 uppercase">Forecaddie Golf App</h2>
         </div>
-        <div className="w-full rounded-lg md:rounded-xl bg-caddi-light pt-6 pb-12 xs:py-12 sm:py-18  sm:px-8 lg:px-12 flex flex-col items-center mx-auto">
+        <div className="w-full rounded-lg md:rounded-xl bg-caddi-light pt-6 pb-16 xs:pt-12 xs:pb-20 sm:pt-18 sm:pb-24 sm:px-8 lg:px-12 flex flex-col items-center mx-auto relative">
           
           {/* Mobile Layout */}
           <div className="w-full lg:hidden">
@@ -140,10 +140,25 @@ export default function ForeCaddi() {
                 ))}
               </ul>
             </div>
+            
+            {/* Mobile: Pagination Dots */}
+            <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex justify-center items-center gap-2">
+              {slides.map((_, idx) => (
+                <button
+                  key={idx}
+                  className={`w-[9.25px] h-[9.25px] rounded-full transition-all duration-200 ${
+                    activeIdx === idx 
+                      ? "bg-[#D9D9D9] opacity-96" 
+                      : "bg-[#D9D9D9] opacity-24"
+                  }`}
+                  onClick={() => setActiveIdx(idx)}
+                />
+              ))}
+            </div>
           </div>
 
           {/* Desktop Layout */}
-          <div className="hidden lg:flex w-full gap-10 items-start">
+          <div className="hidden lg:flex w-full gap-10 items-start relative">
             {/* Left: Text & Selector */}
             <div className="flex-1 flex flex-col justify-center xl:pl-8 max-w-xl">
               <h2 className="text-caddi-blue text-4xl xl:text-5xl font-semibold mb-10">{slide.heading}</h2>
@@ -192,6 +207,21 @@ export default function ForeCaddi() {
                 />
               </div>
             </div>
+          </div>
+          
+          {/* Desktop: Pagination Dots */}
+          <div className="hidden lg:flex absolute bottom-6 left-1/2 transform -translate-x-1/2 justify-center items-center gap-2">
+            {slides.map((_, idx) => (
+              <button
+                key={idx}
+                className={`w-[11.25px] h-[11.25px] rounded-full transition-all duration-200 ${
+                  activeIdx === idx 
+                    ? "bg-[#D9D9D9] opacity-96" 
+                    : "bg-[#D9D9D9] opacity-24"
+                }`}
+                onClick={() => setActiveIdx(idx)}
+              />
+            ))}
           </div>
         </div>
       </Container>
