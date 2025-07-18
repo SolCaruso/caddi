@@ -28,12 +28,17 @@ const slides = [
     key: "environmental",
     label: "Environmental",
     image: "/webm/forecaddi.webp",
-    heading: "GPS Precision Tracking.",
+    heading: "Master Every Variable",
     subnav: ["How it Works", "Environmental", "Decision Maker", "Simplicity"],
     content: {
-      title: "Environmental Placeholder",
-      description: "Replace this with environmental content.",
-      details: ["Detail 1", "Detail 2", "Detail 3"],
+      title: "Environmental Conditions",
+      description: "Forecaddie adapts to live weather and terrain data so your shot recommendations stay razor-sharp.",
+      details: [
+        "Wind speed & direction",
+        "Slope and elevation changes",
+        "Temperature and weather impacts",
+        "Ball lie and turf conditions",
+      ],
       detailsBold: [],
     },
   },
@@ -41,12 +46,17 @@ const slides = [
     key: "decision",
     label: "Decision Maker",
     image: "/webm/forecaddi.webp",
-    heading: "GPS Precision Tracking.",
+    heading: "Take the Guesswork Out",
     subnav: ["How it Works", "Environmental", "Decision Maker", "Simplicity"],
     content: {
-      title: "Decision Maker Placeholder",
-      description: "Replace this with decision maker content.",
-      details: ["Detail 1", "Detail 2", "Detail 3"],
+      title: "Decision Maker",
+      description: "Forecaddie acts as your personal caddie—distilling complex factors into clear club and shot guidance.",
+      details: [
+        "Personalized club recommendations",
+        "Clear shot-type guidance (full, chip, pitch)",
+        "Adjustments for wind and slope",
+        "Confidence-boosting insights",
+      ],
       detailsBold: [],
     },
   },
@@ -54,12 +64,17 @@ const slides = [
     key: "simplicity",
     label: "Simplicity",
     image: "/webm/forecaddi.webp",
-    heading: "GPS Precision Tracking.",
+    heading: "One Swing at a Time",
     subnav: ["How it Works", "Environmental", "Decision Maker", "Simplicity"],
     content: {
-      title: "Simplicity Placeholder",
-      description: "Replace this with simplicity content.",
-      details: ["Detail 1", "Detail 2", "Detail 3"],
+      title: "Shot-by-Shot Simplicity",
+      description: "Forecaddie's stateless design resets after each use so you can concentrate on your next shot without distractions.",
+      details: [
+        "Quick, one-step input",
+        "Clean, intuitive interface",
+        "Instant feedback on every shot",
+        "Stateless resets after each recommendation",
+      ],
       detailsBold: [],
     },
   },
@@ -75,16 +90,19 @@ export default function ForeCaddi() {
         <div className="mx-auto w-full">
           <h2 className="text-caddi-blue text-3xl font-proxima-nova-extra-condensed font-bold mb-8 uppercase">Forecaddie Golf App</h2>
         </div>
-        <div className="w-full rounded-xl bg-caddi-light py-18 px-12 flex flex-col md:flex-row gap-10 md:gap-0 items-center md:items-start mx-auto">
-          {/* Left: Text & Selector */}
-          <div className="flex-1 flex flex-col justify-center md:pl-8 max-w-xl">
-            <h2 className="text-caddi-blue text-4xl md:text-5xl font-semibold mb-10">{slide.heading}</h2>
-            {/* Selector Nav */}
-            <div className="flex gap-2 mb-12 bg-caddi-dark rounded-full p-2 w-fit">
+        <div className="w-full rounded-lg md:rounded-xl bg-caddi-light pt-6 pb-12 xs:py-12 sm:py-18  sm:px-8 lg:px-12 flex flex-col items-center mx-auto">
+          
+          {/* Mobile Layout */}
+          <div className="w-full lg:hidden">
+            {/* Mobile: Heading */}
+            <h2 className="text-caddi-blue px-4 xs:px-6 text-2xl xs:text-3xl sm:text-4xl font-semibold mb-6 sm:mb-10">{slide.heading}</h2>
+            
+            {/* Mobile: Selector Nav */}
+            <div className="flex xs:gap-1 bg-caddi-dark rounded-full p-1 2sm:p-2 w-fit mx-auto 2sm:mx-6 overflow-x-auto">
               {slide.subnav.map((label, idx) => (
                 <button
                   key={label}
-                  className={`rounded-full px-5 py-2 font-semibold transition-all text-nowrap cursor-pointer ${
+                  className={`rounded-full px-2 2xs:px-2.5 xs:px-3 2sm:px-3.5 md:px-4 py-1.5 xs:py-1.5 2sm:py-1.75 md:py-2 font-semibold transition-all text-nowrap cursor-pointer text-[9.76px] xs:text-[11px] 2sm:text-sm md:text-base ${
                     activeIdx === idx 
                       ? "bg-caddi-blue text-white" 
                       : "text-caddi-blue"
@@ -95,11 +113,26 @@ export default function ForeCaddi() {
                 </button>
               ))}
             </div>
-            {/* Content */}
-            <div className="mt-2">
-              <h3 className="text-lg font-semibold mb-2 text-caddi-blue">{slide.content.title}</h3>
-              <p className="text-black/50 mb-4 text-base font-light">{slide.content.description}</p>
-              <ul className="list-disc pl-5 space-y-1 font-medium text-black/50">
+            
+            {/* Mobile: Image */}
+            <div className="flex justify-center items-center">
+              <div className="relative w-[240px] h-[260px] xs:w-[400px] xs:h-[400px] sm:h-[460px]">
+                <Image
+                  src={slide.image}
+                  alt={slide.label}
+                  fill
+                  className="object-contain"
+                  priority
+                  draggable={false}
+                />
+              </div>
+            </div>
+            
+            {/* Mobile: Content */}
+            <div className="px-4 xs:px-6">
+              <h3 className="text-base sm:text-lg font-semibold mb-2 text-caddi-blue">{slide.content.title}</h3>
+              <p className="text-black/50 mb-3 sm:mb-4 text-sm sm:text-base font-light">{slide.content.description}</p>
+              <ul className="list-disc pl-4 sm:pl-5 space-y-1 font-medium text-black/50 text-left text-sm sm:text-base">
                 {slide.content.details.map((item) => (
                   <li key={item} className="font-medium text-black/50">
                     {item}
@@ -108,17 +141,56 @@ export default function ForeCaddi() {
               </ul>
             </div>
           </div>
-          {/* Right: Image */}
-          <div className="flex-1 flex justify-center items-center">
-            <div className="relative w-[340px] h-[480px] md:w-[400px] md:h-[560px] lg:w-[440px] lg:h-[600px] xl:w-[680px] xl:h-[440px]">
-              <Image
-                src={slide.image}
-                alt={slide.label}
-                fill
-                className="object-contain"
-                priority
-                draggable={false}
-              />
+
+          {/* Desktop Layout */}
+          <div className="hidden lg:flex w-full gap-10 items-start">
+            {/* Left: Text & Selector */}
+            <div className="flex-1 flex flex-col justify-center xl:pl-8 max-w-xl">
+              <h2 className="text-caddi-blue text-4xl xl:text-5xl font-semibold mb-10">{slide.heading}</h2>
+              
+              {/* Selector Nav */}
+              <div className="flex gap-1 xl:gap-2 mb-10 xl:mb-12 bg-caddi-dark rounded-full p-2 xl:p-2 w-fit">
+                {slide.subnav.map((label, idx) => (
+                  <button
+                    key={label}
+                    className={`rounded-full px-4 xl:px-5 py-2 xl:py-2 font-semibold transition-all text-nowrap cursor-pointer text-sm xl:text-base ${
+                      activeIdx === idx 
+                        ? "bg-caddi-blue text-white" 
+                        : "text-caddi-blue"
+                    }`}
+                    onClick={() => setActiveIdx(idx)}
+                  >
+                    {label}
+                  </button>
+                ))}
+              </div>
+              
+              {/* Content */}
+              <div className="mt-2">
+                <h3 className="text-lg font-semibold mb-2 text-caddi-blue">{slide.content.title}</h3>
+                <p className="text-black/50 mb-4 text-base font-light">{slide.content.description}</p>
+                <ul className="list-disc pl-5 space-y-1 font-medium text-black/50">
+                  {slide.content.details.map((item) => (
+                    <li key={item} className="font-medium text-black/50">
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+            
+            {/* Right: Image */}
+            <div className="flex-1 flex justify-center items-center">
+              <div className="relative w-[340px] h-[480px] md:w-[400px] md:h-[560px] lg:w-[440px] lg:h-[400px] xl:w-[680px] xl:h-[440px]">
+                <Image
+                  src={slide.image}
+                  alt={slide.label}
+                  fill
+                  className="object-contain"
+                  priority
+                  draggable={false}
+                />
+              </div>
             </div>
           </div>
         </div>
