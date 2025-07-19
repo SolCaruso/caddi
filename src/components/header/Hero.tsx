@@ -27,7 +27,7 @@ export default function Hero() {
                         Premium hardwood divot tools that keep greens looking picture-perfect.
                     </p>
                     <div className="flex flex-row gap-4 justify-center xl:justify-start">
-                        <Link href='/' className="bg-white text-black px-8 sm:px-12 py-2 sm:py-2.5 rounded-full text-nowrap font-semibold hover:bg-caddi-brown hover:text-white cursor-pointer transition-all duration-200 ease-in-out-quad">                            
+                        <Link href='/shop' className="bg-white text-black px-8 sm:px-12 py-2 sm:py-2.5 rounded-full text-nowrap font-semibold hover:bg-caddi-brown hover:text-white cursor-pointer transition-all duration-200 ease-in-out-quad">                            
                             Shop Now
                         </Link>
                         <Link href='/' className=" text-white pl-6 pr-4  sm:pl-8 sm:pr-6 sm:px-12 py-2 sm:py-2.5 rounded-full text-nowrap font-semibold bg-white/10 backdrop-blur-3xl hover:bg-white/20 cursor-pointer transition-all duration-100 ease-in-out-quad flex items-center gap-2">

@@ -91,7 +91,7 @@ export default function HeroCards() {
                     {/* Image */}
                     <div className='flex justify-center sm:justify-normal sm:block pt-18 sm:pt-0'>
                         <Image
-                            src="/webm/forecaddi.webp"
+                            src="/webm/how-it-works.webp"
                             alt="Forecaddie"
                             height={506}
                             width={380}

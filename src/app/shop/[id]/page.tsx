@@ -1,5 +1,11 @@
 import ShopItem from "@/components/pages/shop/ShopItem";
 
-export default function ShopItemPage() {
-  return <ShopItem />;
+interface ShopItemPageProps {
+  params: {
+    id: string;
+  };
+}
+
+export default function ShopItemPage({ params }: ShopItemPageProps) {
+  return <ShopItem productId={parseInt(params.id)} />;
 } 

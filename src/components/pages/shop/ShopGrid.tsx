@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import { useMemo } from "react";
 import ShopHeader from "./ShopHeader";
 import ShopFilter from "./ShopFilter";
@@ -64,7 +65,7 @@ export default function ShopGrid({ onFilterChange, selectedFilters }: ShopGridPr
           const firstImage = productImages[0]
           
           return (
-            <div key={product.id} className="group cursor-pointer">
+            <Link key={product.id} href={`/shop/${product.id}`} className="group cursor-pointer">
               <div className="relative aspect-square mb-3 bg-[#D9D9D9]/30 rounded-md overflow-hidden">
                 <Image
                   src={firstImage?.path || "/webm/birdeye.webp"}
@@ -85,7 +86,7 @@ export default function ShopGrid({ onFilterChange, selectedFilters }: ShopGridPr
                   ${product.price}
                 </p>
               </div>
-            </div>
+            </Link>
           )
         })}
       </div>

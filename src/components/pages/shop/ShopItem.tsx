@@ -1,20 +1,43 @@
 import Image from "next/image";
+import Link from "next/link";
 import { Container } from "@/components/ui/container";
+import { Badge } from "@/components/ui/badge";
+import { getProductById, getProductImages, getProductVariants, getAllProducts } from "@/lib/data";
 
-export default function ShopItem() {
-  const productImages = [
-    "/webm/birdeye.webp",
-    "/webm/birdeye.webp",
-    "/webm/birdeye.webp",
-    "/webm/birdeye.webp",
-    "/webm/birdeye.webp",
-  ];
+interface ShopItemProps {
+  productId: number;
+}
 
-  const relatedProducts = [
-    { name: "Par Tee Time", price: "$55", image: "/webm/birdeye.webp" },
-    { name: "Par Tee Time", price: "$55", image: "/webm/birdeye.webp" },
-    { name: "Par Tee Time", price: "$55", image: "/webm/birdeye.webp" },
-  ];
+export default function ShopItem({ productId }: ShopItemProps) {
+  const product = getProductById(productId);
+  const productImages = getProductImages(productId);
+  const productVariants = getProductVariants(productId);
+  
+  // Get related products (other products in the same category)
+  const allProducts = getAllProducts();
+  const relatedProducts = allProducts
+    .filter(p => p.id !== productId && p.category_id === product?.category_id)
+    .slice(0, 3);
+
+  // If product not found, show error or redirect
+  if (!product) {
+    return (
+      <main className="flex-1 bg-white flex flex-col">
+        <Container className="flex-1">
+          <div className="pt-12 sm:pt-18 h-[50vh]">
+            <h1 className="text-2xl font-bold text-caddi-blue mb-4">Product Not Found</h1>
+            <p className="text-black/60 mb-6">The product you're looking for doesn't exist.</p>
+            <Link href="/shop" className="text-caddi-blue hover:underline">
+              ← Back to Shop
+            </Link>
+          </div>
+        </Container>
+      </main>
+    );
+  }
+  // Get the first image for the main display
+  const firstImage = productImages[0];
+  const mainImageSrc = firstImage?.path || "/webm/placeholder.webp";
 
   return (
     <main className="flex-1 bg-white flex flex-col">
@@ -26,28 +49,15 @@ export default function ShopItem() {
             {/* Main Image */}
             <div className="relative aspect-square mb-6 bg-[#D9D9D9]/30 rounded-md overflow-hidden">
               <Image
-                src="/webm/birdeye.webp"
-                alt="Hardwood Divot Tool"
+                src={mainImageSrc}
+                alt={product.name}
                 fill
                 className="object-cover"
                 sizes="(max-width: 768px) 100vw, 50vw"
               />
             </div>
 
-            {/* Thumbnail Images */}
-            <div className="flex gap-4">
-              {productImages.map((image, index) => (
-                <div key={index} className="relative w-20 h-20 bg-[#D9D9D9]/30 rounded-md overflow-hidden">
-                  <Image
-                    src={image}
-                    alt={`Product view ${index + 1}`}
-                    fill
-                    className="object-cover"
-                    sizes="80px"
-                  />
-                </div>
-              ))}
-            </div>
+
           </div>
 
           {/* Right Side - Product Details */}
@@ -55,40 +65,42 @@ export default function ShopItem() {
             <div className="space-y-6">
               {/* Product Header */}
               <div>
+                {product.tag && (
+                  <Badge variant="secondary" className="mb-2">
+                    {product.tag}
+                  </Badge>
+                )}
                 <h2 className="text-sm font-medium text-caddi-blue mb-2">
-                  Hardwood Divot Tool
+                  {product.categories?.name || "Product"}
                 </h2>
                 <h1 className="text-3xl font-bold text-caddi-blue mb-2">
-                  BIRD&apos;S EYE MAPLE
+                  {product.name}
                 </h1>
                 <p className="text-2xl font-semibold text-caddi-blue">
-                  $15.99
+                  ${product.price}
                 </p>
               </div>
 
               {/* Product Description */}
               <div>
-                <h3 className="text-lg font-semibold text-black/70 mb-3">
-                  Bird&apos;s Eye Maple - Domestic Hardwood Divot Tool
-                </h3>
-                <ul className="space-y-2 text-sm text-black/60">
-                  <li className="flex items-start">
-                    <span className="w-2 h-2 bg-caddi-blue rounded-full mt-2 mr-3 flex-shrink-0"></span>
-                    <span>Growth Location: North America</span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="w-2 h-2 bg-caddi-blue rounded-full mt-2 mr-3 flex-shrink-0"></span>
-                    <span>Colour: Light brown with tiny burls</span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="w-2 h-2 bg-caddi-blue rounded-full mt-2 mr-3 flex-shrink-0"></span>
-                    <span>Rupture Strength: 927 lbf/sq. Inch</span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="w-2 h-2 bg-caddi-blue rounded-full mt-2 mr-3 flex-shrink-0"></span>
-                    <span>Unique Feature: Rare natural grain anomaly</span>
-                  </li>
-                </ul>
+                {product.header && (
+                  <h3 className="text-lg font-semibold text-black/70 mb-3">
+                    {product.header}
+                  </h3>
+                )}
+                <div className="text-sm text-black/60 mb-4">
+                  <p>{product.description}</p>
+                </div>
+                {product.bullets && (
+                  <ul className="space-y-2 text-sm text-black/60">
+                    {product.bullets.split(',').map((bullet, index) => (
+                      <li key={index} className="flex items-start">
+                        <span className="w-2 h-2 bg-caddi-blue rounded-full mt-2 mr-3 flex-shrink-0"></span>
+                        <span>{bullet.trim()}</span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
               </div>
 
               {/* Add to Bag Button */}
@@ -102,37 +114,44 @@ export default function ShopItem() {
         </div>
 
         {/* You Might Also Like Section */}
-        <div className="mb-24">
-          <h2 className="text-2xl font-semibold text-caddi-blue mb-8">
-            YOU MIGHT ALSO LIKE
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {relatedProducts.map((product, index) => (
-              <div key={index} className="group cursor-pointer">
-                <div className="relative aspect-square mb-3 bg-[#D9D9D9]/30 rounded-md overflow-hidden">
-                  <Image
-                    src={product.image}
-                    alt={product.name}
-                    fill
-                    className="object-cover"
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 25vw"
-                  />
-                </div>
-                <div className="space-y-1">
-                  <h3 className="font-proxima-nova font-semibold text-black/50 text-base">
-                    {product.name}
-                  </h3>
-                  <p className="font-proxima-nova font-normal text-black/30 text-base">
-                    3 Colours
-                  </p>
-                  <p className="font-proxima-nova font-semibold text-black/50 text-base">
-                    {product.price}
-                  </p>
-                </div>
-              </div>
-            ))}
+        {relatedProducts.length > 0 && (
+          <div className="mb-24">
+            <h2 className="text-2xl font-semibold text-caddi-blue mb-8">
+              YOU MIGHT ALSO LIKE
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {relatedProducts.map((relatedProduct) => {
+                const relatedImages = getProductImages(relatedProduct.id);
+                const firstRelatedImage = relatedImages[0];
+                
+                return (
+                  <Link key={relatedProduct.id} href={`/shop/${relatedProduct.id}`} className="group cursor-pointer">
+                    <div className="relative aspect-square mb-3 bg-[#D9D9D9]/30 rounded-md overflow-hidden">
+                      <Image
+                        src={firstRelatedImage?.path || "/webm/birdeye.webp"}
+                        alt={relatedProduct.name}
+                        fill
+                        className="object-cover"
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 25vw"
+                      />
+                    </div>
+                    <div className="space-y-1">
+                      <h3 className="font-proxima-nova font-semibold text-black/50 text-base">
+                        {relatedProduct.name}
+                      </h3>
+                      <p className="font-proxima-nova font-normal text-black/30 text-base">
+                        {relatedProduct.subtitle || "3 Colours"}
+                      </p>
+                      <p className="font-proxima-nova font-semibold text-black/50 text-base">
+                        ${relatedProduct.price}
+                      </p>
+                    </div>
+                  </Link>
+                );
+              })}
+            </div>
           </div>
-        </div>
+        )}
       </Container>
     </main>
   );

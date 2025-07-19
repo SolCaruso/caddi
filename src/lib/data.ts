@@ -16,6 +16,8 @@ export interface Product {
   stock: number | null
   price: number
   created_at: string
+  tag: string | null
+  bullets: string | null
   categories?: {
     name: string
   }

@@ -18,7 +18,7 @@ export const filterSections = [
     value: "divot-tools",
     label: "Divot Tools",
     options: [
-      { id: "divot-tools-all", label: "All Divot Tools" },
+      { id: "divot-tools-all", label: "Hardwood Divot Tools" },
     ],
   },
   {
