@@ -10,10 +10,10 @@ export interface Product {
   category_id: number
   name: string
   description: string
-  subtitle: string
-  header: string
+  subtitle: string | null
+  header: string | null
   sku: string
-  stock: number
+  stock: number | null
   price: number
   created_at: string
   categories?: {
