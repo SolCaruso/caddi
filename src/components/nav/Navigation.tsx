@@ -19,7 +19,7 @@ export const navLinks = [
       },
       {
         label: "Shop All",
-        href: "/",
+        href: "/shop",
         description: "Browse the full collection of handcrafted golf tools and accessories.",
       },
       {
