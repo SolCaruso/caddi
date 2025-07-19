@@ -1,5 +1,4 @@
 import Image from "next/image";
-import Link from "next/link";
 import { Container } from "@/components/ui/container";
 
 export default function ShopItem() {
@@ -60,7 +59,7 @@ export default function ShopItem() {
                   Hardwood Divot Tool
                 </h2>
                 <h1 className="text-3xl font-bold text-caddi-blue mb-2">
-                  BIRD'S EYE MAPLE
+                  BIRD&apos;S EYE MAPLE
                 </h1>
                 <p className="text-2xl font-semibold text-caddi-blue">
                   $15.99
@@ -70,7 +69,7 @@ export default function ShopItem() {
               {/* Product Description */}
               <div>
                 <h3 className="text-lg font-semibold text-black/70 mb-3">
-                  Bird's Eye Maple - Domestic Hardwood Divot Tool
+                  Bird&apos;s Eye Maple - Domestic Hardwood Divot Tool
                 </h3>
                 <ul className="space-y-2 text-sm text-black/60">
                   <li className="flex items-start">

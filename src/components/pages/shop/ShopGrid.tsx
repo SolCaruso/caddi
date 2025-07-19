@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { useState, useMemo } from "react";
+import { useMemo } from "react";
 import ShopHeader from "./ShopHeader";
 import ShopFilter from "./ShopFilter";
 import { getAllProducts, getProductImages, getAllCategories } from "@/lib/data";
