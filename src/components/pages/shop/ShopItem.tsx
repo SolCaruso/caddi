@@ -25,7 +25,7 @@ export default function ShopItem({ productId }: ShopItemProps) {
         <Container className="flex-1">
           <div className="flex flex-col justify-center h-full">
             <h1 className="text-2xl font-bold text-caddi-blue mb-4">Product Not Found</h1>
-            <p className="text-caddi-black mb-6">The product you're looking for doesn't exist.</p>
+            <p className="text-caddi-black mb-6">The product you&apos;re looking for doesn&apos;t exist.</p>
             <Link href="/shop" className="text-caddi-brown hover:underline">
               ← Back to Shop
             </Link>

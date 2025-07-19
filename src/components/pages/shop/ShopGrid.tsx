@@ -55,7 +55,7 @@ export default function ShopGrid({ onFilterChange, selectedFilters }: ShopGridPr
   // Reset to first page when filters change
   useMemo(() => {
     setCurrentPage(1);
-  }, [selectedFilters]);
+  }, []);
 
   // Handle scroll to top after page change
   useEffect(() => {
