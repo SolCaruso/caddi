@@ -32,10 +32,11 @@ export interface ProductVariant {
   product_id: number
   size_id: number
   color_id: number
-  sku: string
-  price: number
-  stock: number
+  sku: string | null
+  price: number | null
+  stock: number | null
   created_at: string
+  "Item Description (for database)"?: string
   colors?: {
     name: string
   }
