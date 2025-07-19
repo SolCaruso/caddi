@@ -19,31 +19,24 @@ export const filterSections = [
     label: "Divot Tools",
     options: [
       { id: "divot-tools-all", label: "All Divot Tools" },
-      { id: "divot-tools-premium", label: "Premium Collection" },
-      { id: "divot-tools-custom", label: "Custom Work" },
     ],
   },
   {
     value: "clothes",
     label: "Clothes",
     options: [
-      { id: "t-shirts", label: "T-Shirts", defaultChecked: true },
+      { id: "t-shirts", label: "T-Shirts" },
       { id: "hoodies", label: "Hoodies" },
-      { id: "hats", label: "Hats" },
-    ],
-  },
-  {
-    value: "accessories",
-    label: "Accessories",
-    options: [
-      { id: "golf-bags", label: "Golf Bags" },
-      { id: "golf-gloves", label: "Golf Gloves" },
-      { id: "golf-balls", label: "Golf Balls" },
     ],
   },
 ];
 
-export default function ShopFilter() {
+interface ShopFilterProps {
+  onFilterChange: (filterId: string, isChecked: boolean) => void;
+  selectedFilters: string[];
+}
+
+export default function ShopFilter({ onFilterChange, selectedFilters }: ShopFilterProps) {
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -63,7 +56,6 @@ export default function ShopFilter() {
           <Accordion
             type="multiple"
             className="w-full"
-            defaultValue={["clothes"]}
           >
             {filterSections.map((section) => (
               <AccordionItem key={section.value} value={section.value}>
@@ -73,7 +65,8 @@ export default function ShopFilter() {
                     <div key={option.id} className="flex items-center space-x-2">
                       <Checkbox 
                         id={`mobile-${option.id}`} 
-                        defaultChecked={option.defaultChecked}
+                        checked={selectedFilters.includes(option.id)}
+                        onCheckedChange={(checked) => onFilterChange(option.id, checked as boolean)}
                       />
                       <Label htmlFor={`mobile-${option.id}`}>{option.label}</Label>
                     </div>

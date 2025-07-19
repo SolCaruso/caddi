@@ -9,7 +9,12 @@ import { Label } from "@/components/ui/label";
 import ShopHeader from "./ShopHeader";
 import { filterSections } from "./ShopFilter";
 
-export default function ShopSidebar() {
+interface ShopSidebarProps {
+  onFilterChange: (filterId: string, isChecked: boolean) => void;
+  selectedFilters: string[];
+}
+
+export default function ShopSidebar({ onFilterChange, selectedFilters }: ShopSidebarProps) {
   return (
     <div className="lg:w-1/5 hidden lg:block">
       <div className="mb-8">
@@ -20,7 +25,6 @@ export default function ShopSidebar() {
       <Accordion
         type="multiple"
         className="w-full"
-        defaultValue={["clothes"]}
       >
         {filterSections.map((section) => (
           <AccordionItem key={section.value} value={section.value}>
@@ -30,7 +34,8 @@ export default function ShopSidebar() {
                 <div key={option.id} className="flex items-center space-x-2">
                   <Checkbox 
                     id={option.id} 
-                    defaultChecked={option.defaultChecked}
+                    checked={selectedFilters.includes(option.id)}
+                    onCheckedChange={(checked) => onFilterChange(option.id, checked as boolean)}
                   />
                   <Label htmlFor={option.id}>{option.label}</Label>
                 </div>
