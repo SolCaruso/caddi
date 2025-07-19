@@ -80,7 +80,11 @@ export function getProductsByCategory(categoryId: number): Product[] {
 }
 
 export function getAllProducts(): Product[] {
-  return products
+  return products.sort((a, b) => {
+    const dateA = new Date(a.created_at);
+    const dateB = new Date(b.created_at);
+    return dateB.getTime() - dateA.getTime(); // Newest first
+  });
 }
 
 export function getAllCategories(): Category[] {

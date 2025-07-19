@@ -1,9 +1,18 @@
 import Image from "next/image";
 import Link from "next/link";
-import { useMemo } from "react";
+import { useMemo, useState, useEffect } from "react";
 import ShopHeader from "./ShopHeader";
 import ShopFilter from "./ShopFilter";
 import { getAllProducts, getProductImages, getAllCategories } from "@/lib/data";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 
 interface ShopGridProps {
   onFilterChange: (filterId: string, isChecked: boolean) => void;
@@ -13,6 +22,9 @@ interface ShopGridProps {
 export default function ShopGrid({ onFilterChange, selectedFilters }: ShopGridProps) {
   const allProducts = getAllProducts();
   const categories = getAllCategories();
+  const [currentPage, setCurrentPage] = useState(1);
+  const [shouldScrollToTop, setShouldScrollToTop] = useState(false);
+  const productsPerPage = 9;
 
   // Filter products based on selected filters
   const filteredProducts = useMemo(() => {
@@ -40,6 +52,28 @@ export default function ShopGrid({ onFilterChange, selectedFilters }: ShopGridPr
     });
   }, [allProducts, categories, selectedFilters]);
 
+  // Reset to first page when filters change
+  useMemo(() => {
+    setCurrentPage(1);
+  }, [selectedFilters]);
+
+  // Handle scroll to top after page change
+  useEffect(() => {
+    if (shouldScrollToTop) {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+      setShouldScrollToTop(false);
+    }
+  }, [currentPage, shouldScrollToTop]);
+
+  // Calculate pagination
+  const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
+  const startIndex = (currentPage - 1) * productsPerPage;
+  const endIndex = startIndex + productsPerPage;
+  const currentProducts = filteredProducts.slice(startIndex, endIndex);
+
   return (
     <div className="lg:w-3/4 flex-1">
       {/* Mobile Header Section */}
@@ -59,7 +93,7 @@ export default function ShopGrid({ onFilterChange, selectedFilters }: ShopGridPr
 
       {/* Product Grid */}
       <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-8">
-        {filteredProducts.map((product) => {
+        {currentProducts.map((product) => {
           // Get the first image for this product
           const productImages = getProductImages(product.id)
           const firstImage = productImages[0]
@@ -90,6 +124,132 @@ export default function ShopGrid({ onFilterChange, selectedFilters }: ShopGridPr
           )
         })}
       </div>
+
+      {/* Pagination */}
+      {totalPages > 1 && (
+        <div className="flex justify-center mt-12">
+          <Pagination>
+            <PaginationContent>
+              <PaginationItem>
+                <PaginationPrevious 
+                  href="#" 
+                  onClick={(e) => {
+                    e.preventDefault();
+                    if (currentPage > 1) {
+                      setCurrentPage(currentPage - 1);
+                      setShouldScrollToTop(true);
+                    }
+                  }}
+                  className={currentPage === 1 ? "pointer-events-none opacity-50" : ""}
+                />
+              </PaginationItem>
+              
+              {/* First page */}
+              {currentPage > 2 && (
+                <PaginationItem>
+                  <PaginationLink 
+                    href="#" 
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setCurrentPage(1);
+                      setShouldScrollToTop(true);
+                    }}
+                  >
+                    1
+                  </PaginationLink>
+                </PaginationItem>
+              )}
+              
+              {/* Ellipsis */}
+              {currentPage > 3 && (
+                <PaginationItem>
+                  <PaginationEllipsis />
+                </PaginationItem>
+              )}
+              
+              {/* Previous page */}
+              {currentPage > 1 && (
+                <PaginationItem>
+                  <PaginationLink 
+                    href="#" 
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setCurrentPage(currentPage - 1);
+                      setShouldScrollToTop(true);
+                    }}
+                  >
+                    {currentPage - 1}
+                  </PaginationLink>
+                </PaginationItem>
+              )}
+              
+              {/* Current page */}
+              <PaginationItem>
+                <PaginationLink 
+                  href="#" 
+                  onClick={(e) => e.preventDefault()}
+                  isActive
+                >
+                  {currentPage}
+                </PaginationLink>
+              </PaginationItem>
+              
+              {/* Next page */}
+              {currentPage < totalPages && (
+                <PaginationItem>
+                  <PaginationLink 
+                    href="#" 
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setCurrentPage(currentPage + 1);
+                      setShouldScrollToTop(true);
+                    }}
+                  >
+                    {currentPage + 1}
+                  </PaginationLink>
+                </PaginationItem>
+              )}
+              
+              {/* Ellipsis */}
+              {currentPage < totalPages - 2 && (
+                <PaginationItem>
+                  <PaginationEllipsis />
+                </PaginationItem>
+              )}
+              
+              {/* Last page */}
+              {currentPage < totalPages - 1 && (
+                <PaginationItem>
+                  <PaginationLink 
+                    href="#" 
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setCurrentPage(totalPages);
+                      setShouldScrollToTop(true);
+                    }}
+                  >
+                    {totalPages}
+                  </PaginationLink>
+                </PaginationItem>
+              )}
+              
+              <PaginationItem>
+                <PaginationNext 
+                  href="#" 
+                  onClick={(e) => {
+                    e.preventDefault();
+                    if (currentPage < totalPages) {
+                      setCurrentPage(currentPage + 1);
+                      setShouldScrollToTop(true);
+                    }
+                  }}
+                  className={currentPage === totalPages ? "pointer-events-none opacity-50" : ""}
+                />
+              </PaginationItem>
+            </PaginationContent>
+          </Pagination>
+        </div>
+      )}
     </div>
   );
 } 
