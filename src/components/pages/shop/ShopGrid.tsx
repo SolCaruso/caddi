@@ -3,7 +3,7 @@ import Link from "next/link";
 import { useMemo, useState, useEffect } from "react";
 import ShopHeader from "./ShopHeader";
 import ShopFilter from "./ShopFilter";
-import { getAllProducts, getProductImages, getAllCategories } from "@/lib/data";
+import { getAllProducts, getProductImages, getAllCategories, getProductVariants } from "@/lib/data";
 import {
   Pagination,
   PaginationContent,
@@ -94,9 +94,41 @@ export default function ShopGrid({ onFilterChange, selectedFilters }: ShopGridPr
       {/* Product Grid */}
       <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-8">
         {currentProducts.map((product) => {
-          // Get the first image for this product
+          // Get images and variants for this product
           const productImages = getProductImages(product.id)
-          const firstImage = productImages[0]
+          const productVariants = getProductVariants(product.id)
+          
+          // Get the first image - use the same logic as variant page
+          let firstImage = productImages[0]
+          
+          // If product has variants, get the image for the first available color
+          if (productVariants.length > 0) {
+            // Get unique colors from variants
+            const availableColors = [...new Set(productVariants.map((v: any) => v.colors?.name).filter(Boolean))]
+            
+            if (availableColors.length > 0) {
+              const firstColor = availableColors[0]
+              
+              // Find variants for the first color
+              const colorVariants = productVariants.filter((v: any) => v.colors?.name === firstColor)
+              
+              if (colorVariants.length > 0) {
+                // Get the first variant ID for this color
+                const variantId = colorVariants[0].id
+                
+                // Find image that has this variant ID in its variant_ids
+                const colorImage = productImages.find(img => 
+                  img["variant_ids (using the image)"] && 
+                  Array.isArray(img["variant_ids (using the image)"]) &&
+                  img["variant_ids (using the image)"].includes(variantId)
+                )
+                
+                if (colorImage) {
+                  firstImage = colorImage
+                }
+              }
+            }
+          }
           
           return (
             <Link key={product.id} href={`/shop/${product.id}`} className="group cursor-pointer">
@@ -106,6 +138,7 @@ export default function ShopGrid({ onFilterChange, selectedFilters }: ShopGridPr
                   alt={product.name}
                   fill
                   className="object-cover"
+                  draggable={false}
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 />
               </div>

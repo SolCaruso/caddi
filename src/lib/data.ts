@@ -52,6 +52,8 @@ export interface Image {
   product_id: number
   path: string
   created_at: string
+  "Item Description (for database)"?: string
+  "variant_ids (using the image)"?: number[] | null
 }
 
 export interface Color {

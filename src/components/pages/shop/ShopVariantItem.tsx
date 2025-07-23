@@ -1,64 +1,82 @@
+"use client"
+
 import Image from "next/image"
 import Link from "next/link"
-import { Container } from "@/components/ui/container"
-import { getProductById, getProductImages, getAllProducts, getProductVariants } from "@/lib/data"
+import { useState, useMemo } from "react"
 import { Badge } from "@/components/ui/badge"
-import ShopVariantItem from "./ShopVariantItem"
+import { Container } from "@/components/ui/container"
+import { Product, ProductVariant, Image as ProductImage } from "@/lib/data"
+import { getProductImages } from "@/lib/data"
 
-interface ShopItemProps {
-  productId: number
+interface ShopVariantItemProps {
+  product: Product
+  variants: ProductVariant[]
+  productImages: ProductImage[]
+  relatedProducts: Product[]
 }
 
-export default function ShopItem({ productId }: ShopItemProps) {
-  const product = getProductById(productId)
-  const productImages = getProductImages(productId)
-  const variants = getProductVariants(productId)
-
-  // Get related products (other products in the same category)
-  const allProducts = getAllProducts()
-  const relatedProducts = allProducts
-    .filter((p) => p.id !== productId && p.category_id === product?.category_id)
-    .slice(0, 3)
+export default function ShopVariantItem({ product, variants, productImages, relatedProducts }: ShopVariantItemProps) {
+  // State for selected variations
+  const [selectedColor, setSelectedColor] = useState<string | null>(null)
+  const [selectedSize, setSelectedSize] = useState<string | null>(null)
 
   // Check if product has variants
   const hasVariants = variants.length > 0
 
-  // If product not found, show error or redirect
-  if (!product) {
-    return (
-      <main className="flex-1 bg-white flex flex-col">
-        <Container className="flex-1">
-          <div className="flex flex-col justify-center h-full">
-            <h1 className="text-2xl font-bold text-caddi-blue mb-4">Product Not Found</h1>
-            <p className="text-caddi-black mb-6">The product you&apos;re looking for doesn&apos;t exist.</p>
-            <Link href="/shop" className="text-caddi-brown hover:underline">
-              ← Back to Shop
-            </Link>
-          </div>
-        </Container>
-      </main>
+  // Get unique colors and sizes from variants
+  const availableColors = useMemo(() => {
+    if (!hasVariants) return []
+    const colors = variants.map(v => v.colors?.name).filter(Boolean)
+    return [...new Set(colors)]
+  }, [variants, hasVariants])
+
+  const availableSizes = useMemo(() => {
+    if (!hasVariants) return []
+    const sizes = variants.map(v => v.sizes?.name).filter(Boolean)
+    return [...new Set(sizes)]
+  }, [variants, hasVariants])
+
+  // Set initial selections if product has variants
+  useMemo(() => {
+    if (hasVariants && availableColors.length > 0 && !selectedColor) {
+      setSelectedColor(availableColors[0] || null)
+    }
+    if (hasVariants && availableSizes.length > 0 && !selectedSize) {
+      setSelectedSize(availableSizes[0] || null)
+    }
+  }, [hasVariants, availableColors, availableSizes, selectedColor, selectedSize])
+
+  // Function to get the appropriate image based on selected color
+  const getImageForColor = (color: string | null) => {
+    if (!color || !hasVariants) {
+      return productImages[0]?.path || "/placeholder.svg?height=600&width=600"
+    }
+    
+    // Find variants for the selected color
+    const colorVariants = variants.filter(v => v.colors?.name === color)
+    if (colorVariants.length === 0) {
+      return productImages[0]?.path || "/placeholder.svg?height=600&width=600"
+    }
+    
+    // Get the first variant ID for this color
+    const variantId = colorVariants[0].id
+    
+    // Find image that has this variant ID in its variant_ids
+    const colorImage = productImages.find(img => 
+      img["variant_ids (using the image)"] && 
+      Array.isArray(img["variant_ids (using the image)"]) &&
+      img["variant_ids (using the image)"].includes(variantId)
     )
+    
+    return colorImage?.path || productImages[0]?.path || "/placeholder.svg?height=600&width=600"
   }
 
-  // If product has variants, use the client component
-  if (hasVariants) {
-    return (
-      <ShopVariantItem 
-        product={product}
-        variants={variants}
-        productImages={productImages}
-        relatedProducts={relatedProducts}
-      />
-    )
-  }
-
-  // For products without variants, use the server component version
-  const firstImage = productImages[0]
-  const mainImageSrc = firstImage?.path || "/placeholder.svg?height=600&width=600"
+  // Get the appropriate image for the current selection
+  const mainImageSrc = getImageForColor(selectedColor)
 
   return (
     <main className="bg-white">
-      <Container className="mx-auto px-4">
+      <Container className=" mx-auto px-4">
         {/* Main Product Section */}
         <div className="pt-12 lg:pt-32 pb-23 lg:pb-44 max-w-6xl mx-auto">
           {/* Mobile/Tablet Layout */}
@@ -103,8 +121,52 @@ export default function ShopItem({ productId }: ShopItemProps) {
               </div>
             </div>
 
-            {/* Product Details */}
+            {/* Product Options and Details */}
             <div className="space-y-6">
+              {/* Color Selection */}
+              {hasVariants && availableColors.length > 0 && (
+                <div className="space-y-3">
+                  <p className="text-lg font-medium text-caddi-blue">Color:</p>
+                  <div className="flex gap-2 flex-wrap">
+                    {availableColors.map((color) => (
+                      <button
+                        key={color}
+                        onClick={() => setSelectedColor(color || null)}
+                        className={`px-6 py-3 border rounded-sm transition-all duration-200 whitespace-nowrap cursor-pointer ${
+                          selectedColor === color
+                            ? 'border-caddi-blue text-caddi-blue'
+                            : 'border-gray-300 text-black/50 hover:border-gray-400'
+                        }`}
+                      >
+                        {color || ''}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Size Selection */}
+              {hasVariants && availableSizes.length > 0 && (
+                <div className="space-y-3">
+                  <p className="text-lg font-medium text-caddi-blue">Size:</p>
+                  <div className="flex gap-2 flex-wrap">
+                    {availableSizes.map((size) => (
+                      <button
+                        key={size}
+                        onClick={() => setSelectedSize(size || null)}
+                        className={`px-6 py-3 border rounded-sm transition-all duration-200 whitespace-nowrap cursor-pointer ${
+                          selectedSize === size
+                            ? 'border-caddi-blue text-caddi-blue'
+                            : 'border-gray-300 text-black/70 hover:border-gray-400'
+                        }`}
+                      >
+                        {size || ''}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
               {/* Description */}
               <div className="space-y-4">
                 {product.header && <p className="text-caddi-blue font-medium text-xl pt-2">{product.header}</p>}
@@ -125,8 +187,14 @@ export default function ShopItem({ productId }: ShopItemProps) {
 
               {/* Add to Bag Button */}
               <div className="pt-8">
-                <button className="bg-white text-lg border border-caddi-blue text-caddi-black font-medium py-4 px-38 rounded-full hover:bg-caddi-blue hover:text-white transition-all duration-100 ease-in-out cursor-pointer w-full">
-                  Add to Bag
+                <button 
+                  className="bg-white text-lg border border-caddi-blue text-caddi-black font-medium py-4 px-38 rounded-full hover:bg-caddi-blue hover:text-white transition-all duration-100 ease-in-out cursor-pointer w-full"
+                  disabled={hasVariants && (!selectedColor || !selectedSize)}
+                >
+                  {hasVariants && (!selectedColor || !selectedSize) 
+                    ? "Select Color & Size" 
+                    : "Add to Bag"
+                  }
                 </button>
               </div>
             </div>
@@ -150,26 +218,14 @@ export default function ShopItem({ productId }: ShopItemProps) {
             {/* Right Side - Product Details */}
             <div className="flex flex-col justify-center space-y-4 ">
 
-              {/* Tag and Shop Button Row */}
-              <div className="flex items-center justify-between mb-4">
-                {/* Tag - Left Aligned (Hidden on screens under lg) */}
-                {product.tag && (
-                  <div className="hidden lg:flex">
-                    <Badge variant="secondary" className="text-xs">
-                      {product.tag}
-                    </Badge>
-                  </div>
-                )}
-                
-                {/* Back to Shop Button - Right Aligned */}
-                <div className="flex-shrink-0">
-                  <Link href="/shop" className="inline-flex items-center gap-2 text-black/50 font-medium text-sm border rounded-full px-4 py-1.75 cursor-pointer hover:text-black/70 group">
-                    <svg className="h-4 w-4 text-black/50 group-hover:text-black/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                    </svg>
-                    Shop
-                  </Link>
-                </div>
+              {/* Back to Shop Button - Right Aligned */}
+              <div className="mb-4 flex justify-end">
+                <Link href="/shop" className="inline-flex items-center gap-2 text-black/50 font-medium text-sm border rounded-full px-4 py-1.75 cursor-pointer hover:text-black/70 group">
+                  <svg className="h-4 w-4 text-black/50 group-hover:text-black/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                  </svg>
+                  Shop
+                </Link>
               </div>
 
               {/* Category */}
@@ -181,8 +237,52 @@ export default function ShopItem({ productId }: ShopItemProps) {
               {/* Price */}
               <p className="text-xl font-medium text-black/50">${product.price}</p>
 
+              {/* Color Selection */}
+              {hasVariants && availableColors.length > 0 && (
+                <div className="space-y-3 mt-4">
+                  <p className="text-lg font-medium text-caddi-blue">Color:</p>
+                  <div className="flex gap-2 flex-wrap">
+                    {availableColors.map((color) => (
+                      <button
+                        key={color}
+                        onClick={() => setSelectedColor(color || null)}
+                        className={`px-6 py-3 border rounded-sm transition-all duration-200 whitespace-nowrap cursor-pointer ${
+                          selectedColor === color
+                            ? 'border-caddi-blue text-caddi-blue'
+                            : 'border-gray-300 text-black/50 hover:border-gray-400'
+                        }`}
+                      >
+                        {color || ''}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Size Selection */}
+              {hasVariants && availableSizes.length > 0 && (
+                <div className="space-y-3 mt-4">
+                  <p className="text-lg font-medium text-caddi-blue">Size:</p>
+                  <div className="flex gap-2 flex-wrap">
+                    {availableSizes.map((size) => (
+                      <button
+                        key={size}
+                        onClick={() => setSelectedSize(size || null)}
+                        className={`px-6 py-3 border rounded-sm transition-all duration-200 whitespace-nowrap cursor-pointer ${
+                          selectedSize === size
+                            ? 'border-caddi-blue text-caddi-blue'
+                            : 'border-gray-300 text-black/70 hover:border-gray-400'
+                        }`}
+                      >
+                        {size || ''}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
               {/* Description */}
-              <div className="space-y-4">
+              <div className="space-y-4 mt-4">
                 {product.header && <p className="text-caddi-blue font-medium text-xl pt-2">{product.header}</p>}
 
                 {product.description && <p className="text-black/50 text-lg font-normal ">{product.description}</p>}
@@ -201,8 +301,14 @@ export default function ShopItem({ productId }: ShopItemProps) {
 
               {/* Add to Bag Button */}
               <div className="pt-8">
-                <button className="bg-white text-lg border border-caddi-blue text-caddi-black font-medium py-4 px-38 rounded-full hover:bg-caddi-blue hover:text-white transition-all duration-100 ease-in-out cursor-pointer">
-                  Add to Bag
+                <button 
+                  className="bg-white text-lg border border-caddi-blue text-caddi-black font-medium py-4 px-38 rounded-full hover:bg-caddi-blue hover:text-white transition-all duration-100 ease-in-out cursor-pointer"
+                  disabled={hasVariants && (!selectedColor || !selectedSize)}
+                >
+                  {hasVariants && (!selectedColor || !selectedSize) 
+                    ? "Select Color & Size" 
+                    : "Add to Bag"
+                  }
                 </button>
               </div>
             </div>
@@ -263,4 +369,4 @@ export default function ShopItem({ productId }: ShopItemProps) {
       </Container>
     </main>
   )
-}
+} 
