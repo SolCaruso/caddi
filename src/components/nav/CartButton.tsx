@@ -3,9 +3,10 @@
 import ShoppingBag from "@/components/icons/ShoppingBag";
 import { useCart } from "@/lib/cart";
 import { useEffect, useState } from "react";
+import Link from "next/link";
 
 export default function CartButton() {
-  const { toggleCart, state } = useCart();
+  const { state } = useCart();
   const [itemCount, setItemCount] = useState(0);
   const [isClient, setIsClient] = useState(false);
 
@@ -21,8 +22,8 @@ export default function CartButton() {
   }, [state.items, isClient]);
 
   return (
-    <button 
-      onClick={toggleCart}
+    <Link 
+      href="/cart"
       className="cart-trigger transition-all cursor-pointer duration-100 group ease-in-out-quad -mr-1.5 relative"
     >
       <ShoppingBag className="h-10 w-10 md:h-9 md:w-9 text-caddi-blue group-hover:text-caddi-brown transition-all duration-100 ease-in-out-quad" />
@@ -33,6 +34,6 @@ export default function CartButton() {
           {itemCount > 99 ? '99+' : itemCount}
         </div>
       )}
-    </button>
+    </Link>
   );
 } 

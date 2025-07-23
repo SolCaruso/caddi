@@ -3,7 +3,6 @@ import "./globals.css";
 import Navigation from "@/components/nav/Navigation";
 import Footer from "@/components/footer/Footer";
 import { CartProvider } from "@/lib/cart";
-import CartDrawer from "@/components/cart/CartDrawer";
 
 export const metadata: Metadata = {
   title: "Caddi AI Inc.",
@@ -26,7 +25,6 @@ export default function RootLayout({
           <Navigation />
           {children}
           <Footer />
-          <CartDrawer />
         </CartProvider>
       </body>
     </html>
