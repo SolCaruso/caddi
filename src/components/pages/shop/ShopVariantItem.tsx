@@ -3,7 +3,7 @@
 import Image from "next/image"
 import Link from "next/link"
 import { useState, useMemo } from "react"
-import { Badge } from "@/components/ui/badge"
+
 import { Container } from "@/components/ui/container"
 import { Product, ProductVariant, Image as ProductImage } from "@/lib/data"
 import { getProductImages } from "@/lib/data"

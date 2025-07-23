@@ -3,7 +3,7 @@ import Link from "next/link";
 import { useMemo, useState, useEffect } from "react";
 import ShopHeader from "./ShopHeader";
 import ShopFilter from "./ShopFilter";
-import { getAllProducts, getProductImages, getAllCategories, getProductVariants } from "@/lib/data";
+import { getAllProducts, getProductImages, getAllCategories, getProductVariants, ProductVariant } from "@/lib/data";
 import {
   Pagination,
   PaginationContent,
@@ -104,13 +104,13 @@ export default function ShopGrid({ onFilterChange, selectedFilters }: ShopGridPr
           // If product has variants, get the image for the first available color
           if (productVariants.length > 0) {
             // Get unique colors from variants
-            const availableColors = [...new Set(productVariants.map((v: any) => v.colors?.name).filter(Boolean))]
+            const availableColors = [...new Set(productVariants.map((v: ProductVariant) => v.colors?.name).filter(Boolean))]
             
             if (availableColors.length > 0) {
               const firstColor = availableColors[0]
               
               // Find variants for the first color
-              const colorVariants = productVariants.filter((v: any) => v.colors?.name === firstColor)
+              const colorVariants = productVariants.filter((v: ProductVariant) => v.colors?.name === firstColor)
               
               if (colorVariants.length > 0) {
                 // Get the first variant ID for this color
