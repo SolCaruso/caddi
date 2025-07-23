@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 import Navigation from "@/components/nav/Navigation";
 import Footer from "@/components/footer/Footer";
+import { CartProvider } from "@/lib/cart";
+import CartDrawer from "@/components/cart/CartDrawer";
 
 export const metadata: Metadata = {
   title: "Caddi AI Inc.",
@@ -20,9 +22,12 @@ export default function RootLayout({
         <link rel="stylesheet" href="https://use.typekit.net/eaa4cih.css" />
       </head>
       <body className="font-proxima-nova antialiased h-full mx-auto flex flex-col">
-        <Navigation />
-        {children}
-        <Footer />
+        <CartProvider>
+          <Navigation />
+          {children}
+          <Footer />
+          <CartDrawer />
+        </CartProvider>
       </body>
     </html>
   );

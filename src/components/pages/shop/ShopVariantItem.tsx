@@ -7,6 +7,7 @@ import { useState, useMemo } from "react"
 import { Container } from "@/components/ui/container"
 import { Product, ProductVariant, Image as ProductImage } from "@/lib/data"
 import { getProductImages } from "@/lib/data"
+import AddToBagVariantButton from "@/components/cart/AddToBagVariantButton"
 
 interface ShopVariantItemProps {
   product: Product
@@ -187,15 +188,21 @@ export default function ShopVariantItem({ product, variants, productImages, rela
 
               {/* Add to Bag Button */}
               <div className="pt-8">
-                <button 
-                  className="bg-white text-lg border border-caddi-blue text-caddi-black font-medium py-4 px-38 rounded-full hover:bg-caddi-blue hover:text-white transition-all duration-100 ease-in-out cursor-pointer w-full"
-                  disabled={hasVariants && (!selectedColor || !selectedSize)}
+                <AddToBagVariantButton
+                  productId={product.id}
+                  productName={product.name}
+                  productPrice={product.price}
+                  productImage={mainImageSrc}
+                  variants={variants}
+                  selectedColor={selectedColor}
+                  selectedSize={selectedSize}
+                  hasVariants={hasVariants}
                 >
                   {hasVariants && (!selectedColor || !selectedSize) 
                     ? "Select Color & Size" 
                     : "Add to Bag"
                   }
-                </button>
+                </AddToBagVariantButton>
               </div>
             </div>
           </div>
@@ -301,15 +308,21 @@ export default function ShopVariantItem({ product, variants, productImages, rela
 
               {/* Add to Bag Button */}
               <div className="pt-8">
-                <button 
-                  className="bg-white text-lg border border-caddi-blue text-caddi-black font-medium py-4 px-38 rounded-full hover:bg-caddi-blue hover:text-white transition-all duration-100 ease-in-out cursor-pointer"
-                  disabled={hasVariants && (!selectedColor || !selectedSize)}
+                <AddToBagVariantButton
+                  productId={product.id}
+                  productName={product.name}
+                  productPrice={product.price}
+                  productImage={mainImageSrc}
+                  variants={variants}
+                  selectedColor={selectedColor}
+                  selectedSize={selectedSize}
+                  hasVariants={hasVariants}
                 >
                   {hasVariants && (!selectedColor || !selectedSize) 
                     ? "Select Color & Size" 
                     : "Add to Bag"
                   }
-                </button>
+                </AddToBagVariantButton>
               </div>
             </div>
           </div>
