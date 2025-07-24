@@ -5,6 +5,10 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
+export function classNames(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs))
+}
+
 export function normalizeImageUrl(url: string): string {
   if (!url) return url
   

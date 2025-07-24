@@ -139,9 +139,14 @@ export default function ShopItem({ productId }: ShopItemProps) {
 
               {/* Add to Bag Button */}
               <div className="pt-8">
-                <button className="bg-white text-lg border border-caddi-blue text-caddi-black font-medium py-4 px-38 rounded-full hover:bg-caddi-blue hover:text-white transition-all duration-100 ease-in-out cursor-pointer w-full">
+                <AddToBagButton
+                  productId={product.id}
+                  productName={product.name}
+                  productPrice={product.price}
+                  productImage={mainImageSrc}
+                >
                   Add to Bag
-                </button>
+                </AddToBagButton>
               </div>
             </div>
           </div>

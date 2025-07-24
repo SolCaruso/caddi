@@ -166,7 +166,12 @@ export default function CartPageClient() {
                         // For variants, show: "Product Name - Category"
                         return (
                           <h3 className="text-lg font-medium text-gray-900 truncate">
-                            {item.name} - {product?.categories?.name}
+                            <Link 
+                              href={`/shop/${item.id}`}
+                              className="hover:text-caddi-blue transition-colors cursor-pointer"
+                            >
+                              {item.name} - {product?.categories?.name}
+                            </Link>
                           </h3>
                         )
                       } else {
@@ -174,7 +179,12 @@ export default function CartPageClient() {
                         const displayName = product?.tag ? `${product.tag} ${item.name}` : item.name
                         return (
                           <h3 className="text-lg font-medium text-gray-900 truncate">
-                            {displayName}
+                            <Link 
+                              href={`/shop/${item.id}`}
+                              className="hover:text-caddi-blue transition-colors cursor-pointer"
+                            >
+                              {displayName}
+                            </Link>
                           </h3>
                         )
                       }

@@ -2,6 +2,8 @@
 
 import { useCart, CartProvider } from "@/lib/cart"
 import { ProductVariant } from "@/lib/data"
+import { DrawerDialogDemo } from "@/components/ui/cart-notification"
+import { useCallback } from "react"
 
 interface AddToBagButtonProps {
   productId: number
@@ -38,7 +40,7 @@ function AddToBagButtonInner({
 }: AddToBagButtonProps) {
   const { addItem } = useCart()
 
-  const handleAddToBag = () => {
+  const handleAddToBag = useCallback(() => {
     if (hasVariants && selectedColor && selectedSize && variants) {
       // Handle products with variants that need color/size selection
       const selectedVariant = variants.find(v => 
@@ -79,19 +81,24 @@ function AddToBagButtonInner({
         image: productImage
       })
     }
-  }
+  }, [addItem, productId, productName, productPrice, productImage, variants, selectedColor, selectedSize, hasVariants, variantId, color, size])
 
   // Determine if button should be disabled
   const isDisabled = disabled || (hasVariants && (!selectedColor || !selectedSize))
 
   return (
-    <button
-      onClick={handleAddToBag}
+    <DrawerDialogDemo
+      productId={productId}
+      productName={productName}
+      productPrice={productPrice}
+      productImage={productImage}
+      selectedColor={selectedColor}
+      selectedSize={selectedSize}
       disabled={isDisabled}
-      className="bg-white text-lg border border-caddi-blue text-caddi-black font-medium py-4 px-38 rounded-full hover:bg-caddi-blue hover:text-white transition-all duration-100 ease-in-out cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+      onButtonClick={handleAddToBag}
     >
       {children}
-    </button>
+    </DrawerDialogDemo>
   )
 }
 
