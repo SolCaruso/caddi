@@ -2,7 +2,7 @@ import React from "react";
 import Logo from "@/components/logos/Caddi";
 import DesktopMenu from "./DesktopMenu";
 import DownloadButton from "./DownloadButton";
-import CartButton from "./CartButton";
+import CartButton from "./client/CartButton";
 import MobileNavClient from "./client/MobileNavClient";
 import { Container } from "@/components/ui/container";
 

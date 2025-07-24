@@ -26,14 +26,18 @@ export default function CartButton() {
       href="/cart"
       className="cart-trigger transition-all cursor-pointer duration-100 group ease-in-out-quad -mr-1.5 relative"
     >
-      <ShoppingBag className="h-10 w-10 md:h-9 md:w-9 text-caddi-blue group-hover:text-caddi-brown transition-all duration-100 ease-in-out-quad" />
-      
-      {/* Item Count Badge - Only render on client */}
-      {isClient && itemCount > 0 && (
-        <div className="absolute -top-2 -right-2 bg-caddi-blue text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-medium">
-          {itemCount > 99 ? '99+' : itemCount}
-        </div>
-      )}
+      <div className="relative">
+        <ShoppingBag className="h-10 w-10 md:h-9 md:w-9 text-caddi-blue group-hover:text-caddi-brown transition-all duration-100 ease-in-out-quad" />
+        
+        {/* Item Count Badge - Centered in the bag */}
+        {isClient && itemCount > 0 && (
+          <div className="absolute inset-0 flex items-center justify-center translate-y-0.5">
+            <span className="text-caddi-blue text-xs font-bold">
+              {itemCount > 99 ? '99' : itemCount}
+            </span>
+          </div>
+        )}
+      </div>
     </Link>
   );
 } 

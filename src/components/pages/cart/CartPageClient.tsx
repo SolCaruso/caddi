@@ -79,6 +79,32 @@ export default function CartPageClient() {
 
   const totalItems = state.items.reduce((total, item) => total + item.quantity, 0)
 
+  // Calculate shipping and tax
+  const subtotal = getTotalPrice()
+  const taxRate = 0.13 // 13%
+  const estimatedTax = subtotal * taxRate
+  
+  // Determine shipping cost based on cart contents
+  let shippingCost = 0
+  const hasClothing = state.items.some(item => {
+    const product = getProductById(item.id)
+    return product && (product.category_id === 1 || product.category_id === 2) // T-Shirt or Hoodie
+  })
+  const hasDivotTools = state.items.some(item => {
+    const product = getProductById(item.id)
+    return product && product.category_id === 3 // Divot Tool
+  })
+  
+  if (subtotal >= 100) {
+    shippingCost = 0 // Free shipping for orders over $100
+  } else if (hasClothing) {
+    shippingCost = 9.99 // $9.99 if clothing is included
+  } else if (hasDivotTools) {
+    shippingCost = 4.99 // $4.99 for divot tools only
+  }
+  
+  const total = subtotal + shippingCost + estimatedTax
+
   return (
     <div className="pt-12 lg:pt-32 pb-23 lg:pb-44">
       {/* Header */}
@@ -90,7 +116,7 @@ export default function CartPageClient() {
       {isClient && totalItems > 0 && (
         <div className="mb-8">
           <p className="text-lg text-black/50">
-            {totalItems} {totalItems === 1 ? 'Item' : 'Items'} | ${getTotalPrice().toFixed(2)}
+            {totalItems} {totalItems === 1 ? 'Item' : 'Items'} | ${subtotal.toFixed(2)}
           </p>
         </div>
       )}
@@ -216,7 +242,10 @@ export default function CartPageClient() {
             {/* Shipping Info */}
             <div className="mt-8 p-4 bg-gray-50 rounded-lg">
               <p className="text-sm text-gray-600">
-                Shipping: Arrives by Thu, Jun 26
+                {shippingCost === 0 
+                  ? "Free shipping on orders over $100" 
+                  : `Shipping: $${shippingCost.toFixed(2)} - Arrives by Thu, Jun 26`
+                }
               </p>
             </div>
           </div>
@@ -229,23 +258,23 @@ export default function CartPageClient() {
               <div className="space-y-4">
                 <div className="flex justify-between">
                   <span className="text-gray-600">Subtotal</span>
-                  <span className="font-medium">${getTotalPrice().toFixed(2)}</span>
+                  <span className="font-medium">${subtotal.toFixed(2)}</span>
                 </div>
                 
                 <div className="flex justify-between">
                   <span className="text-gray-600">Estimated Shipping & Handling</span>
-                  <span className="font-medium text-green-600">Free</span>
+                  <span className="font-medium">${shippingCost.toFixed(2)}</span>
                 </div>
                 
                 <div className="flex justify-between">
                   <span className="text-gray-600">Estimated Tax</span>
-                  <span className="font-medium">—</span>
+                  <span className="font-medium">${estimatedTax.toFixed(2)}</span>
                 </div>
                 
                 <div className="border-t border-gray-200 pt-4">
                   <div className="flex justify-between">
                     <span className="text-lg font-semibold">Total</span>
-                    <span className="text-lg font-semibold">${getTotalPrice().toFixed(2)}</span>
+                    <span className="text-lg font-semibold">${total.toFixed(2)}</span>
                   </div>
                 </div>
               </div>
