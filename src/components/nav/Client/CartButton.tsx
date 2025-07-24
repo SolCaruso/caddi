@@ -3,6 +3,7 @@
 import ShoppingBag from "@/components/icons/ShoppingBag";
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { CartItem } from "@/lib/cart";
 
 export default function CartButton() {
   const [itemCount, setItemCount] = useState(0);
@@ -13,7 +14,7 @@ export default function CartButton() {
       const saved = localStorage.getItem('cart');
       if (saved) {
         const cartItems = JSON.parse(saved);
-        const total = cartItems.reduce((total: number, item: any) => total + item.quantity, 0);
+        const total = cartItems.reduce((total: number, item: CartItem) => total + item.quantity, 0);
         setItemCount(total);
       } else {
         setItemCount(0);
