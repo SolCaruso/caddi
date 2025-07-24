@@ -2,6 +2,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { Product } from "@/lib/data"
 import { getProductImages, getProductVariants, getAllCategories } from "@/lib/data"
+import { normalizeImageUrl } from "@/lib/utils"
 
 interface RelatedProductsProps {
   relatedProducts: Product[]
@@ -27,7 +28,7 @@ export default function RelatedProducts({ relatedProducts }: RelatedProductsProp
             <Link key={relatedProduct.id} href={`/shop/${relatedProduct.id}`} className="group">
               <div className="relative aspect-square mb-4 bg-gray-200 overflow-hidden rounded-lg">
                 <Image
-                  src={firstRelatedImage?.path || "/placeholder.svg?height=400&width=400"}
+                  src={normalizeImageUrl(firstRelatedImage?.path || "/placeholder.svg?height=400&width=400")}
                   alt={relatedProduct.name}
                   fill
                   className="object-cover"
@@ -72,7 +73,7 @@ export default function RelatedProducts({ relatedProducts }: RelatedProductsProp
             <Link href={`/shop/${relatedProducts[2].id}`} className="group">
               <div className="relative aspect-square mb-4 bg-gray-200 overflow-hidden rounded-lg">
                 <Image
-                  src={getProductImages(relatedProducts[2].id)[0]?.path || "/placeholder.svg?height=400&width=400"}
+                  src={normalizeImageUrl(getProductImages(relatedProducts[2].id)[0]?.path || "/placeholder.svg?height=400&width=400")}
                   alt={relatedProducts[2].name}
                   fill
                   className="object-cover"

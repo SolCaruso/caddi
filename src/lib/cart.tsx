@@ -119,6 +119,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (typeof window !== 'undefined') {
       localStorage.setItem('cart', JSON.stringify(state.items))
+      // Dispatch custom event to notify other components
+      window.dispatchEvent(new CustomEvent('cartUpdated'))
     }
   }, [state.items])
 

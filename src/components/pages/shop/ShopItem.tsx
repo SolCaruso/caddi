@@ -3,6 +3,7 @@ import Link from "next/link"
 import { Container } from "@/components/ui/container"
 import { getProductById, getProductImages, getAllProducts, getProductVariants, Product } from "@/lib/data"
 import { Badge } from "@/components/ui/badge"
+import { normalizeImageUrl } from "@/lib/utils"
 import ShopVariantItem from "./ShopVariantItem"
 import AddToBagButton from "./AddToBagButton"
 import RelatedProducts from "./RelatedProducts"
@@ -67,7 +68,7 @@ export default function ShopItem({ productId }: ShopItemProps) {
 
   // For products without variants, use the server component version
   const firstImage = productImages[0]
-  const mainImageSrc = firstImage?.path || "/placeholder.svg?height=600&width=600"
+  const mainImageSrc = normalizeImageUrl(firstImage?.path || "/placeholder.svg?height=600&width=600")
 
   return (
     <main className="bg-white">

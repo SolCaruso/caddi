@@ -1,6 +1,6 @@
 "use client"
 
-import { useCart } from "@/lib/cart"
+import { useCart, CartProvider } from "@/lib/cart"
 import { ProductVariant } from "@/lib/data"
 
 interface AddToBagButtonProps {
@@ -21,7 +21,7 @@ interface AddToBagButtonProps {
   children: React.ReactNode
 }
 
-export default function AddToBagButton({
+function AddToBagButtonInner({
   productId,
   productName,
   productPrice,
@@ -93,4 +93,12 @@ export default function AddToBagButton({
       {children}
     </button>
   )
+}
+
+export default function AddToBagButton(props: AddToBagButtonProps) {
+  return (
+    <CartProvider>
+      <AddToBagButtonInner {...props} />
+    </CartProvider>
+  );
 } 

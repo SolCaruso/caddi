@@ -6,6 +6,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { useState, useEffect } from "react"
 import { getAllProducts, getProductById } from "@/lib/data"
+import { normalizeImageUrl } from "@/lib/utils"
 import RelatedProducts from "@/components/pages/shop/RelatedProducts"
 
 // Initialize Stripe
@@ -148,7 +149,7 @@ export default function CartPageClient() {
                   {/* Product Image */}
                   <div className="relative h-28 w-28 flex-shrink-0">
                     <Image
-                      src={item.image}
+                      src={normalizeImageUrl(item.image)}
                       alt={item.name}
                       fill
                       className="object-cover rounded"

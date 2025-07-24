@@ -5,6 +5,7 @@ import Link from "next/link"
 import { useState, useMemo } from "react"
 import { Container } from "@/components/ui/container"
 import { Product, ProductVariant, Image as ProductImage, sortSizes } from "@/lib/data"
+import { normalizeImageUrl } from "@/lib/utils"
 import AddToBagButton from "./AddToBagButton"
 import RelatedProducts from "@/components/pages/shop/RelatedProducts"
 
@@ -73,7 +74,7 @@ export default function ShopVariantItem({ product, variants, productImages, rela
   }
 
   // Get the appropriate image for the current selection
-  const mainImageSrc = getImageForColor(selectedColor)
+  const mainImageSrc = normalizeImageUrl(getImageForColor(selectedColor))
 
   return (
     <main className="bg-white">

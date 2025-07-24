@@ -4,6 +4,7 @@ import { useMemo, useState, useEffect } from "react";
 import ShopHeader from "./ShopHeader";
 import ShopFilter from "./ShopFilter";
 import { getAllProducts, getProductImages, getAllCategories, getProductVariants, ProductVariant } from "@/lib/data";
+import { normalizeImageUrl } from "@/lib/utils";
 import {
   Pagination,
   PaginationContent,
@@ -134,7 +135,7 @@ export default function ShopGrid({ onFilterChange, selectedFilters }: ShopGridPr
             <Link key={product.id} href={`/shop/${product.id}`} className="group cursor-pointer">
               <div className="relative aspect-square mb-3 bg-[#D9D9D9]/30 rounded-md overflow-hidden">
                 <Image
-                  src={firstImage?.path || "/webm/birdeye.webp"}
+                  src={normalizeImageUrl(firstImage?.path || "/webm/birdeye.webp")}
                   alt={product.name}
                   fill
                   className="object-cover"

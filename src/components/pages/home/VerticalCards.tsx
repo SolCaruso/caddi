@@ -5,12 +5,12 @@ import VerticalCardsContent from "@/components/pages/home/Client/VerticalCardsCl
 const cardData = [
   {
     bg: "/webm/divot-bg.webp",
-    overlay: "/webm/birdeye.webp",
+    overlay: "/webm/trophy.webp",
     label: "BIRD'S EYE MAPLE",
   },
   {
     bg: "/webm/divot-bg-2.webp",
-    overlay: "/webm/zebrawood.webp",
+    overlay: "/webm/trophy.webp",
     label: "ZEBRAWOOD",
   },
 ]
