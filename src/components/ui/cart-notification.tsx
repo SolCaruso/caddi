@@ -63,12 +63,15 @@ export function DrawerDialogDemo({
           <Button 
             disabled={disabled} 
             onClick={handleButtonClick}
-            className="bg-white text-lg border border-caddi-blue text-caddi-black font-medium py-4 px-38 rounded-full hover:bg-caddi-blue hover:text-white transition-all duration-100 ease-in-out cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed w-full"
+            className="bg-white text-lg border border-caddi-blue text-caddi-black font-medium py-8 px-38 rounded-full hover:bg-caddi-blue hover:text-white transition-all duration-100 ease-in-out cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed w-full"
           >
             {children}
           </Button>
         </DialogTrigger>
-        <DialogContent className="fixed top-4 right-4 w-80 max-w-none p-0 border-0 shadow-lg bg-white rounded-xl overflow-hidden animate-in slide-in-from-top-2 fade-in-0">
+        <DialogContent 
+          showCloseButton={false}
+          className="fixed top-46 right-4 w-80 max-w-none p-0 border-0 shadow-lg bg-white rounded-xl overflow-hidden animate-in slide-in-from-top-2 fade-in-0"
+        >
           <DialogHeader className="sr-only">
             <DialogTitle>Added to Bag</DialogTitle>
             <DialogDescription>Product successfully added to your shopping bag</DialogDescription>
@@ -147,7 +150,7 @@ export function DrawerDialogDemo({
         <Button 
           disabled={disabled} 
           onClick={handleButtonClick}
-          className="bg-white text-lg border border-caddi-blue text-caddi-black font-medium py-4 px-38 rounded-full hover:bg-caddi-blue hover:text-white transition-all duration-100 ease-in-out cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed w-full"
+          className="bg-white text-lg border border-caddi-blue text-caddi-black font-medium py-8 px-38 rounded-full hover:bg-caddi-blue hover:text-white transition-all duration-100 ease-in-out cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed w-full"
         >
           {children}
         </Button>
