@@ -15,7 +15,6 @@ export interface CartItem {
 
 interface CartState {
   items: CartItem[]
-  isOpen: boolean
 }
 
 type CartAction = 
@@ -23,12 +22,9 @@ type CartAction =
   | { type: 'REMOVE_ITEM'; payload: { id: number; variantId?: number } }
   | { type: 'UPDATE_QUANTITY'; payload: { id: number; variantId?: number; quantity: number } }
   | { type: 'CLEAR_CART' }
-  | { type: 'TOGGLE_CART' }
-  | { type: 'CLOSE_CART' }
 
 const initialState: CartState = {
-  items: [],
-  isOpen: false
+  items: []
 }
 
 function cartReducer(state: CartState, action: CartAction): CartState {
@@ -68,12 +64,6 @@ function cartReducer(state: CartState, action: CartAction): CartState {
     case 'CLEAR_CART':
       return { ...state, items: [] }
     
-    case 'TOGGLE_CART':
-      return { ...state, isOpen: !state.isOpen }
-    
-    case 'CLOSE_CART':
-      return { ...state, isOpen: false }
-    
     default:
       return state
   }
@@ -85,8 +75,6 @@ interface CartContextType {
   removeItem: (id: number, variantId?: number) => void
   updateQuantity: (id: number, variantId: number | undefined, quantity: number) => void
   clearCart: () => void
-  toggleCart: () => void
-  closeCart: () => void
   getTotalItems: () => number
   getTotalPrice: () => number
 }
@@ -119,20 +107,12 @@ export function CartProvider({ children }: { children: ReactNode }) {
     dispatch({ type: 'CLEAR_CART' })
   }
 
-  const toggleCart = () => {
-    dispatch({ type: 'TOGGLE_CART' })
-  }
-
-  const closeCart = () => {
-    dispatch({ type: 'CLOSE_CART' })
-  }
-
   const getTotalItems = () => {
-    return state.items.reduce((total, item) => total + item.quantity, 0)
+    return state.items.reduce((total: number, item: CartItem) => total + item.quantity, 0)
   }
 
   const getTotalPrice = () => {
-    return state.items.reduce((total, item) => total + (item.price * item.quantity), 0)
+    return state.items.reduce((total: number, item: CartItem) => total + (item.price * item.quantity), 0)
   }
 
   // Save cart to localStorage whenever it changes
@@ -149,8 +129,6 @@ export function CartProvider({ children }: { children: ReactNode }) {
       removeItem,
       updateQuantity,
       clearCart,
-      toggleCart,
-      closeCart,
       getTotalItems,
       getTotalPrice
     }}>

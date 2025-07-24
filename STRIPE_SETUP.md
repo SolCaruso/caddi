@@ -37,7 +37,7 @@ NEXT_PUBLIC_BASE_URL=http://localhost:3000
 ### 4. Test the Integration
 1. Start your development server: `npm run dev`
 2. Add items to cart
-3. Click the cart icon to open the cart drawer
+3. Click the cart icon to navigate to the cart page
 4. Click "Proceed to Checkout"
 5. You'll be redirected to Stripe's hosted checkout page
 
@@ -47,7 +47,7 @@ NEXT_PUBLIC_BASE_URL=http://localhost:3000
 - ✅ Add items to cart (with variants)
 - ✅ Remove items from cart
 - ✅ Update quantities
-- ✅ Cart drawer with item count badge
+- ✅ Cart page with item count badge
 - ✅ Persistent cart state
 
 ### Checkout Flow

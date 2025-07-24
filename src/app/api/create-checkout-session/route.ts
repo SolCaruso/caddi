@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import Stripe from 'stripe'
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2023-10-16',
+  apiVersion: '2025-06-30.basil',
 })
 
 export async function POST(request: NextRequest) {
@@ -19,7 +19,7 @@ export async function POST(request: NextRequest) {
     // Create line items for Stripe
     const lineItems = items.map((item: any) => ({
       price_data: {
-        currency: 'usd',
+        currency: 'cad',
         product_data: {
           name: item.name,
           images: [item.image],
@@ -51,7 +51,7 @@ export async function POST(request: NextRequest) {
             type: 'fixed_amount',
             fixed_amount: {
               amount: 0,
-              currency: 'usd',
+              currency: 'cad',
             },
             display_name: 'Free shipping',
             delivery_estimate: {
