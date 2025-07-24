@@ -5,7 +5,7 @@ import Link from "next/link"
 import { useState, useMemo } from "react"
 import { Container } from "@/components/ui/container"
 import { Product, ProductVariant, Image as ProductImage } from "@/lib/data"
-import AddToBagButton from "./AddToBagButton"
+import AddToBagButton from "@/components/pages/shop/Client/AddToBagButton"
 import RelatedProducts from "../RelatedProducts"
 
 interface ShopVariantItemProps {

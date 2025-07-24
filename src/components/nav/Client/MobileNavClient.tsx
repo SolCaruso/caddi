@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import MobileHamburger from "./MobileHamburger";
-import MobileDrawer from "./MobileDrawer";
+import MobileHamburger from "@/components/nav/Client/MobileHamburger";
+import MobileDrawer from "@/components/nav/Client/MobileDrawer";
 
 export default function MobileNavClient({ navLinks }: { 
   navLinks: Array<{
