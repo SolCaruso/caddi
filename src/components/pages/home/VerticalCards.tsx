@@ -1,5 +1,5 @@
 import { Container } from "@/components/ui/container"
-import VerticalCardsContent from "./client/VerticalCardsClient"
+import VerticalCardsContent from "@/components/pages/home/client/VerticalCardsClient"
 
 // Static data - stays on server
 const cardData = [
