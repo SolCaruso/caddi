@@ -3,7 +3,7 @@ import Link from "next/link"
 import { Container } from "@/components/ui/container"
 import { getProductById, getProductImages, getAllProducts, getProductVariants, Product } from "@/lib/data"
 import { Badge } from "@/components/ui/badge"
-import ShopVariantItem from "./Client/ShopVariantItem"
+import ShopVariantItem from "@/components/pages/shop/Client/ShopVariantItem"
 import AddToBagButton from "@/components/pages/shop/Client/AddToBagButton"
 import RelatedProducts from "./RelatedProducts"
 
