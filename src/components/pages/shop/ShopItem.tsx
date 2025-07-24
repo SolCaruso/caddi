@@ -3,8 +3,8 @@ import Link from "next/link"
 import { Container } from "@/components/ui/container"
 import { getProductById, getProductImages, getAllProducts, getProductVariants, Product } from "@/lib/data"
 import { Badge } from "@/components/ui/badge"
-import ShopVariantItem from "./Client/ShopVariantItem"
-import AddToBagButton from "./Client/AddToBagButton"
+import ShopVariantItem from "./ShopVariantItem"
+import AddToBagButton from "./AddToBagButton"
 import RelatedProducts from "./RelatedProducts"
 
 interface ShopItemProps {
