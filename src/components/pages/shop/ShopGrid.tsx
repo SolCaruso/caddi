@@ -147,7 +147,29 @@ export default function ShopGrid({ onFilterChange, selectedFilters }: ShopGridPr
                   {product.name}
                 </h3>
                 <p className="font-proxima-nova font-normal text-black/30 text-base">
-                  {product.subtitle || "3 Colours"}
+                  {(() => {
+                    // Check if product has variants
+                    const hasVariants = productVariants.length > 0
+                    
+                    if (product.subtitle) {
+                      return product.subtitle
+                    } else if (hasVariants) {
+                      // Count unique colors for variant products
+                      const uniqueColors = new Set()
+                      productVariants.forEach(v => {
+                        if (v.colors?.name) uniqueColors.add(v.colors.name)
+                      })
+                      const colorCount = uniqueColors.size
+                      return `${colorCount} ${colorCount === 1 ? 'Colour' : 'Colours'}`
+                    } else {
+                      // For non-variant products, show "Category - Tag" or just "Category"
+                      const category = categories.find(cat => cat.id === product.category_id)
+                      if (category) {
+                        return product.tag ? `${category.name} - ${product.tag}` : category.name
+                      }
+                      return "Product"
+                    }
+                  })()}
                 </p>
                 <p className="font-proxima-nova font-semibold text-black/50 text-base">
                   ${product.price}

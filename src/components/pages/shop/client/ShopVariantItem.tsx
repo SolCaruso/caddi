@@ -3,11 +3,10 @@
 import Image from "next/image"
 import Link from "next/link"
 import { useState, useMemo } from "react"
-
 import { Container } from "@/components/ui/container"
 import { Product, ProductVariant, Image as ProductImage } from "@/lib/data"
-import { getProductImages } from "@/lib/data"
-import AddToBagVariantButton from "@/components/cart/AddToBagVariantButton"
+import AddToBagButton from "./AddToBagButton"
+import RelatedProducts from "../RelatedProducts"
 
 interface ShopVariantItemProps {
   product: Product
@@ -188,7 +187,7 @@ export default function ShopVariantItem({ product, variants, productImages, rela
 
               {/* Add to Bag Button */}
               <div className="pt-8">
-                <AddToBagVariantButton
+                <AddToBagButton
                   productId={product.id}
                   productName={product.name}
                   productPrice={product.price}
@@ -202,7 +201,7 @@ export default function ShopVariantItem({ product, variants, productImages, rela
                     ? "Select Color & Size" 
                     : "Add to Bag"
                   }
-                </AddToBagVariantButton>
+                </AddToBagButton>
               </div>
             </div>
           </div>
@@ -308,7 +307,7 @@ export default function ShopVariantItem({ product, variants, productImages, rela
 
               {/* Add to Bag Button */}
               <div className="pt-8">
-                <AddToBagVariantButton
+                <AddToBagButton
                   productId={product.id}
                   productName={product.name}
                   productPrice={product.price}
@@ -322,63 +321,14 @@ export default function ShopVariantItem({ product, variants, productImages, rela
                     ? "Select Color & Size" 
                     : "Add to Bag"
                   }
-                </AddToBagVariantButton>
+                </AddToBagButton>
               </div>
             </div>
           </div>
         </div>
 
         {/* You Might Also Like Section */}
-        {relatedProducts.length > 0 && (
-          <div className="pb-32">
-            <h2 className="text-4xl font-semibold text-caddi-blue mb-8 uppercase font-family-proxima-nova-extra-condensed">YOU MIGHT ALSO LIKE</h2>
-            <div className="grid grid-cols-2 lg:grid-cols-3 gap-8">
-              {relatedProducts.slice(0, 2).map((relatedProduct) => {
-                const relatedImages = getProductImages(relatedProduct.id)
-                const firstRelatedImage = relatedImages[0]
-                return (
-                  <Link key={relatedProduct.id} href={`/shop/${relatedProduct.id}`} className="group">
-                    <div className="relative aspect-square mb-4 bg-gray-200 overflow-hidden rounded-lg">
-                      <Image
-                        src={firstRelatedImage?.path || "/placeholder.svg?height=400&width=400"}
-                        alt={relatedProduct.name}
-                        fill
-                        className="object-cover"
-                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 25vw"
-                      />
-                    </div>
-                    <div className="space-y-1">
-                      <h3 className="font-semibold text-black/50 text-lg">{relatedProduct.name}</h3>
-                      <p className="text-lg text-black/30 text-regular">{relatedProduct.subtitle || "3 Colours"}</p>
-                      <p className="font-semibold text-black/50 text-lg">${relatedProduct.price}</p>
-                    </div>
-                  </Link>
-                )
-              })}
-              {/* Show third product only on large screens */}
-              {relatedProducts.length > 2 && (
-                <div className="hidden lg:block">
-                  <Link href={`/shop/${relatedProducts[2].id}`} className="group">
-                    <div className="relative aspect-square mb-4 bg-gray-200 overflow-hidden rounded-lg">
-                      <Image
-                        src={getProductImages(relatedProducts[2].id)[0]?.path || "/placeholder.svg?height=400&width=400"}
-                        alt={relatedProducts[2].name}
-                        fill
-                        className="object-cover"
-                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 25vw"
-                      />
-                    </div>
-                    <div className="space-y-1">
-                      <h3 className="font-semibold text-black/50 text-lg">{relatedProducts[2].name}</h3>
-                      <p className="text-lg text-black/30 text-regular">{relatedProducts[2].subtitle || "3 Colours"}</p>
-                      <p className="font-semibold text-black/50 text-lg">${relatedProducts[2].price}</p>
-                    </div>
-                  </Link>
-                </div>
-              )}
-            </div>
-          </div>
-        )}
+        <RelatedProducts relatedProducts={relatedProducts} />
       </Container>
     </main>
   )

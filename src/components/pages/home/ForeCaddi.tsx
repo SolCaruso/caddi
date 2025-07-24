@@ -1,5 +1,5 @@
 import { Container } from "@/components/ui/container"
-import ForeCaddiContent from "./Client/ForeCaddiClient"
+import ForeCaddiContent from "./client/ForeCaddiClient"
 
 // Static data - stays on server
 const slides = [

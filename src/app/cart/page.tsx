@@ -1,5 +1,5 @@
 import { Container } from "@/components/ui/container"
-import CartPageClient from "@/components/cart/CartPageClient"
+import CartPageClient from "@/components/pages/cart/CartPageClient"
 
 export default function CartPage() {
   return (

@@ -3,7 +3,7 @@ import Logo from "@/components/logos/Caddi";
 import DesktopMenu from "./DesktopMenu";
 import DownloadButton from "./DownloadButton";
 import CartButton from "./CartButton";
-import MobileNavClient from "./Client/MobileNavClient";
+import MobileNavClient from "./client/MobileNavClient";
 import { Container } from "@/components/ui/container";
 
 // Nav Links

@@ -5,7 +5,8 @@ import { loadStripe } from "@stripe/stripe-js"
 import Image from "next/image"
 import Link from "next/link"
 import { useState, useEffect } from "react"
-import { getAllProducts, getProductImages } from "@/lib/data"
+import { getAllProducts, getProductById } from "@/lib/data"
+import RelatedProducts from "@/components/pages/shop/RelatedProducts"
 
 // Initialize Stripe
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!)
@@ -56,9 +57,25 @@ export default function CartPageClient() {
 
   // Get related products for "You Might Also Like" section
   const allProducts = getAllProducts()
-  const relatedProducts = allProducts
+  let relatedProducts = allProducts
     .filter(product => !state.items.some(item => item.id === product.id))
     .slice(0, 3)
+  
+  // If cart has clothing items, prioritize showing clothing items
+  const hasClothingInCart = state.items.some(item => {
+    const product = allProducts.find(p => p.id === item.id)
+    return product && (product.category_id === 1 || product.category_id === 2)
+  })
+  
+  if (hasClothingInCart) {
+    // Show most recent clothing items that aren't in cart
+    relatedProducts = allProducts
+      .filter(product => 
+        !state.items.some(item => item.id === product.id) && 
+        (product.category_id === 1 || product.category_id === 2)
+      )
+      .slice(0, 3)
+  }
 
   const totalItems = state.items.reduce((total, item) => total + item.quantity, 0)
 
@@ -114,16 +131,45 @@ export default function CartPageClient() {
 
                   {/* Product Details */}
                   <div className="flex-1 min-w-0">
-                    <h3 className="text-lg font-medium text-gray-900 truncate">
-                      {item.name}
-                    </h3>
+                    {(() => {
+                      const product = getProductById(item.id)
+                      const hasVariants = item.variantId !== undefined
+                      
+                      if (hasVariants) {
+                        // For variants, show: "Product Name - Category"
+                        return (
+                          <h3 className="text-lg font-medium text-gray-900 truncate">
+                            {item.name} - {product?.categories?.name}
+                          </h3>
+                        )
+                      } else {
+                        // For non-variants, show tag if available
+                        const displayName = product?.tag ? `${product.tag} ${item.name}` : item.name
+                        return (
+                          <h3 className="text-lg font-medium text-gray-900 truncate">
+                            {displayName}
+                          </h3>
+                        )
+                      }
+                    })()}
                     {item.color && (
                       <p className="text-sm text-gray-500">Color: {item.color}</p>
                     )}
                     {item.size && (
                       <p className="text-sm text-gray-500">Size: {item.size}</p>
                     )}
-                    <p className="text-sm text-gray-500">Domestic Hardwood Divot Tool</p>
+                    {(() => {
+                      const product = getProductById(item.id)
+                      const hasVariants = item.variantId !== undefined
+                      
+                      if (product?.subtitle) {
+                        return <p className="text-sm text-gray-500">{product.subtitle}</p>
+                      } else if (!hasVariants && product?.tag && product?.categories?.name) {
+                        // For non-variants with tags, show "Tag Category"
+                        return <p className="text-sm text-gray-500">{product.tag} {product.categories.name}</p>
+                      }
+                      return null
+                    })()}
                   </div>
 
                   {/* Quantity Controls */}
@@ -217,38 +263,7 @@ export default function CartPageClient() {
       )}
 
       {/* You Might Also Like Section */}
-      {isClient && relatedProducts.length > 0 && (
-        <div className="mt-24 mb-24">
-          <h2 className="text-4xl font-semibold text-caddi-blue mb-8 uppercase font-family-proxima-nova-extra-condensed">
-            YOU MIGHT ALSO LIKE
-          </h2>
-          <div className="grid grid-cols-2 lg:grid-cols-3 gap-8">
-            {relatedProducts.map((product) => {
-              const productImages = getProductImages(product.id)
-              const firstImage = productImages[0]
-              
-              return (
-                <Link key={product.id} href={`/shop/${product.id}`} className="group">
-                  <div className="relative aspect-square mb-4 bg-gray-200 overflow-hidden rounded-lg">
-                    <Image
-                      src={firstImage?.path || "/placeholder.svg?height=400&width=400"}
-                      alt={product.name}
-                      fill
-                      className="object-cover"
-                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 25vw"
-                    />
-                  </div>
-                  <div className="space-y-1">
-                    <h3 className="font-semibold text-black/50 text-lg">{product.name}</h3>
-                    <p className="text-lg text-black/30 text-regular">{product.subtitle || "3 Colours"}</p>
-                    <p className="font-semibold text-black/50 text-lg">${product.price}</p>
-                  </div>
-                </Link>
-              )
-            })}
-          </div>
-        </div>
-      )}
+      {isClient && <RelatedProducts relatedProducts={relatedProducts} />}
     </div>
   )
 } 

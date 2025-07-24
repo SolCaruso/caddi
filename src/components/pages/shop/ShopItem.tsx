@@ -1,10 +1,11 @@
 import Image from "next/image"
 import Link from "next/link"
 import { Container } from "@/components/ui/container"
-import { getProductById, getProductImages, getAllProducts, getProductVariants } from "@/lib/data"
+import { getProductById, getProductImages, getAllProducts, getProductVariants, Product } from "@/lib/data"
 import { Badge } from "@/components/ui/badge"
-import ShopVariantItem from "./ShopVariantItem"
-import AddToBagButton from "@/components/cart/AddToBagButton"
+import ShopVariantItem from "./client/ShopVariantItem"
+import AddToBagButton from "@/components/pages/shop/client/AddToBagButton"
+import RelatedProducts from "./RelatedProducts"
 
 interface ShopItemProps {
   productId: number
@@ -15,11 +16,22 @@ export default function ShopItem({ productId }: ShopItemProps) {
   const productImages = getProductImages(productId)
   const variants = getProductVariants(productId)
 
-  // Get related products (other products in the same category)
+  // Get related products
   const allProducts = getAllProducts()
-  const relatedProducts = allProducts
-    .filter((p) => p.id !== productId && p.category_id === product?.category_id)
-    .slice(0, 3)
+  let relatedProducts: Product[]
+  
+  // For clothing items (T-Shirts and Hoodies), show most recent clothing items
+  if (product?.category_id === 1 || product?.category_id === 2) {
+    // Get all clothing items (T-Shirts and Hoodies) excluding current product
+    relatedProducts = allProducts
+      .filter((p) => p.id !== productId && (p.category_id === 1 || p.category_id === 2))
+      .slice(0, 3)
+  } else {
+    // For other products, show products in the same category
+    relatedProducts = allProducts
+      .filter((p) => p.id !== productId && p.category_id === product?.category_id)
+      .slice(0, 3)
+  }
 
   // Check if product has variants
   const hasVariants = variants.length > 0
@@ -216,56 +228,7 @@ export default function ShopItem({ productId }: ShopItemProps) {
         </div>
 
         {/* You Might Also Like Section */}
-        {relatedProducts.length > 0 && (
-          <div className="pb-32">
-            <h2 className="text-4xl font-semibold text-caddi-blue mb-8 uppercase font-family-proxima-nova-extra-condensed">YOU MIGHT ALSO LIKE</h2>
-            <div className="grid grid-cols-2 lg:grid-cols-3 gap-8">
-              {relatedProducts.slice(0, 2).map((relatedProduct) => {
-                const relatedImages = getProductImages(relatedProduct.id)
-                const firstRelatedImage = relatedImages[0]
-                return (
-                  <Link key={relatedProduct.id} href={`/shop/${relatedProduct.id}`} className="group">
-                    <div className="relative aspect-square mb-4 bg-gray-200 overflow-hidden rounded-lg">
-                      <Image
-                        src={firstRelatedImage?.path || "/placeholder.svg?height=400&width=400"}
-                        alt={relatedProduct.name}
-                        fill
-                        className="object-cover"
-                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 25vw"
-                      />
-                    </div>
-                    <div className="space-y-1">
-                      <h3 className="font-semibold text-black/50 text-lg">{relatedProduct.name}</h3>
-                      <p className="text-lg text-black/30 text-regular">{relatedProduct.subtitle || "3 Colours"}</p>
-                      <p className="font-semibold text-black/50 text-lg">${relatedProduct.price}</p>
-                    </div>
-                  </Link>
-                )
-              })}
-              {/* Show third product only on large screens */}
-              {relatedProducts.length > 2 && (
-                <div className="hidden lg:block">
-                  <Link href={`/shop/${relatedProducts[2].id}`} className="group">
-                    <div className="relative aspect-square mb-4 bg-gray-200 overflow-hidden rounded-lg">
-                      <Image
-                        src={getProductImages(relatedProducts[2].id)[0]?.path || "/placeholder.svg?height=400&width=400"}
-                        alt={relatedProducts[2].name}
-                        fill
-                        className="object-cover"
-                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 25vw"
-                      />
-                    </div>
-                    <div className="space-y-1">
-                      <h3 className="font-semibold text-black/50 text-lg">{relatedProducts[2].name}</h3>
-                      <p className="text-lg text-black/30 text-regular">{relatedProducts[2].subtitle || "3 Colours"}</p>
-                      <p className="font-semibold text-black/50 text-lg">${relatedProducts[2].price}</p>
-                    </div>
-                  </Link>
-                </div>
-              )}
-            </div>
-          </div>
-        )}
+        <RelatedProducts relatedProducts={relatedProducts} />
       </Container>
     </main>
   )
