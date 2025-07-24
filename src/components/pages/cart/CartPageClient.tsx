@@ -132,7 +132,7 @@ export default function CartPageClient() {
           <p className="text-gray-600 mb-8">Add some items to get started</p>
           <Link 
             href="/shop" 
-            className="inline-block bg-caddi-blue text-white px-6 py-3 rounded-full font-medium hover:bg-blue-700 transition-colors"
+            className="inline-block bg-caddi-blue text-white px-6 py-3 rounded-full font-medium hover:bg-caddi-blue/80 transition-colors"
           >
             Continue Shopping
           </Link>
