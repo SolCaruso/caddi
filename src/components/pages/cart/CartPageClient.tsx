@@ -106,10 +106,10 @@ export default function CartPageClient() {
   const total = subtotal + shippingCost + estimatedTax
 
   return (
-    <div className="pt-12 lg:pt-32 pb-23 lg:pb-44">
+    <div className="pt-12 lg:pt-24">
       {/* Header */}
-      <div className="mb-8">
-        <h1 className="text-4xl font-semibold text-caddi-blue uppercase font-family-proxima-nova-extra-condensed">
+      <div className="mb-3">
+        <h1 className="text-3xl font-medium text-caddi-blue">
           Bag
         </h1>
       </div>
@@ -144,9 +144,9 @@ export default function CartPageClient() {
           <div className="lg:col-span-2">
             <div className="space-y-6">
               {state.items.map((item, index) => (
-                <div key={`${item.id}-${item.variantId || 'default'}-${index}`} className="flex items-start space-x-4 p-4 border border-gray-200 rounded-lg">
+                <div key={`${item.id}-${item.variantId || 'default'}-${index}`} className="flex items-start space-x-4 p-4">
                   {/* Product Image */}
-                  <div className="relative h-24 w-24 flex-shrink-0">
+                  <div className="relative h-28 w-28 flex-shrink-0">
                     <Image
                       src={item.image}
                       alt={item.name}
@@ -196,45 +196,53 @@ export default function CartPageClient() {
                       }
                       return null
                     })()}
-                  </div>
 
-                  {/* Quantity Controls */}
-                  <div className="flex items-center space-x-2">
-                    <button
-                      onClick={() => updateQuantity(item.id, item.variantId, Math.max(1, item.quantity - 1))}
-                      className="text-gray-400 hover:text-gray-600"
-                    >
-                      <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
-                      </svg>
-                    </button>
-                    <span className="text-sm font-medium text-gray-900 w-8 text-center">
-                      {item.quantity}
-                    </span>
-                    <button
-                      onClick={() => updateQuantity(item.id, item.variantId, item.quantity + 1)}
-                      className="text-gray-400 hover:text-gray-600"
-                    >
-                      <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                      </svg>
-                    </button>
+                    {/* Quantity Controls - Styled like shop button */}
+                    <div className="mt-3">
+                      <div className="inline-flex items-center border border-gray-300 rounded-full px-3 py-1 bg-white">
+                        {item.quantity === 1 ? (
+                          // Show garbage icon when quantity is 1
+                          <button
+                            onClick={() => removeItem(item.id, item.variantId)}
+                            className="text-gray-500 hover:text-caddi-brown cursor-pointer transition-colors"
+                          >
+                            <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                            </svg>
+                          </button>
+                        ) : (
+                          // Show minus button when quantity > 1
+                          <button
+                            onClick={() => updateQuantity(item.id, item.variantId, item.quantity - 1)}
+                            className="text-gray-500 hover:text-caddi-brown cursor-pointer transition-colors"
+                          >
+                            <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
+                            </svg>
+                          </button>
+                        )}
+                        
+                        <span className="text-sm font-medium text-gray-900 mx-3">
+                          {item.quantity}
+                        </span>
+                        
+                        {/* Always show plus button */}
+                        <button
+                          onClick={() => updateQuantity(item.id, item.variantId, item.quantity + 1)}
+                          className="text-gray-500 hover:text-caddi-brown transition-colors cursor-pointer"
+                        >
+                          <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                          </svg>
+                        </button>
+                      </div>
+                    </div>
                   </div>
 
                   {/* Price */}
                   <div className="text-right">
                     <p className="text-lg font-medium text-gray-900">${(item.price * item.quantity).toFixed(2)}</p>
                   </div>
-
-                  {/* Remove Button */}
-                  <button
-                    onClick={() => removeItem(item.id, item.variantId)}
-                    className="text-gray-400 hover:text-red-600"
-                  >
-                    <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                    </svg>
-                  </button>
                 </div>
               ))}
             </div>
@@ -291,8 +299,11 @@ export default function CartPageClient() {
         </div>
       )}
 
-      {/* You Might Also Like Section */}
-      {isClient && <RelatedProducts relatedProducts={relatedProducts} />}
+      <div className="mt-42">
+            {/* You Might Also Like Section */}
+            {isClient && <RelatedProducts relatedProducts={relatedProducts} />}
+      </div>
+
     </div>
   )
 } 
