@@ -4,7 +4,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { useState, useMemo } from "react"
 import { Container } from "@/components/ui/container"
-import { Product, ProductVariant, Image as ProductImage } from "@/lib/data"
+import { Product, ProductVariant, Image as ProductImage, sortSizes } from "@/lib/data"
 import AddToBagButton from "./AddToBagButton"
 import RelatedProducts from "@/components/pages/shop/RelatedProducts"
 
@@ -32,8 +32,9 @@ export default function ShopVariantItem({ product, variants, productImages, rela
 
   const availableSizes = useMemo(() => {
     if (!hasVariants) return []
-    const sizes = variants.map(v => v.sizes?.name).filter(Boolean)
-    return [...new Set(sizes)]
+    const sizes = variants.map(v => v.sizes?.name).filter((size): size is string => Boolean(size))
+    const uniqueSizes = [...new Set(sizes)]
+    return sortSizes(uniqueSizes)
   }, [variants, hasVariants])
 
   // Set initial selections if product has variants

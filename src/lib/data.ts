@@ -113,4 +113,23 @@ export function getProductWithVariants(productId: number) {
     variants,
     images: productImages
   }
+}
+
+// Utility function to sort sizes in the correct order
+export function sortSizes(sizes: string[]): string[] {
+  const sizeOrder = ['Small', 'Medium', 'Large', 'X-Large']
+  // Create a new array to avoid mutating the original
+  return [...sizes].sort((a, b) => {
+    const indexA = sizeOrder.indexOf(a)
+    const indexB = sizeOrder.indexOf(b)
+    // If both sizes are in the order array, sort by their position
+    if (indexA !== -1 && indexB !== -1) {
+      return indexA - indexB
+    }
+    // If only one is in the order array, prioritize it
+    if (indexA !== -1) return -1
+    if (indexB !== -1) return 1
+    // If neither is in the order array, sort alphabetically
+    return a.localeCompare(b)
+  })
 } 

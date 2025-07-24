@@ -24,7 +24,7 @@ export const navLinks = [
       },
       {
         label: "Divot Tools",
-        href: "/",
+        href: "/shop",
         description: "Premium hardwood divot tools — expertly finished and ready to ship.",
       },
       {
