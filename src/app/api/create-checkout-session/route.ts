@@ -6,6 +6,17 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2025-06-30.basil',
 })
 
+interface CartItem {
+  id: number
+  name: string
+  price: number
+  quantity: number
+  image: string
+  variantId?: number
+  color?: string
+  size?: string
+}
+
 export async function POST(request: NextRequest) {
   try {
     const { items } = await request.json()
@@ -18,14 +29,14 @@ export async function POST(request: NextRequest) {
     }
 
     // Calculate shipping cost based on cart contents
-    const subtotal = items.reduce((total: number, item: any) => total + (item.price * item.quantity), 0)
+    const subtotal = items.reduce((total: number, item: CartItem) => total + (item.price * item.quantity), 0)
     let shippingCost = 0
     
-    const hasClothing = items.some((item: any) => {
+    const hasClothing = items.some((item: CartItem) => {
       const product = getProductById(item.id)
       return product && (product.category_id === 1 || product.category_id === 2) // T-Shirt or Hoodie
     })
-    const hasDivotTools = items.some((item: any) => {
+    const hasDivotTools = items.some((item: CartItem) => {
       const product = getProductById(item.id)
       return product && product.category_id === 3 // Divot Tool
     })
@@ -39,7 +50,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Create line items for Stripe
-    const lineItems = items.map((item: any) => ({
+    const lineItems = items.map((item: CartItem) => ({
       price_data: {
         currency: 'cad',
         product_data: {

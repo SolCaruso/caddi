@@ -19,7 +19,7 @@ export default function CheckoutSuccessPage() {
           </h1>
           
           <p className="text-lg text-gray-600 mb-8">
-            Your order has been placed successfully. You'll receive a confirmation email shortly with your order details.
+            Your order has been placed successfully. You&apos;ll receive a confirmation email shortly with your order details.
           </p>
 
           {/* Action Buttons */}
