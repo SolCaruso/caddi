@@ -2,14 +2,18 @@
 
 import { useEffect, useState } from "react"
 import Image from "next/image"
+import Link from "next/link"
 import { motion, AnimatePresence } from "motion/react"
 import { Carousel, CarouselContent, CarouselItem, useCarousel } from "@/components/ui/carousel"
 import { Container } from "@/components/ui/container"
 
 interface CardData {
   bg: string
-  overlay: string
   label: string
+  linkText: string
+  internalLink: string | null
+  externalLink: string | null
+  poster: string
 }
 
 interface VerticalCardsContentProps {
@@ -96,7 +100,7 @@ export default function VerticalCardsContent({ cardData }: VerticalCardsContentP
     return () => window.removeEventListener("resize", checkScreen)
   }, [])
 
-  const cards = Array.from({ length: 8 }, (_, i) => cardData[i % 2])
+  const cards = Array.from({ length: 8 }, (_, i) => cardData[i % cardData.length])
 
   return (
     <Carousel opts={{ align: "start", slidesToScroll }} className="w-full">
@@ -106,28 +110,43 @@ export default function VerticalCardsContent({ cardData }: VerticalCardsContentP
           paddingLeft: "max(1rem, calc((100vw - 96rem) / 2 + 0.0625rem))",
         }}
       >
-        {cards.map((card, idx) => (
-          <CarouselItem
-            key={idx}
-            className={`${
-              idx === 0 ? "" : "pl-3"
-            } basis-[95vw] sm:basis-[65vw] md:basis-[45vw] lg:basis-[320px] xl:basis-[380px] 2xl:basis-[580px] flex-shrink-0 aspect-[3/4] min-h-[240px] lg:min-h-[360px] xl:min-h-[450px] 3xl:min-h-[600px] max-w-[320px] xl:max-w-[380px] 3xl:max-w-[580px]`}
-          >
-            <div
-              className="relative rounded-lg overflow-hidden group w-full h-full flex flex-col justify-end select-none cursor-pointer"
-              onMouseEnter={() => setHoveredCard(idx)}
-              onMouseLeave={() => setHoveredCard(null)}
+        {cards.map((card, idx) => {
+          const CardWrapper = card.internalLink && !card.externalLink ? Link : 'a';
+          const cardProps = card.internalLink && !card.externalLink 
+            ? { href: card.internalLink }
+            : { 
+                href: card.externalLink || '#', 
+                target: "_blank", 
+                rel: "noopener noreferrer" 
+              };
+
+          return (
+            <CarouselItem
+              key={idx}
+              className={`${
+                idx === 0 ? "" : "pl-3"
+              } basis-[95vw] sm:basis-[65vw] md:basis-[45vw] lg:basis-[320px] xl:basis-[380px] 2xl:basis-[580px] flex-shrink-0 aspect-[3/4] min-h-[240px] lg:min-h-[360px] xl:min-h-[450px] 3xl:min-h-[600px] max-w-[320px] xl:max-w-[380px] 3xl:max-w-[580px]`}
             >
+              <CardWrapper
+                {...cardProps}
+                className="relative rounded-lg overflow-hidden group w-full h-full flex flex-col justify-end select-none cursor-pointer"
+                onMouseEnter={() => setHoveredCard(idx)}
+                onMouseLeave={() => setHoveredCard(null)}
+              >
               {/* Background with hover blur */}
-              {card.bg.endsWith('.MOV') ? (
+              {(card.bg.endsWith('.MOV') || card.bg.endsWith('.webm') || card.bg.endsWith('.mp4')) ? (
                 <video
-                  src={card.bg}
                   autoPlay
                   loop
                   muted
                   playsInline
+                  poster={card.poster}
                   className="absolute inset-0 w-full h-full object-cover object-center scale-105 select-none pointer-events-none"
-                />
+                >
+                  <source src={card.bg} type={card.bg.endsWith('.webm') ? 'video/webm' : card.bg.endsWith('.mp4') ? 'video/mp4' : 'video/quicktime'} />
+                  <source src={card.bg.replace('.webm', '.mp4')} type="video/mp4" />
+                  Your browser does not support the video tag.
+                </video>
               ) : (
                 <Image
                   src={card.bg || "/placeholder.svg"}
@@ -154,7 +173,7 @@ export default function VerticalCardsContent({ cardData }: VerticalCardsContentP
                 </span>
               </div>
 
-              {/* Plus icon and SEE MORE */}
+              {/* Visual button (no link - card handles navigation) */}
               <div className="absolute bottom-4 right-4 z-20 flex items-center gap-2">
                 <AnimatePresence>
                   {hoveredCard === idx && (
@@ -166,7 +185,7 @@ export default function VerticalCardsContent({ cardData }: VerticalCardsContentP
                       transition={{ duration: 0.22, ease: [0.55, 0.085, 0.68, 0.53] }}
                       className="font-proxima-nova-extra-condensed text-white mr-1 font-extrabold text-sm 3xl:text-base"
                     >
-                      LEARN MORE
+                      {card.linkText}
                     </motion.span>
                   )}
                 </AnimatePresence>
@@ -197,9 +216,10 @@ export default function VerticalCardsContent({ cardData }: VerticalCardsContentP
                   </svg>
                 </motion.span>
               </div>
-            </div>
-          </CarouselItem>
-        ))}
+              </CardWrapper>
+            </CarouselItem>
+          );
+        })}
 
         {/* Ghost item for right margin */}
         <CarouselItem

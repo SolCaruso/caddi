@@ -6,7 +6,7 @@ const slides = [
   {
     key: "how",
     label: "How it Works",
-    image: "/webm/how-it-works.webp",
+    image: "/webp/how-it-works.webp",
     heading: "GPS Precision Tracking.",
     subnav: ["How it Works", "Environmental", "Decision Maker", "Simplicity"],
     content: {
@@ -20,7 +20,7 @@ const slides = [
   {
     key: "environmental",
     label: "Environmental",
-    image: "/webm/environmental.webp",
+    image: "/webp/environmental.webp",
     heading: "Master Every Variable",
     subnav: ["How it Works", "Environmental", "Decision Maker", "Simplicity"],
     content: {
@@ -38,7 +38,7 @@ const slides = [
   {
     key: "decision",
     label: "Decision Maker",
-    image: "/webm/decision.webp",
+    image: "/webp/decision.webp",
     heading: "Take the Guesswork Out",
     subnav: ["How it Works", "Environmental", "Decision Maker", "Simplicity"],
     content: {
@@ -57,7 +57,7 @@ const slides = [
   {
     key: "simplicity",
     label: "Simplicity",
-    image: "/webm/simplicity.webp",
+    image: "/webp/simplicity.webp",
     heading: "One Swing at a Time",
     subnav: ["How it Works", "Environmental", "Decision Maker", "Simplicity"],
     content: {

@@ -135,7 +135,7 @@ export default function ShopGrid({ onFilterChange, selectedFilters }: ShopGridPr
             <Link key={product.id} href={`/shop/${product.id}`} className="group cursor-pointer">
               <div className="relative aspect-square mb-3 bg-[#D9D9D9]/30 rounded-md overflow-hidden">
                 <Image
-                  src={normalizeImageUrl(firstImage?.path || "/webm/birdeye.webp")}
+                  src={normalizeImageUrl(firstImage?.path || "/webp/birdeye.webp")}
                   alt={product.name}
                   fill
                   className="object-cover"

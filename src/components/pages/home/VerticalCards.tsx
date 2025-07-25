@@ -1,21 +1,74 @@
 import { Container } from "@/components/ui/container"
 import VerticalCardsContent from "@/components/pages/home/Client/VerticalCardsClient"
 
-// Static data - stays on server
+// Static data 
 const cardData = [
   {
-    bg: "/MOV/caddi.MOV",
-    overlay: "/webm/trophy.webp",
-    label: "BIRD'S EYE MAPLE",
+    bg: "/webm/caddi.webm",
+    label: "CALCULATE YOUR DISTANCE",
+    linkText: "LEARN MORE",
+    internalLink: "/",
+    externalLink: null,
+    poster: "/webp/thumbnails/caddi.webp",
   },
   {
-    bg: "/webm/divot-bg-2.webp",
-    overlay: "/webm/trophy.webp",
-    label: "ZEBRAWOOD",
+    bg: "/webm/caddi7.webm",
+    label: "CUSTOMIZE YOUR DIVOT",
+    linkText: "LEARN MORE",
+    internalLink: "/shop",
+    externalLink: null,
+    poster: "/webp/thumbnails/caddi7.webp",
+  },
+  {
+    bg: "/webm/caddi11.webm",
+    label: "THE MAKING OF FORECADDI",
+    linkText: "DOWNLOAD APP",
+    internalLink: null,
+    externalLink: "https://apps.apple.com/us/app/forecaddie-golf-app/id6740142793",
+    poster: "/webp/thumbnails/caddi11.webp",
+  },
+  {
+    bg: "/webm/caddi9.webm",
+    label: "CUSTOM TROPHY",
+    linkText: "LEARN MORE",
+    internalLink: "/shop",
+    externalLink: null,
+    poster: "/webp/thumbnails/caddi9.webp",
+  },
+  {
+    bg: "/webm/caddi2.webm",
+    label: "CADDI AI",
+    linkText: "DOWNLOAD APP",
+    internalLink: null,
+    externalLink: "https://apps.apple.com/us/app/forecaddie-golf-app/id6740142793",
+    poster: "/webp/thumbnails/caddi2.webp",
+  },
+  {
+    bg: "/webm/caddi10.webm",
+    label: "AVAILABLE FOR IOS & ANDROID",
+    linkText: "DOWNLOAD APP",
+    internalLink: null,
+    externalLink: "https://apps.apple.com/us/app/forecaddie-golf-app/id6740142793",
+    poster: "/webp/thumbnails/caddi10.webp",
+  },
+  {
+    bg: "/webm/caddi4.webm",
+    label: "CADDI MERCH",
+    linkText: "SHOP NOW",
+    internalLink: "/shop",
+    externalLink: null,
+    poster: "/webp/thumbnails/caddi4.webp",
+  },
+  {
+    bg: "/webm/caddi8.webm",
+    label: "ON THE COURSE",
+    linkText: "DOWNLOAD APP",
+    internalLink: null,
+    externalLink: "https://apps.apple.com/us/app/forecaddie-golf-app/id6740142793",
+    poster: "/webp/thumbnails/caddi8.webp",
   },
 ]
 
-// Server Component - only handles layout and passes data
 export default function VerticalCards() {
   return (
     <section className="w-full mb-12">

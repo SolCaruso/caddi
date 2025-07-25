@@ -1,5 +1,5 @@
-import Image from 'next/image';
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function HeroCards() {
 
@@ -7,19 +7,21 @@ export default function HeroCards() {
         <div className="flex flex-col md:flex-row w-full mx-auto ">
 
             {/* Left Card */}
-            <div
-                className="relative md:flex-1 rounded-lg overflow-hidden flex mx-2 mt-2 md:ml-3 md:mr-1.5 md:my-3 md:w-full h-[500px] sm:h-[350px] xl:h-[450px] 3xl:h-[550px] 4xl:h-[650px] 5xl:h-[750px]"
-                style={{
-                backgroundImage: 'url(/jpg/zolas-8.jpg)',
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-                }}
-            >
+            <div className="relative md:flex-1 rounded-lg overflow-hidden flex mx-2 mt-2 md:ml-3 md:mr-1.5 md:my-3 md:w-full h-[500px] sm:h-[350px] xl:h-[450px] 3xl:h-[550px] 4xl:h-[650px] 5xl:h-[750px]">
+                {/* Background Image */}
+                <Image
+                    src="/webp/zolas-8.webp"
+                    alt="Custom Golf Course Materials & Trophies"
+                    fill
+                    className="object-cover"
+                    priority
+                />
+
                 {/* Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-r from-black/100 to-transparent"/>
+                <div className="absolute inset-0 bg-gradient-to-r from-black/100 to-transparent z-10"/>
 
                 {/* Content */}
-                <div className="relative z-10 flex justify-between items-end w-full pl-4 pr-2 pb-10 xl:p-6">
+                <div className="relative z-20 flex justify-between items-end w-full pl-4 pr-2 pb-10 xl:p-6">
 
                     {/* Text & Button */}
                     <div className='text-white xl:p-6 flex flex-col justify-between h-full'>
@@ -39,35 +41,27 @@ export default function HeroCards() {
                         </div>
                         
                     </div>
-
-                    {/* Image */} 
-                    {/* <Image
-                        src="/webm/trophy.webp"
-                        alt="Trophy Forecaddi"
-                        height={463}
-                        width={309}
-                        className="w-[250px] h-auto 3xl:w-[309px] 4xl:w-[359px] hidden 2xl:block mr-12 3xl:mr-24"
-                        draggable={false}
-                    /> */}
                     
                 </div>
 
             </div>
 
             {/* Right Card */}
-            <div
-                className="relative md:flex-1 rounded-lg  overflow-hidden flex mx-2 mt-2 md:mr-3 md:ml-1.5 md:my-3 md:w-full h-[500px] sm:h-[350px] xl:h-[450px] 3xl:h-[550px] 4xl:h-[650px] 5xl:h-[750px]"
-                style={{
-                backgroundImage: 'url(/jpg/zolas-36.jpg)',
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-                }}
-            >
+            <div className="relative md:flex-1 rounded-lg overflow-hidden flex mx-2 mt-2 md:mr-3 md:ml-1.5 md:my-3 md:w-full h-[500px] sm:h-[350px] xl:h-[450px] 3xl:h-[550px] 4xl:h-[650px] 5xl:h-[750px]">
+                {/* Background Image */}
+                <Image
+                    src="/webp/zolas-36.webp"
+                    alt="Forecaddie Golf App on IOS and Android"
+                    fill
+                    className="object-cover"
+                    priority
+                />
+
                 {/* Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-r from-black/70 to-transparent"/>
+                <div className="absolute inset-0 bg-gradient-to-r from-black/70 to-transparent z-10"/>
 
                 {/* Content */}
-                <div className="relative z-10 flex flex-col-reverse sm:flex-row sm:justify-between sm:items-end w-full pl-4 pr-2 pb-10 xl:p-6">
+                <div className="relative z-20 flex flex-col-reverse sm:flex-row sm:justify-between sm:items-end w-full pl-4 pr-2 pb-10 xl:p-6">
 
                     {/* Text & Button */}
                     <div className='text-white xl:p-6 flex flex-col sm:justify-between h-full'>
@@ -88,17 +82,6 @@ export default function HeroCards() {
                         
                     </div>
 
-                    {/* Image */}
-                    <div className='flex justify-center sm:justify-normal sm:block pt-18 sm:pt-0'>
-                        {/* <Image
-                            src="/webm/how-it-works.webp"
-                            alt="Forecaddie"
-                            height={506}
-                            width={380}
-                            className="h-auto w-[300px] 2xl:w-[550px] 5xl:w-[650px] hidden 2xs:block sm:hidden 2xl:block"
-                            draggable={false}
-                        /> */}
-                    </div>
                 </div>
 
             </div>
