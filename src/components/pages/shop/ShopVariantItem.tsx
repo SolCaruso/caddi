@@ -80,7 +80,7 @@ export default function ShopVariantItem({ product, variants, productImages, rela
     <main className="bg-white">
               <Container className=" mx-auto px-4 3xl:!max-w-8xl">
         {/* Main Product Section */}
-        <div className="pt-12 lg:pt-32 pb-23 lg:pb-44 max-w-6xl mx-auto">
+        <div className="pt-12 lg:pt-32 pb-23 lg:pb-44">
           {/* Mobile/Tablet Layout */}
           <div className="lg:hidden">
             {/* Product Info at Top */}
@@ -210,23 +210,23 @@ export default function ShopVariantItem({ product, variants, productImages, rela
           </div>
 
           {/* Desktop Layout */}
-          <div className="hidden lg:grid lg:grid-cols-2">
+          <div className="hidden lg:grid" style={{ gridTemplateColumns: '1fr 600px' }}>
             {/* Left Side - Product Image */}
-            <div>
-              <div className="relative aspect-square bg-[#D9D9D9]/30 overflow-hidden rounded-lg w-[450px] h-[550px]">
+            <div className="pr-8">
+              <div className="relative bg-[#D9D9D9]/30 overflow-hidden rounded-lg max-w-[650px] w-full h-[750px]">
                 <Image
                   src={mainImageSrc || "/placeholder.svg"}
                   alt={product.name}
                   fill
                   className="object-cover"
-                  sizes="(max-width: 768px) 100vw, 50vw"
+                  sizes="(max-width: 768px) 100vw, 70vw"
                   draggable={false}
                 />
               </div>
             </div>
 
             {/* Right Side - Product Details */}
-            <div className="flex flex-col justify-center space-y-4 ">
+            <div className="flex flex-col justify-center space-y-4 min-w-[500px] max-w-[600px]">
 
               {/* Back to Shop Button - Right Aligned */}
               <div className="mb-4 flex justify-end">
