@@ -15,6 +15,8 @@ export default function HeroCards() {
                     fill
                     className="object-cover"
                     priority
+                    draggable={false}
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 />
 
                 {/* Overlay */}
@@ -55,6 +57,8 @@ export default function HeroCards() {
                     fill
                     className="object-cover"
                     priority
+                    draggable={false}
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 />
 
                 {/* Overlay */}
