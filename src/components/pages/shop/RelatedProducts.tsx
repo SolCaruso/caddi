@@ -33,6 +33,7 @@ export default function RelatedProducts({ relatedProducts }: RelatedProductsProp
                   fill
                   className="object-cover"
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 25vw"
+                  draggable={false}
                 />
               </div>
               <div className="space-y-1">
@@ -78,6 +79,7 @@ export default function RelatedProducts({ relatedProducts }: RelatedProductsProp
                   fill
                   className="object-cover"
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 25vw"
+                  draggable={false}
                 />
               </div>
               <div className="space-y-1">

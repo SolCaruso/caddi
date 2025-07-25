@@ -7,7 +7,7 @@ export default function Hero() {
     return (
         <section className='w-full relative overflow-x-hidden xl:min-h-[800px] md:min-h-[600px] sm:min-h-[500px] min-h-[400px]'>
             <Image
-                src="/webm/hero.webp"
+                src="/jpg/zolas.jpg"
                 alt="Hero background"
                 className="absolute inset-0 w-full h-full object-cover"
                 style={{

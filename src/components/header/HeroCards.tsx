@@ -10,7 +10,7 @@ export default function HeroCards() {
             <div
                 className="relative md:flex-1 rounded-lg lg:rounded-xl overflow-hidden flex mx-2 mt-2 md:ml-4 md:mr-2 md:my-4 md:w-full h-[500px] sm:h-[350px] xl:h-[450px] 3xl:h-[550px] 4xl:h-[650px] 5xl:h-[750px]"
                 style={{
-                backgroundImage: 'url(/webm/trophy-bg.webp)',
+                backgroundImage: 'url(/jpg/zolas-8.jpg)',
                 backgroundSize: 'cover',
                 backgroundPosition: 'center',
                 }}
@@ -56,9 +56,9 @@ export default function HeroCards() {
 
             {/* Right Card */}
             <div
-                className="relative md:flex-1 rounded-lg lg:rounded-xl overflow-hidden flex mx-2 mt-2 md:mr-4 md:ml-2 md:my-4 md:w-full h-[500px] sm:h-[350px] xl:h-[450px] 3xl:h-[550px] 4xl:h-[650px] 5xl:h-[750px]"
+                className="relative md:flex-1  rounded-lg lg:rounded-xl overflow-hidden flex mx-2 mt-2 md:mr-4 md:ml-2 md:my-4 md:w-full h-[500px] sm:h-[350px] xl:h-[450px] 3xl:h-[550px] 4xl:h-[650px] 5xl:h-[750px]"
                 style={{
-                backgroundImage: 'url(/webm/forecaddi-bg.webp)',
+                backgroundImage: 'url(/jpg/zolas-36.jpg)',
                 backgroundSize: 'cover',
                 backgroundPosition: 'center',
                 }}

@@ -119,6 +119,7 @@ export default function ShopVariantItem({ product, variants, productImages, rela
                   fill
                   className="object-cover"
                   sizes="(max-width: 768px) 100vw, 50vw"
+                  draggable={false}
                 />
               </div>
             </div>
@@ -219,6 +220,7 @@ export default function ShopVariantItem({ product, variants, productImages, rela
                   fill
                   className="object-cover"
                   sizes="(max-width: 768px) 100vw, 50vw"
+                  draggable={false}
                 />
               </div>
             </div>

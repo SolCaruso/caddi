@@ -153,6 +153,7 @@ export default function CartPageClient() {
                       alt={item.name}
                       fill
                       className="object-cover rounded"
+                      draggable={false}
                     />
                   </div>
 
