@@ -19,7 +19,7 @@ export default function ShopPage() {
 
   return (
     <main className="flex-1 bg-white flex flex-col">
-      <Container className="flex-1">
+      <Container className="flex-1 3xl:!max-w-8xl">
 
         {/* Main Content Area */}
         <div className="flex flex-col lg:flex-row gap-8 flex-1 mb-24 lg:mt-24">

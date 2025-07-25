@@ -102,7 +102,7 @@ function DialogContent({
       <DialogPrimitive.Content
         data-slot="dialog-content"
         className={cn(
-                      "bg-background data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:slide-out-to-top-2 data-[state=open]:slide-in-from-top-2 fixed z-50 grid w-full max-w-8xl max-h-full gap-4 border p-6 shadow-lg duration-200 top-14 right-[max(1rem,calc((100vw-96rem)/2+1rem))] xl:right-[max(1.5rem,calc((100vw-92rem)/2+1.5rem))]",
+                      "bg-background data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:slide-out-to-top-2 data-[state=open]:slide-in-from-top-2 fixed z-50 grid w-full max-w-8xl max-h-full gap-4 border p-6 shadow-lg duration-200 top-14 right-[max(1rem,calc((100vw-96rem)/2+1rem))] xl:right-[max(1.5rem,calc((100vw-96rem)/2+1.5rem))] 3xl:right-[max(1.5rem,calc((100vw-150rem)/2+1.5rem))]",
           className
         )}
         {...props}

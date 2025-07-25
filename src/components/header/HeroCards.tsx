@@ -4,7 +4,7 @@ import Link from 'next/link';
 export default function HeroCards() {
 
     return (
-        <div className="flex flex-col md:flex-row w-full mx-auto mb-12 lg:mb-20">
+        <div className="flex flex-col md:flex-row w-full mx-auto ">
 
             {/* Left Card */}
             <div

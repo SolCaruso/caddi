@@ -41,7 +41,7 @@ export default function ShopItem({ productId }: ShopItemProps) {
   if (!product) {
     return (
       <main className="flex-1 bg-white flex flex-col">
-        <Container className="flex-1">
+        <Container className="flex-1 3xl:!max-w-8xl">
           <div className="flex flex-col justify-center h-full">
             <h1 className="text-2xl font-bold text-caddi-blue mb-4">Product Not Found</h1>
             <p className="text-caddi-black mb-6">The product you&apos;re looking for doesn&apos;t exist.</p>
@@ -72,7 +72,7 @@ export default function ShopItem({ productId }: ShopItemProps) {
 
   return (
     <main className="bg-white">
-      <Container className="mx-auto px-4">
+              <Container className="mx-auto px-4 3xl:!max-w-8xl">
         {/* Main Product Section */}
         <div className="pt-12 lg:pt-32 pb-23 lg:pb-44 max-w-6xl mx-auto">
           {/* Mobile/Tablet Layout */}

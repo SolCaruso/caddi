@@ -3,6 +3,8 @@
 import * as React from "react"
 import Image from "next/image"
 import Link from "next/link"
+import { loadStripe } from "@stripe/stripe-js"
+import { useCart } from "@/lib/cart"
 import { CheckCircle, X } from "lucide-react"
 import { useMediaQuery } from "@/hooks/use-media-query"
 import { Button } from "@/components/ui/button"
@@ -16,7 +18,6 @@ import {
 } from "@/components/ui/dialog"
 import {
   Drawer,
-  DrawerClose,
   DrawerContent,
   DrawerFooter,
   DrawerHeader,
@@ -49,7 +50,12 @@ export function DrawerDialogDemo({
   onButtonClick
 }: DrawerDialogDemoProps) {
   const [open, setOpen] = React.useState(false)
+  const [isLoading, setIsLoading] = React.useState(false)
   const isDesktop = useMediaQuery("(min-width: 768px)")
+  const { state } = useCart()
+
+  // Initialize Stripe
+  const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!)
 
   const handleButtonClick = () => {
     onButtonClick?.() // Call the callback first (adds to cart)
@@ -61,16 +67,51 @@ export function DrawerDialogDemo({
     }
   }
 
-  // Auto-close dialog after 10 seconds
+  // Auto-close dialog after 6 seconds (unless loading)
   React.useEffect(() => {
-    if (open) {
+    if (open && !isLoading) {
       const timer = setTimeout(() => {
         setOpen(false)
-      }, 6000) // 10 seconds
+      }, 6000) // 6 seconds
 
       return () => clearTimeout(timer) // Cleanup timer on unmount or when open changes
     }
-  }, [open])
+  }, [open, isLoading])
+
+  const handleCheckout = async () => {
+    if (state.items.length === 0) return
+
+    setIsLoading(true)
+    try {
+      const response = await fetch('/api/create-checkout-session', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          items: state.items,
+        }),
+      })
+
+      const { sessionId } = await response.json()
+      
+      // Redirect to Stripe Checkout
+      const stripe = await stripePromise
+      if (stripe) {
+        const { error } = await stripe.redirectToCheckout({
+          sessionId,
+        })
+        
+        if (error) {
+          console.error('Error redirecting to checkout:', error)
+          setIsLoading(false)
+        }
+      }
+    } catch (error) {
+      console.error('Error creating checkout session:', error)
+      setIsLoading(false)
+    }
+  }
 
   if (isDesktop) {
     return (
@@ -150,10 +191,11 @@ export function DrawerDialogDemo({
               View Bag
             </Link>
             <button
-              className="w-full bg-caddi-blue text-white text-center py-3 px-4 rounded-full font-medium hover:bg-caddi-blue/90 transition-colors cursor-pointer"
-              onClick={() => setOpen(false)}
+              className="w-full bg-caddi-blue text-white text-center py-3 px-4 rounded-full font-medium hover:bg-caddi-blue/90 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+              onClick={handleCheckout}
+              disabled={isLoading || state.items.length === 0}
             >
-              Checkout
+              {isLoading ? 'Processing...' : 'Checkout'}
             </button>
           </div>
         </DialogContent>
@@ -219,13 +261,12 @@ export function DrawerDialogDemo({
             View Bag
           </Link>
           <button
-            className="w-full bg-caddi-blue text-white text-center py-3 px-4 rounded-full font-medium hover:bg-caddi-blue/90 transition-colors"
+            className="w-full bg-caddi-blue text-white text-center py-3 px-4 rounded-full font-medium hover:bg-caddi-blue/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            onClick={handleCheckout}
+            disabled={isLoading || state.items.length === 0}
           >
-            Checkout
+            {isLoading ? 'Processing...' : 'Checkout'}
           </button>
-          <DrawerClose asChild>
-            <Button variant="outline">Close</Button>
-          </DrawerClose>
         </DrawerFooter>
       </DrawerContent>
     </Drawer>
