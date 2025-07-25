@@ -40,7 +40,7 @@ function CarouselNavigation() {
   
   return (
     <Container>
-      <div className="flex justify-start items-center gap-4 mt-16">
+      <div className="flex justify-start items-center gap-4 mt-8 lg:mt-16">
         <button
           onClick={scrollPrev}
           disabled={!canScrollPrev}
@@ -101,9 +101,9 @@ export default function VerticalCardsContent({ cardData }: VerticalCardsContentP
   return (
     <Carousel opts={{ align: "start", slidesToScroll }} className="w-full">
       <CarouselContent
-        className="-ml-0"
+        className="-ml-0 3xl:!pl-[max(1rem,calc((100vw-150rem)/2))]"
         style={{
-          paddingLeft: "max(1rem, calc((100vw - 92rem) / 2 + 1rem))",
+          paddingLeft: "max(1rem, calc((100vw - 96rem) / 2 + 1rem))",
         }}
       >
         {cards.map((card, idx) => (
@@ -205,7 +205,7 @@ export default function VerticalCardsContent({ cardData }: VerticalCardsContentP
         <CarouselItem
           aria-hidden="true"
           tabIndex={-1}
-          className="pointer-events-none flex-shrink-0 basis-0 sm:basis-0 md:basis-0 lg:basis-[calc((100vw-90rem)/2+1rem)]"
+          className="pointer-events-none flex-shrink-0 basis-0 sm:basis-0 md:basis-0 lg:basis-[calc((100vw-96rem)/2+1rem)] 3xl:basis-[calc((100vw-150rem)/2)]"
         />
       </CarouselContent>
       
