@@ -3,7 +3,8 @@
 import { useEffect, useState } from "react"
 import Image from "next/image"
 import { motion, AnimatePresence } from "motion/react"
-import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel"
+import { Carousel, CarouselContent, CarouselItem, useCarousel } from "@/components/ui/carousel"
+import { Container } from "@/components/ui/container"
 
 interface CardData {
   bg: string
@@ -13,6 +14,67 @@ interface CardData {
 
 interface VerticalCardsContentProps {
   cardData: CardData[]
+}
+
+// Separate component for the navigation that can use useCarousel
+function CarouselNavigation() {
+  const { scrollPrev, scrollNext, canScrollPrev, canScrollNext, api } = useCarousel()
+  const [current, setCurrent] = useState(0)
+  const [count, setCount] = useState(0)
+
+  useEffect(() => {
+    if (!api) return
+
+    const updatePagination = () => {
+      setCurrent(api.selectedScrollSnap() + 1)
+      setCount(api.scrollSnapList().length)
+    }
+
+    updatePagination()
+    api.on("select", updatePagination)
+
+    return () => {
+      api.off("select", updatePagination)
+    }
+  }, [api])
+  
+  return (
+    <Container>
+      <div className="flex justify-start items-center gap-4 mt-16">
+        <button
+          onClick={scrollPrev}
+          disabled={!canScrollPrev}
+          className={`w-10 h-10  rounded-full transition-colors duration-200 flex items-center justify-center ${
+            canScrollPrev 
+              ? 'bg-gray-200/50 hover:bg-gray-200 cursor-pointer' 
+              : 'bg-gray-200/50'
+          }`}
+          aria-label="Scroll left"
+        >
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 12L6 8L10 4" stroke={canScrollPrev ? "#666" : "#ccc"} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+        </button>
+        
+        <span className="text-gray-600 font-medium text-sm w-8 text-center">{current}/{count}</span>
+        
+        <button
+          onClick={scrollNext}
+          disabled={!canScrollNext}
+          className={`w-10 h-10 rounded-full transition-colors duration-200 flex items-center justify-center ${
+            canScrollNext 
+              ? 'bg-gray-200/50 hover:bg-gray-200 cursor-pointer' 
+              : 'bg-gray-200/50'
+          }`}
+          aria-label="Scroll right"
+        >
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M6 4L10 8L6 12" stroke={canScrollNext ? "#666" : "#ccc"} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+        </button>
+      </div>
+    </Container>
+  )
 }
 
 export default function VerticalCardsContent({ cardData }: VerticalCardsContentProps) {
@@ -146,6 +208,9 @@ export default function VerticalCardsContent({ cardData }: VerticalCardsContentP
           className="pointer-events-none flex-shrink-0 basis-0 sm:basis-0 md:basis-0 lg:basis-[calc((100vw-90rem)/2+1rem)]"
         />
       </CarouselContent>
+      
+      {/* Navigation buttons */}
+      <CarouselNavigation />
     </Carousel>
   )
 }

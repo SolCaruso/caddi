@@ -20,7 +20,7 @@ export default function VerticalCards() {
   return (
     <section className="w-full mb-12">
       {/* Edge-to-edge grey background wrapper */}
-      <div className="w-full bg-[#D9D9D9]/30 pb-44 pt-12">
+      <div className="w-full bg-[#D9D9D9]/30 pb-22 pt-18">
         <Container>
           <h2 className="text-caddi-blue text-3xl font-proxima-nova-extra-condensed font-bold mb-8">CADDI SHORTS</h2>
         </Container>
