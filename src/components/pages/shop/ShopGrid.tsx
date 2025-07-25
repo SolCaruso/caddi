@@ -93,7 +93,7 @@ export default function ShopGrid({ onFilterChange, selectedFilters }: ShopGridPr
       </div>
 
       {/* Product Grid */}
-      <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-8">
+      <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-x-3 gap-y-12 lg:gap-x-4 lg:gap-y-16">
         {currentProducts.map((product) => {
           // Get images and variants for this product
           const productImages = getProductImages(product.id)

@@ -48,41 +48,45 @@ export default function VerticalCardsContent({ cardData }: VerticalCardsContentP
           <CarouselItem
             key={idx}
             className={`${
-              idx === 0 ? "" : "pl-6"
-            } basis-[90vw] sm:basis-[60vw] md:basis-[40vw] lg:basis-[280px] xl:basis-[320px] 2xl:basis-[500px] flex-shrink-0 aspect-[3/4] min-h-[220px] lg:min-h-[320px] xl:min-h-[400px] 3xl:min-h-[550px] max-w-[280px] xl:max-w-[320px] 3xl:max-w-[550px]`}
+              idx === 0 ? "" : "pl-3"
+            } basis-[95vw] sm:basis-[65vw] md:basis-[45vw] lg:basis-[320px] xl:basis-[380px] 2xl:basis-[580px] flex-shrink-0 aspect-[3/4] min-h-[240px] lg:min-h-[360px] xl:min-h-[450px] 3xl:min-h-[600px] max-w-[320px] xl:max-w-[380px] 3xl:max-w-[580px]`}
           >
             <div
               className="relative rounded-lg overflow-hidden group w-full h-full flex flex-col justify-end select-none cursor-pointer"
               onMouseEnter={() => setHoveredCard(idx)}
               onMouseLeave={() => setHoveredCard(null)}
             >
-              {/* Blurred background */}
-              <Image
-                src={card.bg || "/placeholder.svg"}
-                alt="Divot tool background"
-                fill
-                className="object-cover object-center blur-md scale-105 select-none pointer-events-none"
-                priority={idx < 2}
-                draggable={false}
-              />
-
-              {/* Hover overlay (now just above background, below overlay image) */}
-              <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 z-10 pointer-events-none transition-all duration-200 ease-in-out-quad" />
-
-              {/* Overlay image */}
-              <div className="absolute inset-0 flex items-center justify-center z-20">
+              {/* Background with hover blur */}
+              {card.bg.endsWith('.MOV') ? (
+                <video
+                  src={card.bg}
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  className="absolute inset-0 w-full h-full object-cover object-center scale-105 select-none pointer-events-none"
+                />
+              ) : (
                 <Image
-                  src={card.overlay || "/placeholder.svg"}
-                  alt="Divot tool"
-                  width={340}
-                  height={340}
-                  className="object-contain drop-shadow-xl select-none pointer-events-none"
+                  src={card.bg || "/placeholder.svg"}
+                  alt="Divot tool background"
+                  fill
+                  className="object-cover object-center scale-105 select-none pointer-events-none"
+                  priority={idx < 2}
                   draggable={false}
                 />
-              </div>
+              )}
+
+              {/* Black gradient overlay */}
+              <div className="absolute inset-0 z-10 pointer-events-none bg-gradient-to-b from-black/60 via-black/20 to-black/60" />
+
+              {/* Hover black shader */}
+              <div className={`absolute inset-0 z-[15] pointer-events-none bg-black/50 transition-opacity duration-300 ease-in-out ${
+                hoveredCard === idx ? 'opacity-100' : 'opacity-0'
+              }`} />
 
               {/* Label */}
-              <div className="absolute top-4 left-4 z-10">
+              <div className="absolute top-4 left-4 z-20">
                 <span className="text-white font-bold text-base drop-shadow-md uppercase tracking-wide">
                   {card.label}
                 </span>

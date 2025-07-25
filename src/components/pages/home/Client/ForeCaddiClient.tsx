@@ -135,7 +135,7 @@ export default function ForeCaddiContent({ slides }: ForeCaddiContentProps) {
         
         {/* Right: Image */}
         <div className="flex-1 flex justify-center items-center">
-          <div className="relative w-[340px] h-[480px] md:w-[400px] md:h-[560px] lg:w-[440px] lg:h-[400px] xl:w-[680px] xl:h-[440px]">
+          <div className="relative w-[340px] h-[480px] md:w-[400px] md:h-[560px] lg:w-[440px] lg:h-[400px] xl:w-[680px] xl:h-[640px]">
             <Image
               src={slide.image}
               alt={slide.label}
@@ -149,7 +149,7 @@ export default function ForeCaddiContent({ slides }: ForeCaddiContentProps) {
       </div>
       
       {/* Desktop: Pagination Dots */}
-      <div className="hidden lg:flex absolute bottom-6 left-1/2 transform -translate-x-1/2 justify-center items-center gap-2">
+      <div className="hidden lg:flex absolute bottom-10 left-1/2 transform -translate-x-1/2 justify-center items-center gap-2">
         {slides.map((_, idx) => (
           <button
             key={idx}

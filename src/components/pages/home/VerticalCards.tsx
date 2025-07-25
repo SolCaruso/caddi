@@ -4,7 +4,7 @@ import VerticalCardsContent from "@/components/pages/home/Client/VerticalCardsCl
 // Static data - stays on server
 const cardData = [
   {
-    bg: "/webm/divot-bg.webp",
+    bg: "/MOV/caddi.MOV",
     overlay: "/webm/trophy.webp",
     label: "BIRD'S EYE MAPLE",
   },
@@ -18,13 +18,16 @@ const cardData = [
 // Server Component - only handles layout and passes data
 export default function VerticalCards() {
   return (
-    <section className="w-full py-12 mb-12">
-      <Container>
-        <h2 className="text-caddi-blue text-3xl font-proxima-nova-extra-condensed font-bold mb-8">DIVOT TOOLS</h2>
-      </Container>
-      
-      {/* Pass only data to the content component */}
-      <VerticalCardsContent cardData={cardData} />
+    <section className="w-full mb-12">
+      {/* Edge-to-edge grey background wrapper */}
+      <div className="w-full bg-[#D9D9D9]/30 pb-44 pt-12">
+        <Container>
+          <h2 className="text-caddi-blue text-3xl font-proxima-nova-extra-condensed font-bold mb-8">CADDI SHORTS</h2>
+        </Container>
+        
+        {/* Pass only data to the content component */}
+        <VerticalCardsContent cardData={cardData} />
+      </div>
     </section>
   )
 }
