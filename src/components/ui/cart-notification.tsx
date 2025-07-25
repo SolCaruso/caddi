@@ -54,7 +54,23 @@ export function DrawerDialogDemo({
   const handleButtonClick = () => {
     onButtonClick?.() // Call the callback first (adds to cart)
     setOpen(true) // Then open the notification
+    
+    // Smooth scroll to top only for desktop (dialog), not mobile (drawer)
+    if (isDesktop) {
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    }
   }
+
+  // Auto-close dialog after 10 seconds
+  React.useEffect(() => {
+    if (open) {
+      const timer = setTimeout(() => {
+        setOpen(false)
+      }, 6000) // 10 seconds
+
+      return () => clearTimeout(timer) // Cleanup timer on unmount or when open changes
+    }
+  }, [open])
 
   if (isDesktop) {
     return (
@@ -70,7 +86,8 @@ export function DrawerDialogDemo({
         </DialogTrigger>
         <DialogContent 
           showCloseButton={false}
-          className="fixed top-46 right-4 w-80 max-w-none p-0 border-0 shadow-lg bg-white rounded-xl overflow-hidden animate-in slide-in-from-top-2 fade-in-0"
+          overlayClassName="z-[5]"
+          className="w-80 max-w-none p-0 pt-6 border-0 shadow-lg bg-white rounded-b-xl overflow-hidden animate-in slide-in-from-top-2 fade-in-0 z-[60]"
         >
           <DialogHeader className="sr-only">
             <DialogTitle>Added to Bag</DialogTitle>
@@ -80,7 +97,7 @@ export function DrawerDialogDemo({
           {/* Close button */}
           <button
             onClick={() => setOpen(false)}
-            className="absolute top-3 right-3 z-10 p-2.5 hover:bg-gray-100 rounded-full transition-colors cursor-pointer"
+            className="absolute top-3 right-3 z-10 p-2.5 mt-5 hover:bg-gray-100 rounded-full transition-colors cursor-pointer"
             aria-label="Close notification"
           >
             <X className="w-5 h-5 text-gray-500" />
@@ -93,8 +110,8 @@ export function DrawerDialogDemo({
           </div>
 
           {/* Product info */}
-          <div className="flex gap-3 px-4 pb-4">
-            <div className="w-16 h-16 bg-gray-100 rounded-md overflow-hidden flex-shrink-0">
+          <div className="flex gap-3 px-4 pt-2 pb-5">
+            <div className="w-20 h-20 bg-gray-100 rounded-sm overflow-hidden flex-shrink-0">
               <Image
                 src={productImage}
                 alt={productName}
@@ -133,7 +150,7 @@ export function DrawerDialogDemo({
               View Bag
             </Link>
             <button
-              className="w-full bg-caddi-blue text-white text-center py-3 px-4 rounded-full font-medium hover:bg-caddi-blue/90 transition-colors"
+              className="w-full bg-caddi-blue text-white text-center py-3 px-4 rounded-full font-medium hover:bg-caddi-blue/90 transition-colors cursor-pointer"
               onClick={() => setOpen(false)}
             >
               Checkout

@@ -26,7 +26,7 @@ export default function RelatedProducts({ relatedProducts }: RelatedProductsProp
           
           return (
             <Link key={relatedProduct.id} href={`/shop/${relatedProduct.id}`} className="group">
-              <div className="relative aspect-square mb-4 bg-gray-200 overflow-hidden rounded-lg">
+              <div className="relative aspect-square mb-4 bg-[#D9D9D9]/30 overflow-hidden rounded-lg">
                 <Image
                   src={normalizeImageUrl(firstRelatedImage?.path || "/placeholder.svg?height=400&width=400")}
                   alt={relatedProduct.name}
@@ -71,7 +71,7 @@ export default function RelatedProducts({ relatedProducts }: RelatedProductsProp
         {relatedProducts.length > 2 && (
           <div className="hidden lg:block">
             <Link href={`/shop/${relatedProducts[2].id}`} className="group">
-              <div className="relative aspect-square mb-4 bg-gray-200 overflow-hidden rounded-lg">
+              <div className="relative aspect-square mb-4 bg-[#D9D9D9]/30 overflow-hidden rounded-lg">
                 <Image
                   src={normalizeImageUrl(getProductImages(relatedProducts[2].id)[0]?.path || "/placeholder.svg?height=400&width=400")}
                   alt={relatedProducts[2].name}

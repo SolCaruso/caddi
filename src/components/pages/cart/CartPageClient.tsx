@@ -147,7 +147,7 @@ export default function CartPageClient() {
               {state.items.map((item, index) => (
                 <div key={`${item.id}-${item.variantId || 'default'}-${index}`} className="flex items-start space-x-4 p-4">
                   {/* Product Image */}
-                  <div className="relative h-28 w-28 flex-shrink-0">
+                  <div className="relative h-28 w-28 flex-shrink-0 bg-[#D9D9D9]/30 rounded-sm">
                     <Image
                       src={normalizeImageUrl(item.image)}
                       alt={item.name}
@@ -259,7 +259,7 @@ export default function CartPageClient() {
             </div>
 
             {/* Shipping Info */}
-            <div className="mt-8 p-4 bg-gray-50 rounded-lg">
+            <div className="mt-8 p-4 bg-[#D9D9D9]/20 rounded-lg">
               <p className="text-sm text-gray-600">
                 {shippingCost === 0 
                   ? "Free shipping on orders over $100" 
@@ -271,7 +271,7 @@ export default function CartPageClient() {
 
           {/* Summary Section - Right Side */}
           <div className="lg:col-span-1 mt-8 lg:mt-0">
-            <div className="bg-gray-50 p-6 rounded-lg">
+            <div className="bg-[#D9D9D9]/20 p-6 rounded-lg">
               <h2 className="text-2xl font-semibold text-caddi-blue mb-6">Summary</h2>
               
               <div className="space-y-4">

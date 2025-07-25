@@ -34,11 +34,51 @@ function DialogOverlay({
   className,
   ...props
 }: React.ComponentProps<typeof DialogPrimitive.Overlay>) {
+  const [showOverlay, setShowOverlay] = React.useState(false)
+
+  React.useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowOverlay(true)
+    }, 50) // 50ms delay
+
+    return () => clearTimeout(timer)
+  }, [])
+
+  React.useEffect(() => {
+    // Override Radix's scroll locking by removing data-scroll-locked
+    const removeScrollLock = () => {
+      document.body.removeAttribute('data-scroll-locked')
+    }
+
+    // Remove immediately and set up observer to catch when Radix adds it
+    removeScrollLock()
+    
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.type === 'attributes' && mutation.attributeName === 'data-scroll-locked') {
+          removeScrollLock()
+        }
+      })
+    })
+
+    observer.observe(document.body, {
+      attributes: true,
+      attributeFilter: ['data-scroll-locked']
+    })
+
+    return () => {
+      observer.disconnect()
+    }
+  }, [])
+
+
+
   return (
     <DialogPrimitive.Overlay
       data-slot="dialog-overlay"
       className={cn(
-        "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 fixed inset-0 z-50 bg-black/50",
+        "fixed inset-0 z-50 bg-black/50 transition-opacity duration-300",
+        showOverlay ? "opacity-100" : "opacity-0",
         className
       )}
       {...props}
@@ -50,17 +90,19 @@ function DialogContent({
   className,
   children,
   showCloseButton = true,
+  overlayClassName,
   ...props
 }: React.ComponentProps<typeof DialogPrimitive.Content> & {
   showCloseButton?: boolean
+  overlayClassName?: string
 }) {
   return (
     <DialogPortal data-slot="dialog-portal">
-      <DialogOverlay />
+      <DialogOverlay className={overlayClassName} />
       <DialogPrimitive.Content
         data-slot="dialog-content"
         className={cn(
-          "bg-background data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 fixed top-[50%] left-[50%] z-50 grid w-full max-w-[calc(100%-2rem)] translate-x-[-50%] translate-y-[-50%] gap-4 rounded-lg border p-6 shadow-lg duration-200 sm:max-w-lg",
+                      "bg-background data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:slide-out-to-top-2 data-[state=open]:slide-in-from-top-2 fixed z-50 grid w-full max-w-8xl max-h-full gap-4 border p-6 shadow-lg duration-200 top-14 right-[max(1rem,calc((100vw-96rem)/2+1rem))] xl:right-[max(1.5rem,calc((100vw-92rem)/2+1.5rem))]",
           className
         )}
         {...props}
