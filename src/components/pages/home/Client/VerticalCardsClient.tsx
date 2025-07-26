@@ -144,7 +144,7 @@ export default function VerticalCardsContent({ cardData }: VerticalCardsContentP
                   className="absolute inset-0 w-full h-full object-cover object-center scale-105 select-none pointer-events-none"
                 >
                   <source src={card.bg} type={card.bg.endsWith('.webm') ? 'video/webm' : card.bg.endsWith('.mp4') ? 'video/mp4' : 'video/quicktime'} />
-                  <source src={card.bg.replace('.webm', '.mp4')} type="video/mp4" />
+                  <source src={card.bg.replace('/webm/', '/mp4/').replace('.webm', '.mp4')} type="video/mp4" />
                   Your browser does not support the video tag.
                 </video>
               ) : (
