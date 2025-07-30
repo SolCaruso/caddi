@@ -138,6 +138,23 @@
   body {
     @apply bg-background text-foreground;
   }
+
+  a {
+    user-select: none;
+    -webkit-user-drag: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+  }
+
+  a {
+    @apply select-none;
+  }
+
+  img {
+    @apply select-none;
+    -webkit-user-drag: none;
+  }
 }
 
 

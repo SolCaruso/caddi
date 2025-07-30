@@ -107,5 +107,5 @@ export default function AddToBagButton(props: AddToBagButtonProps) {
     <CartProvider>
       <AddToBagButtonInner {...props} />
     </CartProvider>
-  );
+  )
 } 

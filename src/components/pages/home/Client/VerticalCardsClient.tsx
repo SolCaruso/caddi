@@ -82,16 +82,28 @@ function CarouselNavigation() {
 }
 
 export default function VerticalCardsContent({ cardData }: VerticalCardsContentProps) {
-  // Responsive slidesToScroll
-  const [slidesToScroll, setSlidesToScroll] = useState(2)
+  // Responsive carousel options
+  const [carouselOpts, setCarouselOpts] = useState({ align: "start" as const, slidesToScroll: 2, dragFree: false, containScroll: "trimSnaps" as const })
   const [hoveredCard, setHoveredCard] = useState<number | null>(null)
 
   useEffect(() => {
     const checkScreen = () => {
       if (window.innerWidth < 768) {
-        setSlidesToScroll(1)
+        // Mobile: Enable free scrolling
+        setCarouselOpts({ 
+          align: "start", 
+          slidesToScroll: 1, 
+          dragFree: true, 
+          containScroll: "keepSnaps" 
+        })
       } else {
-        setSlidesToScroll(2)
+        // Desktop: Keep discrete sliding
+        setCarouselOpts({ 
+          align: "start", 
+          slidesToScroll: 2, 
+          dragFree: false, 
+          containScroll: "trimSnaps" 
+        })
       }
     }
 
@@ -103,7 +115,7 @@ export default function VerticalCardsContent({ cardData }: VerticalCardsContentP
   const cards = Array.from({ length: 8 }, (_, i) => cardData[i % cardData.length])
 
   return (
-    <Carousel opts={{ align: "start", slidesToScroll }} className="w-full">
+    <Carousel opts={carouselOpts} className="w-full">
       <CarouselContent
         className="-ml-0 lg:!pl-[max(1rem,calc((100vw-96rem)/2+2.875rem))] 3xl:!pl-[max(1rem,calc((100vw-150rem)/2))]"
         style={{

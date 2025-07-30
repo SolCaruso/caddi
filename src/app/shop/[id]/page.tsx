@@ -1,4 +1,5 @@
 import ShopItem from "@/components/pages/shop/ShopItem";
+import { CartProvider } from "@/lib/cart";
 
 interface ShopItemPageProps {
   params: Promise<{
@@ -8,5 +9,9 @@ interface ShopItemPageProps {
 
 export default async function ShopItemPage({ params }: ShopItemPageProps) {
   const { id } = await params;
-  return <ShopItem productId={parseInt(id)} />;
+  return (
+    <CartProvider>
+      <ShopItem productId={parseInt(id)} />
+    </CartProvider>
+  );
 } 
