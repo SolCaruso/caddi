@@ -243,6 +243,35 @@ export default function BuildYourOwnClient({ modelPath }: BuildYourOwnClientProp
             </div>
           </div>
 
+          {/* Logo Color Selection */}
+          {(showForecaddiLogo || logoFile) && (
+            <div className="space-y-3">
+              <p className="text-lg font-medium text-caddi-blue">Etched Logo Color:</p>
+              <div className="flex gap-2 flex-wrap">
+                <button
+                  onClick={() => setLogoColor('black')}
+                  className={`px-6 py-3 border rounded-sm transition-all duration-200 whitespace-nowrap cursor-pointer ${
+                    logoColor === 'black'
+                      ? 'border-caddi-blue text-caddi-blue'
+                      : 'border-gray-300 text-black/50 hover:border-gray-400'
+                  }`}
+                >
+                  Black
+                </button>
+                <button
+                  onClick={() => setLogoColor('white')}
+                  className={`px-6 py-3 border rounded-sm transition-all duration-200 whitespace-nowrap cursor-pointer ${
+                    logoColor === 'white'
+                      ? 'border-caddi-blue text-caddi-blue'
+                      : 'border-gray-300 text-black/50 hover:border-gray-400'
+                  }`}
+                >
+                  White
+                </button>
+              </div>
+            </div>
+          )}
+
           {/* Logo Upload */}
           <div>
             <h3 className="text-lg font-semibold mb-4 text-caddi-blue">Custom Logo: <span className="text-sm font-normal text-gray-500">(+$25)</span></h3>
@@ -270,41 +299,6 @@ export default function BuildYourOwnClient({ modelPath }: BuildYourOwnClientProp
               )}
             </div>
           </div>
-
-          {/* Logo Color Selection */}
-          {(showForecaddiLogo || logoFile) && (
-            <div>
-              <h3 className="text-lg font-semibold mb-4 text-caddi-blue">Color:</h3>
-              <div className="grid grid-cols-5 gap-3">
-                <button
-                  onClick={() => {
-                    console.log("🎨 Setting logoColor to black")
-                    setLogoColor('black')
-                  }}
-                  className={`px-4 py-2 rounded-lg border transition-all ${
-                    logoColor === 'black'
-                      ? "border-blue-600 text-blue-600 bg-white"
-                      : "border-gray-300 text-gray-500 bg-white hover:border-gray-400"
-                  }`}
-                >
-                  Black (Current: {logoColor})
-                </button>
-                <button
-                  onClick={() => {
-                    console.log("🎨 Setting logoColor to white")
-                    setLogoColor('white')
-                  }}
-                  className={`px-4 py-2 rounded-lg border transition-all ${
-                    logoColor === 'white'
-                      ? "border-blue-600 text-blue-600 bg-white"
-                      : "border-gray-300 text-gray-500 bg-white hover:border-gray-400"
-                  }`}
-                >
-                  White (Current: {logoColor})
-                </button>
-              </div>
-            </div>
-          )}
 
           {/* Add to Bag Button - Match Shop Page Style */}
           <button
@@ -419,6 +413,35 @@ export default function BuildYourOwnClient({ modelPath }: BuildYourOwnClientProp
             </div>
           </div>
 
+          {/* Logo Color Selection */}
+          {(showForecaddiLogo || logoFile) && (
+            <div className="space-y-3">
+              <p className="text-xl font-medium text-caddi-blue">Etched Logo Color:</p>
+              <div className="flex gap-2 flex-wrap">
+                <button
+                  onClick={() => setLogoColor('black')}
+                  className={`px-6 py-3 border rounded-sm transition-all duration-200 whitespace-nowrap cursor-pointer ${
+                    logoColor === 'black'
+                      ? 'border-caddi-blue text-caddi-blue'
+                      : 'border-gray-300 text-black/50 hover:border-gray-400'
+                  }`}
+                >
+                  Black
+                </button>
+                <button
+                  onClick={() => setLogoColor('white')}
+                  className={`px-6 py-3 border rounded-sm transition-all duration-200 whitespace-nowrap cursor-pointer ${
+                    logoColor === 'white'
+                      ? 'border-caddi-blue text-caddi-blue'
+                      : 'border-gray-300 text-black/50 hover:border-gray-400'
+                  }`}
+                >
+                  White
+                </button>
+              </div>
+            </div>
+          )}
+
           {/* Logo Upload */}
           <div>
             <h3 className="text-xl font-semibold mb-6 text-caddi-blue">Custom Logo: <span className="text-base font-normal text-gray-500">(+$25)</span></h3>
@@ -446,35 +469,6 @@ export default function BuildYourOwnClient({ modelPath }: BuildYourOwnClientProp
               )}
             </div>
           </div>
-
-          {/* Logo Color Selection */}
-          {(showForecaddiLogo || logoFile) && (
-            <div>
-              <h3 className="text-xl font-semibold mb-6 text-caddi-blue">Color:</h3>
-              <div className="grid grid-cols-5 gap-4">
-                <button
-                  onClick={() => setLogoColor('black')}
-                  className={`px-6 py-3 rounded-lg border transition-all text-lg ${
-                    logoColor === 'black'
-                      ? "border-blue-600 text-blue-600 bg-white"
-                      : "border-gray-300 text-gray-500 bg-white hover:border-gray-400"
-                  }`}
-                >
-                  Black
-                </button>
-                <button
-                  onClick={() => setLogoColor('white')}
-                  className={`px-6 py-3 rounded-lg border transition-all text-lg ${
-                    logoColor === 'white'
-                      ? "border-blue-600 text-blue-600 bg-white"
-                      : "border-gray-300 text-gray-500 bg-white hover:border-gray-400"
-                  }`}
-                >
-                  White
-                </button>
-              </div>
-            </div>
-          )}
 
           {/* Add to Bag Button - Match Shop Page Style */}
           <button
