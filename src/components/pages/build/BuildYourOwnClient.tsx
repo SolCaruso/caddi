@@ -2,7 +2,7 @@
 
 import { useState, useRef, Suspense } from "react"
 import Link from "next/link"
-import { ArrowLeft, Upload } from "lucide-react"
+import { Upload } from "lucide-react"
 import ThreeDModelViewer from "./ThreeDModelViewer"
 import { useCart, CartItem } from "@/lib/cart"
 
@@ -145,20 +145,21 @@ export default function BuildYourOwnClient({ modelPath }: BuildYourOwnClientProp
               </p>
             </div>
 
-            {/* Back Button */}
-            <Link 
-              href="/shop" 
-              className="flex items-center gap-2 text-black/50 font-medium text-lg hover:text-caddi-blue transition-colors"
-            >
-              <ArrowLeft className="w-5 h-5" />
-              Shop
-            </Link>
+            {/* Back Button - Match Shop Page Style */}
+            <div className="flex-shrink-0">
+              <Link href="/shop" className="flex items-center gap-2 text-black/50 font-medium text-sm border rounded-full px-4 py-1.75 cursor-pointer hover:text-black/70 group">
+                <svg className="h-4 w-4 text-black/50 group-hover:text-black/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                </svg>
+                Shop
+              </Link>
+            </div>
           </div>
         </div>
 
         {/* 3D Model Viewer */}
         <div className="w-full mb-8 -mx-4 lg:mx-0">
-          <div className="relative w-full h-[400px] bg-gray-50">
+          <div className="relative w-full h-[600px]">
             <Suspense fallback={<div className="flex items-center justify-center h-full text-gray-500">Loading 3D Model...</div>}>
               <ThreeDModelViewer 
                 modelPath={modelPath}
@@ -184,6 +185,9 @@ export default function BuildYourOwnClient({ modelPath }: BuildYourOwnClientProp
                       ? "border-caddi-blue bg-caddi-blue/5 text-caddi-blue"
                       : "border-gray-300 hover:border-caddi-blue/50"
                   }`}
+                  style={{
+                    opacity: selectedTexture.id === texture.id ? 1 : 0.8
+                  }}
                 >
                   {/* Texture Preview */}
                   <div 
@@ -199,7 +203,7 @@ export default function BuildYourOwnClient({ modelPath }: BuildYourOwnClientProp
                 </button>
               ))}
             </div>
-            <p className="text-sm text-gray-600 mt-2">{selectedTexture.description}</p>
+
           </div>
 
           {/* Logo Upload */}
@@ -230,10 +234,10 @@ export default function BuildYourOwnClient({ modelPath }: BuildYourOwnClientProp
             </div>
           </div>
 
-          {/* Add to Bag Button */}
+          {/* Add to Bag Button - Match Shop Page Style */}
           <button
             onClick={handleAddToBag}
-            className="w-full bg-caddi-blue text-white py-4 px-6 rounded-lg font-medium text-lg hover:bg-caddi-blue/90 transition-colors"
+            className="bg-white text-lg border border-caddi-blue text-caddi-black font-medium py-4.5 px-38 rounded-full hover:bg-caddi-blue hover:text-white transition-all duration-100 ease-in-out cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed w-full"
           >
             Add to Bag - ${totalPrice.toFixed(2)}
           </button>
@@ -244,7 +248,7 @@ export default function BuildYourOwnClient({ modelPath }: BuildYourOwnClientProp
       <div className="hidden lg:grid lg:grid-cols-2 lg:gap-16 lg:items-start">
         {/* Left: 3D Model Viewer */}
         <div className="sticky top-8">
-          <div className="relative w-full h-[600px] bg-gray-50 rounded-lg">
+          <div className="relative w-full h-[600px] rounded-lg">
             <Suspense fallback={<div className="flex items-center justify-center h-full text-gray-500">Loading 3D Model...</div>}>
               <ThreeDModelViewer 
                 modelPath={modelPath}
@@ -259,14 +263,15 @@ export default function BuildYourOwnClient({ modelPath }: BuildYourOwnClientProp
         <div className="space-y-8">
           {/* Header */}
           <div>
-            {/* Back Button */}
-            <Link 
-              href="/shop" 
-              className="inline-flex items-center gap-2 text-black/50 font-medium text-lg hover:text-caddi-blue transition-colors mb-6"
-            >
-              <ArrowLeft className="w-5 h-5" />
-              Shop
-            </Link>
+            {/* Back Button - Match Shop Page Style */}
+            <div className="flex justify-end mb-6">
+              <Link href="/shop" className="inline-flex items-center gap-2 text-black/50 font-medium text-sm border rounded-full px-4 py-1.75 cursor-pointer hover:text-black/70 group">
+                <svg className="h-4 w-4 text-black/50 group-hover:text-black/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                </svg>
+                Shop
+              </Link>
+            </div>
 
             {/* Category */}
             <p className="text-lg text-black/50 font-semibold mb-2">Custom Divot Tools</p>
@@ -290,26 +295,27 @@ export default function BuildYourOwnClient({ modelPath }: BuildYourOwnClientProp
                 <button
                   key={texture.id}
                   onClick={() => setSelectedTexture(texture)}
-                  className={`relative p-4 rounded-lg border-2 transition-all text-left overflow-hidden ${
+                  className={`relative pb-4 rounded-lg border transition-all text-left overflow-hidden cursor-pointer ${
                     selectedTexture.id === texture.id
-                      ? "border-caddi-blue bg-caddi-blue/5 text-caddi-blue"
-                      : "border-gray-300 hover:border-caddi-blue/50"
+                      ? "border-caddi-blue text-caddi-blue bg-white"
+                      : "border-gray-300 hover:border-gray-400 text-black/50 bg-gray-100"
                   }`}
+                  style={{
+                    opacity: selectedTexture.id === texture.id ? 1 : 0.8
+                  }}
                 >
                   {/* Texture Preview */}
                   <div 
-                    className="w-full h-20 rounded mb-3 bg-cover bg-center"
+                    className="w-full h-20 rounded-t mb-3 bg-cover bg-center"
                     style={{ backgroundImage: `url(${texture.texture})` }}
                   />
-                  <div className="font-medium text-lg">
+                  <div className="font-medium text-lg px-4">
                     {texture.name}
                   </div>
-                  <div className="text-base text-gray-500 mb-2">
+                  <div className="text-base text-gray-500 mb-2 px-4">
                     ${texture.price}
                   </div>
-                  <div className="text-sm text-gray-600">
-                    {texture.description}
-                  </div>
+
                 </button>
               ))}
             </div>
@@ -351,10 +357,10 @@ export default function BuildYourOwnClient({ modelPath }: BuildYourOwnClientProp
             </div>
           </div>
 
-          {/* Add to Bag Button */}
+          {/* Add to Bag Button - Match Shop Page Style */}
           <button
             onClick={handleAddToBag}
-            className="w-full bg-caddi-blue text-white py-4 px-8 rounded-lg font-medium text-xl hover:bg-caddi-blue/90 transition-colors"
+            className="bg-white text-lg border border-caddi-blue text-caddi-black font-medium py-4.5 px-38 rounded-full hover:bg-caddi-blue hover:text-white transition-all duration-100 ease-in-out cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed w-full"
           >
             Add to Bag - ${totalPrice.toFixed(2)}
           </button>

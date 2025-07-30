@@ -190,8 +190,10 @@ interface ThreeDModelViewerProps {
 }
 
 export default function ThreeDModelViewer({ modelPath, woodTexture, logoTexture }: ThreeDModelViewerProps) {
+  const [cursorStyle, setCursorStyle] = useState('cursor-grab')
+  
   return (
-    <div className="w-full h-full">
+    <div className={`w-full h-full ${cursorStyle}`}>
       <Canvas
         camera={{
           position: [0, 0, 6],
@@ -199,12 +201,15 @@ export default function ThreeDModelViewer({ modelPath, woodTexture, logoTexture 
           near: 0.1,
           far: 1000,
         }}
-        style={{ background: 'linear-gradient(to bottom, #f0f0f0, #e0e0e0)' }}
+        style={{ background: 'rgba(217, 217, 217, 0.3)', borderRadius: '10px' }}
         gl={{ 
           toneMapping: THREE.NoToneMapping,
           outputColorSpace: THREE.SRGBColorSpace
         }}
         shadows
+        onPointerDown={() => setCursorStyle('cursor-grabbing')}
+        onPointerUp={() => setCursorStyle('cursor-grab')}
+        onPointerLeave={() => setCursorStyle('cursor-grab')}
       >
         <ambientLight intensity={0.3} />
         <directionalLight position={[10, 10, 5]} intensity={0.7} castShadow />
@@ -224,9 +229,21 @@ export default function ThreeDModelViewer({ modelPath, woodTexture, logoTexture 
         <Environment preset="warehouse" />
       </Canvas>
       
-      {/* Instructions */}
-      <div className="absolute bottom-4 left-4 text-sm text-gray-500">
-        Click and drag to rotate
+      {/* Visual Rotation Indicators - Bottom half curved arrows */}
+      <div className="absolute bottom-42 left-52 rotate-80 text-gray-300/30 hidden xl:block pointer-events-none">
+        <svg className="w-18 h-18 scale-x-[-1]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7" />
+        </svg>
+      </div>
+      <div className="absolute bottom-42 right-52 -rotate-80 text-gray-300/30 hidden xl:block pointer-events-none">
+        <svg className="w-18 h-18 scale-x-[-1]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7" />
+        </svg>
+      </div>
+      
+      {/* Subtle hint text */}
+      <div className="absolute bottom-3 left-1/2 transform -translate-x-1/2 text-xs text-gray-400 opacity-60 animate-pulse pointer-events-none">
+        Drag to rotate
       </div>
     </div>
   )
