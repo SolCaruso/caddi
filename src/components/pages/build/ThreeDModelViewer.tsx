@@ -12,10 +12,11 @@ interface ModelProps {
   woodTexture: string
   logoTexture?: string
   showForecaddiLogo?: boolean
+  logoColor?: 'black' | 'white'
 }
 
 // Custom OBJ+MTL Model Component with manual rotation
-function ObjModel({ modelPath, woodTexture, logoTexture, showForecaddiLogo = false }: ModelProps) {
+function ObjModel({ modelPath, woodTexture, logoTexture, showForecaddiLogo = false, logoColor = 'black' }: ModelProps) {
   // Use the woodTexture path directly - no mapping needed
   const woodMap = useTexture(woodTexture)
   woodMap.wrapS = woodMap.wrapT = THREE.ClampToEdgeWrapping
@@ -166,12 +167,17 @@ function ObjModel({ modelPath, woodTexture, logoTexture, showForecaddiLogo = fal
       />
       
       {/* Forecaddi Logo Overlay - now inside the rotating group */}
-      {showForecaddiLogo && <ForecaddiLogoOverlay />}
+      {showForecaddiLogo && (
+        <ForecaddiLogoOverlay 
+          logoColor={logoColor} 
+          key={`logo-${logoColor}`}
+        />
+      )}
     </group>
   )
 }
 
-function DivotToolModel({ modelPath, woodTexture, logoTexture, showForecaddiLogo = false }: ModelProps) {
+function DivotToolModel({ modelPath, woodTexture, logoTexture, showForecaddiLogo = false, logoColor = 'black' }: ModelProps) {
   // Only try OBJ, no fallback
   if (modelPath.endsWith('.obj')) {
     return (
@@ -181,6 +187,7 @@ function DivotToolModel({ modelPath, woodTexture, logoTexture, showForecaddiLogo
           woodTexture={woodTexture} 
           logoTexture={logoTexture} 
           showForecaddiLogo={showForecaddiLogo}
+          logoColor={logoColor}
         />
       </Suspense>
     )
@@ -190,7 +197,7 @@ function DivotToolModel({ modelPath, woodTexture, logoTexture, showForecaddiLogo
   return null
 }
 
-function ForecaddiLogoOverlay() {
+function ForecaddiLogoOverlay({ logoColor = 'black' }: { logoColor?: 'black' | 'white' }) {
   // Load Forecaddi logo texture inside Canvas
   const forecaddiLogoMap = useTexture('/webp/forecaddi-logo.webp')
   
@@ -201,15 +208,42 @@ function ForecaddiLogoOverlay() {
     forecaddiLogoMap.flipY = false
   }
   
+  console.log("🎨 ForecaddiLogoOverlay received logoColor:", logoColor)
+  
+  const meshColor = logoColor === 'white' ? '#ffffff' : '#ff0000'
+  console.log("🎨 ForecaddiLogoOverlay using mesh color:", meshColor)
+  
   return (
     <mesh position={[-0.01, 1.1, 0.19]} scale={[1.5, -1.5, 1.5]}>
       <planeGeometry args={[1, 1]} />
-      <meshStandardMaterial 
-        color={forecaddiLogoMap ? undefined : "red"}
-        map={forecaddiLogoMap}
+      <shaderMaterial
         transparent={true}
-        opacity={0.9}
+        opacity={0.8}
         side={THREE.DoubleSide}
+        uniforms={{
+          map: { value: forecaddiLogoMap },
+          invert: { value: logoColor === 'white' ? 1.0 : 0.0 }
+        }}
+        vertexShader={`
+          varying vec2 vUv;
+          void main() {
+            vUv = uv;
+            gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+          }
+        `}
+        fragmentShader={`
+          uniform sampler2D map;
+          uniform float invert;
+          varying vec2 vUv;
+          void main() {
+            vec4 texColor = texture2D(map, vUv);
+            if (invert > 0.5) {
+              gl_FragColor = vec4(1.0 - texColor.rgb, texColor.a);
+            } else {
+              gl_FragColor = texColor;
+            }
+          }
+        `}
       />
     </mesh>
   )
@@ -220,10 +254,13 @@ interface ThreeDModelViewerProps {
   woodTexture: string
   logoTexture?: string | null
   showForecaddiLogo?: boolean
+  logoColor?: 'black' | 'white'
 }
 
-export default function ThreeDModelViewer({ modelPath, woodTexture, logoTexture, showForecaddiLogo = false }: ThreeDModelViewerProps) {
+export default function ThreeDModelViewer({ modelPath, woodTexture, logoTexture, showForecaddiLogo = false, logoColor = 'black' }: ThreeDModelViewerProps) {
   const [cursorStyle, setCursorStyle] = useState('cursor-grab')
+  
+  console.log("🎨 ThreeDModelViewer received logoColor:", logoColor)
   
   return (
     <div className={`w-full h-full ${cursorStyle}`}>
@@ -257,6 +294,7 @@ export default function ThreeDModelViewer({ modelPath, woodTexture, logoTexture,
             woodTexture={woodTexture} 
             logoTexture={logoTexture || undefined}
             showForecaddiLogo={showForecaddiLogo}
+            logoColor={logoColor}
           />
         </Suspense>
         

@@ -90,11 +90,20 @@ export default function BuildYourOwnClient({ modelPath }: BuildYourOwnClientProp
   const [logoFile, setLogoFile] = useState<File | null>(null)
   const [logoUrl, setLogoUrl] = useState<string | null>(null)
   const [showForecaddiLogo, setShowForecaddiLogo] = useState(false)
+  const [logoColor, setLogoColor] = useState<'black' | 'white'>('black')
+  
+  // Force re-render when logoColor changes
+  const logoColorKey = `${logoColor}-${Date.now()}`
   
   // Debug logging for Forecaddi logo state
   useEffect(() => {
     console.log("🔍 Forecaddi logo state changed:", showForecaddiLogo)
   }, [showForecaddiLogo])
+  
+  // Debug logging for logo color state
+  useEffect(() => {
+    console.log("🎨 Logo color state changed:", logoColor)
+  }, [logoColor])
   const fileInputRef = useRef<HTMLInputElement>(null)
   const { addItem } = useCart()
 
@@ -104,6 +113,8 @@ export default function BuildYourOwnClient({ modelPath }: BuildYourOwnClientProp
       setLogoFile(file)
       const url = URL.createObjectURL(file)
       setLogoUrl(url)
+      // Automatically uncheck Forecaddi logo when custom logo is uploaded
+      setShowForecaddiLogo(false)
     }
   }
 
@@ -174,6 +185,7 @@ export default function BuildYourOwnClient({ modelPath }: BuildYourOwnClientProp
                 woodTexture={selectedTexture.texture}
                 logoTexture={logoUrl}
                 showForecaddiLogo={showForecaddiLogo}
+                logoColor={logoColor}
               />
             </Suspense>
           </div>
@@ -259,6 +271,41 @@ export default function BuildYourOwnClient({ modelPath }: BuildYourOwnClientProp
             </div>
           </div>
 
+          {/* Logo Color Selection */}
+          {(showForecaddiLogo || logoFile) && (
+            <div>
+              <h3 className="text-lg font-semibold mb-4 text-caddi-blue">Color:</h3>
+              <div className="grid grid-cols-5 gap-3">
+                <button
+                  onClick={() => {
+                    console.log("🎨 Setting logoColor to black")
+                    setLogoColor('black')
+                  }}
+                  className={`px-4 py-2 rounded-lg border transition-all ${
+                    logoColor === 'black'
+                      ? "border-blue-600 text-blue-600 bg-white"
+                      : "border-gray-300 text-gray-500 bg-white hover:border-gray-400"
+                  }`}
+                >
+                  Black (Current: {logoColor})
+                </button>
+                <button
+                  onClick={() => {
+                    console.log("🎨 Setting logoColor to white")
+                    setLogoColor('white')
+                  }}
+                  className={`px-4 py-2 rounded-lg border transition-all ${
+                    logoColor === 'white'
+                      ? "border-blue-600 text-blue-600 bg-white"
+                      : "border-gray-300 text-gray-500 bg-white hover:border-gray-400"
+                  }`}
+                >
+                  White (Current: {logoColor})
+                </button>
+              </div>
+            </div>
+          )}
+
           {/* Add to Bag Button - Match Shop Page Style */}
           <button
             onClick={handleAddToBag}
@@ -282,6 +329,7 @@ export default function BuildYourOwnClient({ modelPath }: BuildYourOwnClientProp
                 woodTexture={selectedTexture.texture}
                 logoTexture={logoUrl}
                 showForecaddiLogo={showForecaddiLogo}
+                logoColor={logoColor}
               />
             </Suspense>
           </div>
@@ -398,6 +446,35 @@ export default function BuildYourOwnClient({ modelPath }: BuildYourOwnClientProp
               )}
             </div>
           </div>
+
+          {/* Logo Color Selection */}
+          {(showForecaddiLogo || logoFile) && (
+            <div>
+              <h3 className="text-xl font-semibold mb-6 text-caddi-blue">Color:</h3>
+              <div className="grid grid-cols-5 gap-4">
+                <button
+                  onClick={() => setLogoColor('black')}
+                  className={`px-6 py-3 rounded-lg border transition-all text-lg ${
+                    logoColor === 'black'
+                      ? "border-blue-600 text-blue-600 bg-white"
+                      : "border-gray-300 text-gray-500 bg-white hover:border-gray-400"
+                  }`}
+                >
+                  Black
+                </button>
+                <button
+                  onClick={() => setLogoColor('white')}
+                  className={`px-6 py-3 rounded-lg border transition-all text-lg ${
+                    logoColor === 'white'
+                      ? "border-blue-600 text-blue-600 bg-white"
+                      : "border-gray-300 text-gray-500 bg-white hover:border-gray-400"
+                  }`}
+                >
+                  White
+                </button>
+              </div>
+            </div>
+          )}
 
           {/* Add to Bag Button - Match Shop Page Style */}
           <button
