@@ -11,10 +11,11 @@ interface ModelProps {
   modelPath: string
   woodTexture: string
   logoTexture?: string
+  showForecaddiLogo?: boolean
 }
 
 // Custom OBJ+MTL Model Component with manual rotation
-function ObjModel({ modelPath, woodTexture, logoTexture }: ModelProps) {
+function ObjModel({ modelPath, woodTexture, logoTexture, showForecaddiLogo = false }: ModelProps) {
   // Use the woodTexture path directly - no mapping needed
   const woodMap = useTexture(woodTexture)
   woodMap.wrapS = woodMap.wrapT = THREE.ClampToEdgeWrapping
@@ -116,7 +117,7 @@ function ObjModel({ modelPath, woodTexture, logoTexture }: ModelProps) {
   useEffect(() => {
     if (!model) return
 
-    console.log("🎨 Applying wood texture:", woodTexture)
+    console.log("🎨 Applying wood texture:", woodTexture, "Forecaddi logo:", showForecaddiLogo)
     
     model.traverse((child) => {
       if (child instanceof THREE.Mesh) {
@@ -133,6 +134,8 @@ function ObjModel({ modelPath, woodTexture, logoTexture }: ModelProps) {
           toneMapped: false,
           envMapIntensity: 0.5 // Moderate environment reflections
         })
+        
+
         
         // Replace the material entirely
         mesh.material = newMaterial
@@ -161,11 +164,14 @@ function ObjModel({ modelPath, woodTexture, logoTexture }: ModelProps) {
         position={[0, 0, 0]} 
         rotation={[0, 0, 0]}
       />
+      
+      {/* Forecaddi Logo Overlay - now inside the rotating group */}
+      {showForecaddiLogo && <ForecaddiLogoOverlay />}
     </group>
   )
 }
 
-function DivotToolModel({ modelPath, woodTexture, logoTexture }: ModelProps) {
+function DivotToolModel({ modelPath, woodTexture, logoTexture, showForecaddiLogo = false }: ModelProps) {
   // Only try OBJ, no fallback
   if (modelPath.endsWith('.obj')) {
     return (
@@ -174,6 +180,7 @@ function DivotToolModel({ modelPath, woodTexture, logoTexture }: ModelProps) {
           modelPath={modelPath} 
           woodTexture={woodTexture} 
           logoTexture={logoTexture} 
+          showForecaddiLogo={showForecaddiLogo}
         />
       </Suspense>
     )
@@ -183,14 +190,49 @@ function DivotToolModel({ modelPath, woodTexture, logoTexture }: ModelProps) {
   return null
 }
 
+function ForecaddiLogoOverlay() {
+  // Load Forecaddi logo texture inside Canvas
+  const forecaddiLogoMap = useTexture('/webp/forecaddi-logo.webp')
+  
+  console.log("🎨 Forecaddi logo texture loaded:", { forecaddiLogoMap: !!forecaddiLogoMap })
+  
+  if (forecaddiLogoMap) {
+    forecaddiLogoMap.wrapS = forecaddiLogoMap.wrapT = THREE.ClampToEdgeWrapping
+    forecaddiLogoMap.repeat.set(1, 1)
+    forecaddiLogoMap.colorSpace = THREE.SRGBColorSpace
+    forecaddiLogoMap.flipY = false
+  }
+  
+  console.log("🎨 Rendering Forecaddi logo overlay")
+  
+  return (
+    <mesh position={[-0.01, 1.1, 0.19]} scale={[1.5, 1.5, 1.5]}>
+      <planeGeometry args={[1, 1]} />
+      <meshStandardMaterial 
+        color={forecaddiLogoMap ? undefined : "red"}
+        map={forecaddiLogoMap}
+        transparent={true}
+        opacity={0.9}
+        side={THREE.DoubleSide}
+      />
+    </mesh>
+  )
+}
+
 interface ThreeDModelViewerProps {
   modelPath: string
   woodTexture: string
   logoTexture?: string | null
+  showForecaddiLogo?: boolean
 }
 
-export default function ThreeDModelViewer({ modelPath, woodTexture, logoTexture }: ThreeDModelViewerProps) {
+export default function ThreeDModelViewer({ modelPath, woodTexture, logoTexture, showForecaddiLogo = false }: ThreeDModelViewerProps) {
   const [cursorStyle, setCursorStyle] = useState('cursor-grab')
+  
+  // Debug logging for props
+  useEffect(() => {
+    console.log("🎯 ThreeDModelViewer props:", { showForecaddiLogo, logoTexture })
+  }, [showForecaddiLogo, logoTexture])
   
   return (
     <div className={`w-full h-full ${cursorStyle}`}>
@@ -217,12 +259,13 @@ export default function ThreeDModelViewer({ modelPath, woodTexture, logoTexture 
         <directionalLight position={[5, -5, 8]} intensity={0.2} />
         <spotLight position={[0, 15, 0]} angle={0.3} intensity={0.2} />
         
-        <Suspense fallback={null}>
+                <Suspense fallback={null}>
           {/* 3D Model */}
           <DivotToolModel 
             modelPath={modelPath} 
             woodTexture={woodTexture} 
-            logoTexture={logoTexture || undefined} 
+            logoTexture={logoTexture || undefined}
+            showForecaddiLogo={showForecaddiLogo}
           />
         </Suspense>
         

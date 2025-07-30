@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useRef, Suspense } from "react"
+import { useState, useRef, Suspense, useEffect } from "react"
 import Link from "next/link"
 import { Upload } from "lucide-react"
 import ThreeDModelViewer from "./ThreeDModelViewer"
@@ -89,6 +89,12 @@ export default function BuildYourOwnClient({ modelPath }: BuildYourOwnClientProp
   const [selectedTexture, setSelectedTexture] = useState<TextureOption>(textureOptions[0])
   const [logoFile, setLogoFile] = useState<File | null>(null)
   const [logoUrl, setLogoUrl] = useState<string | null>(null)
+  const [showForecaddiLogo, setShowForecaddiLogo] = useState(false)
+  
+  // Debug logging for Forecaddi logo state
+  useEffect(() => {
+    console.log("🔍 Forecaddi logo state changed:", showForecaddiLogo)
+  }, [showForecaddiLogo])
   const fileInputRef = useRef<HTMLInputElement>(null)
   const { addItem } = useCart()
 
@@ -120,7 +126,7 @@ export default function BuildYourOwnClient({ modelPath }: BuildYourOwnClientProp
     addItem(customProduct)
   }
 
-  const totalPrice = selectedTexture.price + (logoFile ? 25 : 0)
+  const totalPrice = selectedTexture.price + (logoFile ? 25 : 0) + (showForecaddiLogo ? 3.95 : 0)
 
   return (
     <>
@@ -160,11 +166,14 @@ export default function BuildYourOwnClient({ modelPath }: BuildYourOwnClientProp
         {/* 3D Model Viewer */}
         <div className="mb-8 -mx-4 lg:mx-0">
           <div className="relative aspect-square bg-[#D9D9D9]/30 overflow-hidden w-full lg:rounded-lg" style={{backgroundColor: '#F3F3F3'}}>
-            <Suspense fallback={<div className="flex items-center justify-center h-full text-gray-500">Loading 3D Model...</div>}>
+            <Suspense fallback={<div className="flex items-center justify-center h-full">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-caddi-blue"></div>
+            </div>}>
               <ThreeDModelViewer 
                 modelPath={modelPath}
                 woodTexture={selectedTexture.texture}
                 logoTexture={logoUrl}
+                showForecaddiLogo={showForecaddiLogo}
               />
             </Suspense>
           </div>
@@ -204,6 +213,22 @@ export default function BuildYourOwnClient({ modelPath }: BuildYourOwnClientProp
               ))}
             </div>
 
+          </div>
+
+          {/* Forecaddi Logo Option */}
+          <div>
+            <div className="flex items-center gap-3 mb-4">
+              <input
+                type="checkbox"
+                id="forecaddi-logo"
+                checked={showForecaddiLogo}
+                onChange={(e) => setShowForecaddiLogo(e.target.checked)}
+                className="w-4 h-4 text-caddi-blue border-gray-300 rounded focus:ring-caddi-blue"
+              />
+              <label htmlFor="forecaddi-logo" className="text-lg font-semibold text-caddi-blue cursor-pointer">
+                Forecaddi Logo (etched): <span className="text-sm font-normal text-gray-500">(+$3.95)</span>
+              </label>
+            </div>
           </div>
 
           {/* Logo Upload */}
@@ -249,11 +274,14 @@ export default function BuildYourOwnClient({ modelPath }: BuildYourOwnClientProp
         {/* Left: 3D Model Viewer */}
         <div className="pr-8 sticky top-8">
           <div className="relative bg-[#D9D9D9]/30 overflow-hidden rounded-lg max-w-[650px] w-full h-[750px]" style={{backgroundColor: '#F3F3F3'}}>
-            <Suspense fallback={<div className="flex items-center justify-center h-full text-gray-500">Loading 3D Model...</div>}>
+            <Suspense fallback={<div className="flex items-center justify-center h-full">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-caddi-blue"></div>
+            </div>}>
               <ThreeDModelViewer 
                 modelPath={modelPath}
                 woodTexture={selectedTexture.texture}
                 logoTexture={logoUrl}
+                showForecaddiLogo={showForecaddiLogo}
               />
             </Suspense>
           </div>
@@ -324,6 +352,22 @@ export default function BuildYourOwnClient({ modelPath }: BuildYourOwnClientProp
               <div className="text-sm text-gray-600">
                 {selectedTexture.description}
               </div>
+            </div>
+          </div>
+
+          {/* Forecaddi Logo Option */}
+          <div>
+            <div className="flex items-center gap-4 mb-6">
+              <input
+                type="checkbox"
+                id="forecaddi-logo-desktop"
+                checked={showForecaddiLogo}
+                onChange={(e) => setShowForecaddiLogo(e.target.checked)}
+                className="w-5 h-5 text-caddi-blue border-gray-300 rounded focus:ring-caddi-blue"
+              />
+              <label htmlFor="forecaddi-logo-desktop" className="text-xl font-semibold text-caddi-blue cursor-pointer">
+                Forecaddi Logo (etched): <span className="text-base font-normal text-gray-500">(+$3.95)</span>
+              </label>
             </div>
           </div>
 
