@@ -12,11 +12,11 @@ interface ModelProps {
   woodTexture: string
   logoTexture?: string
   showForecaddiLogo?: boolean
-  logoColor?: 'black' | 'white'
+  logoColor?: 'black' | 'white' | 'neutral'
 }
 
 // Custom OBJ+MTL Model Component with manual rotation
-function ObjModel({ modelPath, woodTexture, logoTexture, showForecaddiLogo = false, logoColor = 'black' }: ModelProps) {
+function ObjModel({ modelPath, woodTexture, logoTexture, showForecaddiLogo = false, logoColor = 'neutral' }: ModelProps) {
   // Use the woodTexture path directly - no mapping needed
   const woodMap = useTexture(woodTexture)
   woodMap.wrapS = woodMap.wrapT = THREE.ClampToEdgeWrapping
@@ -170,6 +170,7 @@ function ObjModel({ modelPath, woodTexture, logoTexture, showForecaddiLogo = fal
       {showForecaddiLogo && (
         <ForecaddiLogoOverlay 
           logoColor={logoColor} 
+          woodTexture={woodMap}
           key={`logo-${logoColor}`}
         />
       )}
@@ -177,7 +178,7 @@ function ObjModel({ modelPath, woodTexture, logoTexture, showForecaddiLogo = fal
   )
 }
 
-function DivotToolModel({ modelPath, woodTexture, logoTexture, showForecaddiLogo = false, logoColor = 'black' }: ModelProps) {
+function DivotToolModel({ modelPath, woodTexture, logoTexture, showForecaddiLogo = false, logoColor = 'neutral' }: ModelProps) {
   // Only try OBJ, no fallback
   if (modelPath.endsWith('.obj')) {
     return (
@@ -197,7 +198,7 @@ function DivotToolModel({ modelPath, woodTexture, logoTexture, showForecaddiLogo
   return null
 }
 
-function ForecaddiLogoOverlay({ logoColor = 'black' }: { logoColor?: 'black' | 'white' }) {
+function ForecaddiLogoOverlay({ logoColor = 'neutral', woodTexture }: { logoColor?: 'black' | 'white' | 'neutral', woodTexture?: THREE.Texture }) {
   // Load Forecaddi logo texture inside Canvas
   const forecaddiLogoMap = useTexture('/webp/forecaddi-logo.webp')
   
@@ -210,9 +211,6 @@ function ForecaddiLogoOverlay({ logoColor = 'black' }: { logoColor?: 'black' | '
   
   console.log("🎨 ForecaddiLogoOverlay received logoColor:", logoColor)
   
-  const meshColor = logoColor === 'white' ? '#ffffff' : '#ff0000'
-  console.log("🎨 ForecaddiLogoOverlay using mesh color:", meshColor)
-  
   return (
     <mesh position={[-0.01, 1.1, 0.19]} scale={[1.5, -1.5, 1.5]}>
       <planeGeometry args={[1, 1]} />
@@ -222,7 +220,9 @@ function ForecaddiLogoOverlay({ logoColor = 'black' }: { logoColor?: 'black' | '
         side={THREE.DoubleSide}
         uniforms={{
           map: { value: forecaddiLogoMap },
-          invert: { value: logoColor === 'white' ? 1.0 : 0.0 }
+          woodTexture: { value: woodTexture },
+          invert: { value: logoColor === 'white' ? 1.0 : 0.0 },
+          neutral: { value: logoColor === 'neutral' ? 1.0 : 0.0 }
         }}
         vertexShader={`
           varying vec2 vUv;
@@ -233,12 +233,18 @@ function ForecaddiLogoOverlay({ logoColor = 'black' }: { logoColor?: 'black' | '
         `}
         fragmentShader={`
           uniform sampler2D map;
+          uniform sampler2D woodTexture;
           uniform float invert;
+          uniform float neutral;
           varying vec2 vUv;
           void main() {
             vec4 texColor = texture2D(map, vUv);
             if (invert > 0.5) {
               gl_FragColor = vec4(1.0 - texColor.rgb, texColor.a);
+            } else if (neutral > 0.5) {
+              // For neutral, sample the wood texture and darken it for laser etching
+              vec4 woodColor = texture2D(woodTexture, vUv);
+              gl_FragColor = vec4(woodColor.rgb * 0.7, texColor.a);
             } else {
               gl_FragColor = texColor;
             }
@@ -254,10 +260,10 @@ interface ThreeDModelViewerProps {
   woodTexture: string
   logoTexture?: string | null
   showForecaddiLogo?: boolean
-  logoColor?: 'black' | 'white'
+  logoColor?: 'black' | 'white' | 'neutral'
 }
 
-export default function ThreeDModelViewer({ modelPath, woodTexture, logoTexture, showForecaddiLogo = false, logoColor = 'black' }: ThreeDModelViewerProps) {
+export default function ThreeDModelViewer({ modelPath, woodTexture, logoTexture, showForecaddiLogo = false, logoColor = 'neutral' }: ThreeDModelViewerProps) {
   const [cursorStyle, setCursorStyle] = useState('cursor-grab')
   
   console.log("🎨 ThreeDModelViewer received logoColor:", logoColor)

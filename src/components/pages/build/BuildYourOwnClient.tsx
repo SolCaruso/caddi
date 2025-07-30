@@ -90,7 +90,7 @@ export default function BuildYourOwnClient({ modelPath }: BuildYourOwnClientProp
   const [logoFile, setLogoFile] = useState<File | null>(null)
   const [logoUrl, setLogoUrl] = useState<string | null>(null)
   const [showForecaddiLogo, setShowForecaddiLogo] = useState(false)
-  const [logoColor, setLogoColor] = useState<'black' | 'white'>('black')
+  const [logoColor, setLogoColor] = useState<'black' | 'white' | 'neutral'>('neutral')
   
   // Force re-render when logoColor changes
   const logoColorKey = `${logoColor}-${Date.now()}`
@@ -248,6 +248,16 @@ export default function BuildYourOwnClient({ modelPath }: BuildYourOwnClientProp
             <div className="space-y-3">
               <p className="text-lg font-medium text-caddi-blue">Etched Logo Color:</p>
               <div className="flex gap-2 flex-wrap">
+                <button
+                  onClick={() => setLogoColor('neutral')}
+                  className={`px-6 py-3 border rounded-sm transition-all duration-200 whitespace-nowrap cursor-pointer ${
+                    logoColor === 'neutral'
+                      ? 'border-caddi-blue text-caddi-blue'
+                      : 'border-gray-300 text-black/50 hover:border-gray-400'
+                  }`}
+                >
+                  Neutral
+                </button>
                 <button
                   onClick={() => setLogoColor('black')}
                   className={`px-6 py-3 border rounded-sm transition-all duration-200 whitespace-nowrap cursor-pointer ${
@@ -418,6 +428,16 @@ export default function BuildYourOwnClient({ modelPath }: BuildYourOwnClientProp
             <div className="space-y-3">
               <p className="text-xl font-medium text-caddi-blue">Etched Logo Color:</p>
               <div className="flex gap-2 flex-wrap">
+                <button
+                  onClick={() => setLogoColor('neutral')}
+                  className={`px-6 py-3 border rounded-sm transition-all duration-200 whitespace-nowrap cursor-pointer ${
+                    logoColor === 'neutral'
+                      ? 'border-caddi-blue text-caddi-blue'
+                      : 'border-gray-300 text-black/50 hover:border-gray-400'
+                  }`}
+                >
+                  Neutral
+                </button>
                 <button
                   onClick={() => setLogoColor('black')}
                   className={`px-6 py-3 border rounded-sm transition-all duration-200 whitespace-nowrap cursor-pointer ${
