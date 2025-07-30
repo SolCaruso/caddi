@@ -111,12 +111,17 @@ function ObjModel({ modelPath, woodTexture, logoTexture }: ModelProps) {
         }
       });
 
-      // override each mesh's diffuse map with our woodMap
+      // override each mesh's material with woodMap + manual PBR maps
       object.traverse((child) => {
-        if (child instanceof THREE.Mesh) {
-          child.material.map = woodMap
-          child.material.needsUpdate = true
-        }
+        if (!(child instanceof THREE.Mesh)) return
+        const mesh = child as THREE.Mesh
+        const pbrMat = mesh.material as THREE.MeshStandardMaterial
+        pbrMat.map = woodMap
+        // manually boost contrast by setting roughness/metalness
+        pbrMat.roughness = 0.4
+        pbrMat.metalness = 0.1
+        pbrMat.envMapIntensity = 0.7
+        pbrMat.needsUpdate = true
       })
       setModel(object)
     }
