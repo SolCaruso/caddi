@@ -230,12 +230,12 @@ export default function ThreeDModelViewer({ modelPath, woodTexture, logoTexture 
       </Canvas>
       
       {/* Visual Rotation Indicators - Bottom half curved arrows */}
-      <div className="absolute bottom-42 left-52 rotate-80 text-gray-300/30 hidden xl:block pointer-events-none">
+      <div className="absolute bottom-42 left-42 rotate-80 text-gray-300 hidden xl:block pointer-events-none animate-pulse">
         <svg className="w-18 h-18 scale-x-[-1]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7" />
         </svg>
       </div>
-      <div className="absolute bottom-42 right-52 -rotate-80 text-gray-300/30 hidden xl:block pointer-events-none">
+      <div className="absolute bottom-42 right-42 -rotate-80 text-gray-300 hidden xl:block pointer-events-none animate-pulse">
         <svg className="w-18 h-18 scale-x-[-1]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7" />
         </svg>

@@ -22,18 +22,18 @@ export default function BuildYourOwnClient({ modelPath }: BuildYourOwnClientProp
   // Available texture options
   const textureOptions: TextureOption[] = [
     {
-      id: 'zebrawood',
-      name: 'Zebrawood',
-      texture: '/textures/zebrawood.webp',
-      price: 189,
-      description: 'Bold striped pattern with dramatic contrast'
-    },
-    {
       id: 'canarywood',
       name: 'Canarywood',
       texture: '/textures/canarywood.webp',
       price: 169,
       description: 'Rich golden yellow with subtle grain'
+    },
+    {
+      id: 'zebrawood',
+      name: 'Zebrawood',
+      texture: '/textures/zebrawood.webp',
+      price: 189,
+      description: 'Bold striped pattern with dramatic contrast'
     },
     {
       id: 'white-oak',
@@ -158,8 +158,8 @@ export default function BuildYourOwnClient({ modelPath }: BuildYourOwnClientProp
         </div>
 
         {/* 3D Model Viewer */}
-        <div className="w-full mb-8 -mx-4 lg:mx-0">
-          <div className="relative w-full h-[600px]">
+        <div className="mb-8 -mx-4 lg:mx-0">
+          <div className="relative aspect-square bg-[#D9D9D9]/30 overflow-hidden w-full lg:rounded-lg" style={{backgroundColor: '#F3F3F3'}}>
             <Suspense fallback={<div className="flex items-center justify-center h-full text-gray-500">Loading 3D Model...</div>}>
               <ThreeDModelViewer 
                 modelPath={modelPath}
@@ -180,10 +180,10 @@ export default function BuildYourOwnClient({ modelPath }: BuildYourOwnClientProp
                 <button
                   key={texture.id}
                   onClick={() => setSelectedTexture(texture)}
-                  className={`relative p-3 rounded-lg border-2 transition-all text-left overflow-hidden ${
+                  className={`relative pb-4 rounded-lg border transition-all text-left overflow-hidden cursor-pointer ${
                     selectedTexture.id === texture.id
-                      ? "border-caddi-blue bg-caddi-blue/5 text-caddi-blue"
-                      : "border-gray-300 hover:border-caddi-blue/50"
+                      ? "border-caddi-blue text-caddi-blue bg-white"
+                      : "border-gray-300 hover:border-gray-400 text-black/50 bg-gray-100"
                   }`}
                   style={{
                     opacity: selectedTexture.id === texture.id ? 1 : 0.8
@@ -191,13 +191,13 @@ export default function BuildYourOwnClient({ modelPath }: BuildYourOwnClientProp
                 >
                   {/* Texture Preview */}
                   <div 
-                    className="w-full h-16 rounded mb-2 bg-cover bg-center"
+                    className="w-full h-20 rounded-t mb-3 bg-cover bg-center"
                     style={{ backgroundImage: `url(${texture.texture})` }}
                   />
-                  <div className="font-medium text-sm whitespace-nowrap">
+                  <div className="font-medium text-lg px-4">
                     {texture.name}
                   </div>
-                  <div className="text-xs text-gray-500">
+                  <div className="text-base text-gray-500 px-4">
                     ${texture.price}
                   </div>
                 </button>
@@ -239,7 +239,7 @@ export default function BuildYourOwnClient({ modelPath }: BuildYourOwnClientProp
             onClick={handleAddToBag}
             className="bg-white text-lg border border-caddi-blue text-caddi-black font-medium py-4.5 px-38 rounded-full hover:bg-caddi-blue hover:text-white transition-all duration-100 ease-in-out cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed w-full"
           >
-            Add to Bag - ${totalPrice.toFixed(2)}
+            Add to Bag
           </button>
         </div>
       </div>
@@ -247,8 +247,8 @@ export default function BuildYourOwnClient({ modelPath }: BuildYourOwnClientProp
       {/* Desktop Layout */}
       <div className="hidden lg:grid lg:grid-cols-2 lg:gap-16 lg:items-start">
         {/* Left: 3D Model Viewer */}
-        <div className="sticky top-8">
-          <div className="relative w-full h-[600px] rounded-lg">
+        <div className="pr-8 sticky top-8">
+          <div className="relative bg-[#D9D9D9]/30 overflow-hidden rounded-lg max-w-[650px] w-full h-[750px]" style={{backgroundColor: '#F3F3F3'}}>
             <Suspense fallback={<div className="flex items-center justify-center h-full text-gray-500">Loading 3D Model...</div>}>
               <ThreeDModelViewer 
                 modelPath={modelPath}
@@ -263,8 +263,9 @@ export default function BuildYourOwnClient({ modelPath }: BuildYourOwnClientProp
         <div className="space-y-8">
           {/* Header */}
           <div>
-            {/* Back Button - Match Shop Page Style */}
-            <div className="flex justify-end mb-6">
+            {/* Category and Back Button Row */}
+            <div className="flex items-center justify-between mb-1">
+              <p className="text-lg text-black/50 font-semibold">Custom Divot Tools</p>
               <Link href="/shop" className="inline-flex items-center gap-2 text-black/50 font-medium text-sm border rounded-full px-4 py-1.75 cursor-pointer hover:text-black/70 group">
                 <svg className="h-4 w-4 text-black/50 group-hover:text-black/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -273,11 +274,8 @@ export default function BuildYourOwnClient({ modelPath }: BuildYourOwnClientProp
               </Link>
             </div>
 
-            {/* Category */}
-            <p className="text-lg text-black/50 font-semibold mb-2">Custom Divot Tools</p>
-
             {/* Product Title */}
-            <h1 className="text-5xl font-semibold text-caddi-blue uppercase font-family-proxima-nova-extra-condensed mb-4">
+            <h1 className="text-5xl font-semibold text-caddi-blue uppercase font-family-proxima-nova-extra-condensed mb-2">
               Build Your Own
             </h1>
 
@@ -312,7 +310,7 @@ export default function BuildYourOwnClient({ modelPath }: BuildYourOwnClientProp
                   <div className="font-medium text-lg px-4">
                     {texture.name}
                   </div>
-                  <div className="text-base text-gray-500 mb-2 px-4">
+                  <div className="text-base text-gray-500 px-4">
                     ${texture.price}
                   </div>
 
