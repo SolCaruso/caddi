@@ -1,7 +1,7 @@
 "use client"
 
 import { Canvas } from "@react-three/fiber"
-import { OrbitControls, Environment, useGLTF, useTexture, Box, Cylinder } from "@react-three/drei"
+import { OrbitControls, Environment, useGLTF, useTexture } from "@react-three/drei"
 import { Suspense, useRef, useEffect, useState } from "react"
 import * as THREE from "three"
 
@@ -11,89 +11,31 @@ interface ModelProps {
   logoTexture?: string | null
 }
 
-// Fallback 3D model when GLTF fails to load
-function FallbackDivotTool({ woodTexture, logoTexture }: { woodTexture: string; logoTexture?: string | null }) {
-  const woodMap = useTexture(woodTexture)
-  
-  return (
-    <group position={[0, 0, 0]} rotation={[0, 0, 0]}>
-      {/* Handle */}
-      <Cylinder
-        args={[0.15, 0.15, 2, 16]}
-        position={[0, 0, 0]}
-        rotation={[0, 0, 0]}
-      >
-        <meshStandardMaterial 
-          map={woodMap} 
-          roughness={0.8} 
-          metalness={0.1}
-        />
-      </Cylinder>
-      
-      {/* Spike tip */}
-      <Cylinder
-        args={[0.05, 0.15, 0.5, 8]}
-        position={[0, -1.25, 0]}
-        rotation={[0, 0, 0]}
-      >
-        <meshStandardMaterial 
-          color="#C0C0C0" 
-          roughness={0.3} 
-          metalness={0.8}
-        />
-      </Cylinder>
-      
-      {/* Top cap */}
-      <Cylinder
-        args={[0.18, 0.18, 0.2, 16]}
-        position={[0, 1.1, 0]}
-        rotation={[0, 0, 0]}
-      >
-        <meshStandardMaterial 
-          map={woodMap} 
-          roughness={0.8} 
-          metalness={0.1}
-        />
-      </Cylinder>
-      
-      {/* Logo overlay if provided */}
-      {logoTexture && (
-        <Cylinder
-          args={[0.16, 0.16, 0.01, 16]}
-          position={[0, 0.5, 0]}
-          rotation={[0, 0, 0]}
-        >
-          <meshStandardMaterial 
-            map={useTexture(logoTexture)}
-            transparent={true}
-            opacity={0.9}
-          />
-        </Cylinder>
-      )}
-    </group>
-  )
-}
-
 function DivotToolModel({ modelPath, woodTexture, logoTexture }: ModelProps) {
-  const [useGLTFModel, setUseGLTFModel] = useState(true)
   const [gltfLoaded, setGltfLoaded] = useState(false)
+  const [loadError, setLoadError] = useState<string | null>(null)
   
+  let gltf: any
   let scene: THREE.Group | undefined
-  let error: any
   
   try {
-    const gltf = useGLTF(modelPath)
+    // Use useGLTF with error handling
+    gltf = useGLTF(modelPath, true) // true for draco support
     scene = gltf.scene
-  } catch (e) {
-    error = e
-    if (useGLTFModel) {
-      setUseGLTFModel(false)
+    
+    if (scene && !gltfLoaded) {
+      console.log("✅ Model loaded successfully")
     }
+  } catch (e) {
+    const errorMsg = e instanceof Error ? e.message : String(e)
+    console.error("❌ Model loading error:", errorMsg)
+    setLoadError(errorMsg)
   }
   
   // Handle GLTF loading state properly
   useEffect(() => {
     if (scene && !gltfLoaded) {
+      console.log("🎯 Setting GLTF as loaded")
       setGltfLoaded(true)
     }
   }, [scene, gltfLoaded])
@@ -104,13 +46,42 @@ function DivotToolModel({ modelPath, woodTexture, logoTexture }: ModelProps) {
 
   useEffect(() => {
     if (scene && gltfLoaded) {
+      console.log("🛠️ Processing GLTF scene...")
       try {
         // Clone the scene to avoid modifying the original
         const clonedScene = scene.clone()
         
+        // Check model dimensions and auto-scale/center
+        const box = new THREE.Box3().setFromObject(clonedScene)
+        const size = box.getSize(new THREE.Vector3())
+        const center = box.getCenter(new THREE.Vector3())
+        
+        console.log("📦 Model bounding box:", {
+          size: size,
+          center: center,
+          min: box.min,
+          max: box.max
+        })
+        
+        // Auto-scale the model to a reasonable size (target height of 4 units)
+        const maxDimension = Math.max(size.x, size.y, size.z)
+        const targetSize = 4
+        const scale = targetSize / maxDimension
+        
+        console.log("📏 Auto-scaling:", {
+          originalSize: maxDimension,
+          scale: scale,
+          newSize: maxDimension * scale
+        })
+        
+        // Center and scale the model
+        clonedScene.position.set(-center.x * scale, -center.y * scale, -center.z * scale)
+        clonedScene.scale.setScalar(scale)
+        
         // Traverse the model and apply wood texture to materials
         clonedScene.traverse((child: THREE.Object3D) => {
           if (child instanceof THREE.Mesh && child.material) {
+            console.log("🎨 Applying texture to mesh:", child.name)
             // Create a new material with the wood texture
             const material = new THREE.MeshStandardMaterial({
               map: woodMap,
@@ -126,17 +97,45 @@ function DivotToolModel({ modelPath, woodTexture, logoTexture }: ModelProps) {
           // Clear existing children
           meshRef.current.clear()
           meshRef.current.add(clonedScene)
+          console.log("🚀 Model added to scene")
         }
       } catch (e) {
-        console.warn("Failed to process GLTF model, using fallback:", e)
-        setUseGLTFModel(false)
+        console.warn("Failed to process GLTF model:", e)
       }
     }
   }, [scene, woodMap, logoMap, gltfLoaded])
 
-  // Use fallback model if GLTF fails
-  if (!useGLTFModel || error) {
-    return <FallbackDivotTool woodTexture={woodTexture} logoTexture={logoTexture} />
+  // Show error state if loading failed
+  if (loadError) {
+    return (
+      <mesh>
+        <boxGeometry args={[1, 1, 1]} />
+        <meshBasicMaterial color="red" />
+      </mesh>
+    )
+  }
+
+  // Show test box if model has invalid geometry
+  if (scene && gltfLoaded) {
+    const box = new THREE.Box3().setFromObject(scene)
+    const size = box.getSize(new THREE.Vector3())
+    
+    // Check if bounding box is invalid (infinite or zero size)
+    if (!isFinite(size.x) || !isFinite(size.y) || !isFinite(size.z) || 
+        size.x === 0 || size.y === 0 || size.z === 0) {
+      console.warn("🚨 Model has invalid geometry - showing test box instead")
+      return (
+        <mesh>
+          <boxGeometry args={[2, 4, 0.5]} />
+          <meshStandardMaterial 
+            map={woodMap}
+            roughness={0.8}
+            metalness={0.1}
+            color="#8B4513"
+          />
+        </mesh>
+      )
+    }
   }
 
   return (
@@ -155,10 +154,10 @@ export default function ThreeDModelViewer({ modelPath, woodTexture, logoTexture 
     <div className="w-full h-full">
       <Canvas
         camera={{ 
-          position: [3, 2, 3], 
-          fov: 50,
-          near: 0.1,
-          far: 1000
+          position: [10, 10, 10], 
+          fov: 75,
+          near: 0.01,
+          far: 10000
         }}
         style={{ background: 'transparent' }}
       >
@@ -194,8 +193,7 @@ export default function ThreeDModelViewer({ modelPath, woodTexture, logoTexture 
             enableRotate={true}
             minDistance={2}
             maxDistance={8}
-            autoRotate={true}
-            autoRotateSpeed={1}
+            autoRotate={false}
             target={[0, 0, 0]}
           />
         </Suspense>
@@ -209,4 +207,5 @@ export default function ThreeDModelViewer({ modelPath, woodTexture, logoTexture 
   )
 }
 
-// Don't preload the GLTF since it might fail without the binary file 
+// Preload the GLTF model
+useGLTF.preload("/glb/divot-tool.glb") 

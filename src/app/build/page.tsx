@@ -35,7 +35,7 @@ export default function BuildYourOwnPage() {
         <div className="pt-12 lg:pt-32 pb-23 lg:pb-44">
           <CartProvider>
             <BuildYourOwnClient
-              modelPath="/gltf/divot-tool.glb"
+              modelPath="/glb/divot-tool.glb"
               woodTypes={woodTypes}
             />
           </CartProvider>
