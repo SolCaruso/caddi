@@ -1,146 +1,174 @@
 "use client"
 
-import { Canvas } from "@react-three/fiber"
-import { OrbitControls, Environment, useGLTF, useTexture } from "@react-three/drei"
+import { Canvas, useFrame, useThree } from "@react-three/fiber"
+import { Environment, useTexture } from "@react-three/drei"
 import { Suspense, useRef, useEffect, useState } from "react"
 import * as THREE from "three"
+import { OBJLoader } from 'three/addons/loaders/OBJLoader.js'
+import { MTLLoader } from 'three/addons/loaders/MTLLoader.js'
 
 interface ModelProps {
   modelPath: string
   woodTexture: string
-  logoTexture?: string | null
+  logoTexture?: string
 }
 
-function DivotToolModel({ modelPath, woodTexture, logoTexture }: ModelProps) {
-  const [gltfLoaded, setGltfLoaded] = useState(false)
-  const [loadError, setLoadError] = useState<string | null>(null)
-  
-  let gltf: any
-  let scene: THREE.Group | undefined
-  
-  try {
-    // Use useGLTF with error handling
-    gltf = useGLTF(modelPath, true) // true for draco support
-    scene = gltf.scene
-    
-    if (scene && !gltfLoaded) {
-      console.log("✅ Model loaded successfully")
-    }
-  } catch (e) {
-    const errorMsg = e instanceof Error ? e.message : String(e)
-    console.error("❌ Model loading error:", errorMsg)
-    setLoadError(errorMsg)
-  }
-  
-  // Handle GLTF loading state properly
-  useEffect(() => {
-    if (scene && !gltfLoaded) {
-      console.log("🎯 Setting GLTF as loaded")
-      setGltfLoaded(true)
-    }
-  }, [scene, gltfLoaded])
-  
+// Custom OBJ+MTL Model Component with manual rotation
+function ObjModel({ modelPath, woodTexture, logoTexture }: ModelProps) {
+  const [model, setModel] = useState<THREE.Group | null>(null)
+  const [error, setError] = useState<string | null>(null)
+  const groupRef = useRef<THREE.Group>(null)
+  const [isDragging, setIsDragging] = useState(false)
+  const [rotation, setRotation] = useState(0)
+  const [lastMouseX, setLastMouseX] = useState(0)
+
+  // Load texture
   const woodMap = useTexture(woodTexture)
-  const logoMap = logoTexture ? useTexture(logoTexture) : null
-  const meshRef = useRef<THREE.Group>(null)
+  const { gl } = useThree()
+
+  // Handle mouse events for manual rotation
+  useEffect(() => {
+    const handleMouseDown = (event: MouseEvent) => {
+      setIsDragging(true)
+      setLastMouseX(event.clientX)
+    }
+
+    const handleMouseMove = (event: MouseEvent) => {
+      if (!isDragging) return
+      
+      const deltaX = event.clientX - lastMouseX
+      setRotation(prev => prev + deltaX * 0.01) // Adjust sensitivity
+      setLastMouseX(event.clientX)
+    }
+
+    const handleMouseUp = () => {
+      setIsDragging(false)
+    }
+
+    const canvas = gl.domElement
+    canvas.addEventListener('mousedown', handleMouseDown)
+    window.addEventListener('mousemove', handleMouseMove)
+    window.addEventListener('mouseup', handleMouseUp)
+
+    return () => {
+      canvas.removeEventListener('mousedown', handleMouseDown)
+      window.removeEventListener('mousemove', handleMouseMove)
+      window.removeEventListener('mouseup', handleMouseUp)
+    }
+  }, [isDragging, lastMouseX, gl])
 
   useEffect(() => {
-    if (scene && gltfLoaded) {
-      console.log("🛠️ Processing GLTF scene...")
+    const loadModel = async () => {
       try {
-        // Clone the scene to avoid modifying the original
-        const clonedScene = scene.clone()
+        console.log("🔄 Loading OBJ+MTL:", modelPath)
         
-        // Check model dimensions and auto-scale/center
-        const box = new THREE.Box3().setFromObject(clonedScene)
-        const size = box.getSize(new THREE.Vector3())
-        const center = box.getCenter(new THREE.Vector3())
+        // Load MTL first
+        const mtlLoader = new MTLLoader()
+        const mtlPath = modelPath.replace('.obj', '.mtl')
+        const materials = await mtlLoader.loadAsync(mtlPath)
+        materials.preload()
         
-        console.log("📦 Model bounding box:", {
-          size: size,
-          center: center,
-          min: box.min,
-          max: box.max
-        })
+        // Load OBJ with materials
+        const objLoader = new OBJLoader()
+        objLoader.setMaterials(materials)
+        const object = await objLoader.loadAsync(modelPath)
         
-        // Auto-scale the model to a reasonable size (target height of 4 units)
-        const maxDimension = Math.max(size.x, size.y, size.z)
-        const targetSize = 4
-        const scale = targetSize / maxDimension
-        
-        console.log("📏 Auto-scaling:", {
-          originalSize: maxDimension,
-          scale: scale,
-          newSize: maxDimension * scale
-        })
-        
-        // Center and scale the model
-        clonedScene.position.set(-center.x * scale, -center.y * scale, -center.z * scale)
-        clonedScene.scale.setScalar(scale)
-        
-        // Traverse the model and apply wood texture to materials
-        clonedScene.traverse((child: THREE.Object3D) => {
-          if (child instanceof THREE.Mesh && child.material) {
-            console.log("🎨 Applying texture to mesh:", child.name)
-            // Create a new material with the wood texture
-            const material = new THREE.MeshStandardMaterial({
-              map: woodMap,
-              roughness: 0.8,
-              metalness: 0.1,
-            })
-            
-            child.material = material
-          }
-        })
-
-        if (meshRef.current) {
-          // Clear existing children
-          meshRef.current.clear()
-          meshRef.current.add(clonedScene)
-          console.log("🚀 Model added to scene")
+        console.log("✅ OBJ+MTL loaded successfully")
+        setModel(object)
+        setError(null)
+      } catch (err) {
+        console.error("❌ Failed to load OBJ+MTL:", err)
+        // Fallback: try loading just the OBJ without MTL
+        try {
+          console.log("🔄 Fallback: Loading OBJ without MTL")
+          const objLoader = new OBJLoader()
+          const object = await objLoader.loadAsync(modelPath)
+          console.log("✅ OBJ loaded successfully (no MTL)")
+          setModel(object)
+          setError(null)
+        } catch (objErr) {
+          console.error("❌ Failed to load OBJ:", objErr)
+          setError("Failed to load model")
         }
-      } catch (e) {
-        console.warn("Failed to process GLTF model:", e)
       }
     }
-  }, [scene, woodMap, logoMap, gltfLoaded])
 
-  // Show error state if loading failed
-  if (loadError) {
-    return (
-      <mesh>
-        <boxGeometry args={[1, 1, 1]} />
-        <meshBasicMaterial color="red" />
-      </mesh>
-    )
-  }
+    loadModel()
+  }, [modelPath])
 
-  // Show test box if model has invalid geometry
-  if (scene && gltfLoaded) {
-    const box = new THREE.Box3().setFromObject(scene)
-    const size = box.getSize(new THREE.Vector3())
+  // Apply wood texture when model and texture are loaded
+  useEffect(() => {
+    if (!model || !woodMap) return
+
+    console.log("🎨 Applying wood texture to OBJ model")
     
-    // Check if bounding box is invalid (infinite or zero size)
-    if (!isFinite(size.x) || !isFinite(size.y) || !isFinite(size.z) || 
-        size.x === 0 || size.y === 0 || size.z === 0) {
-      console.warn("🚨 Model has invalid geometry - showing test box instead")
-      return (
-        <mesh>
-          <boxGeometry args={[2, 4, 0.5]} />
-          <meshStandardMaterial 
-            map={woodMap}
-            roughness={0.8}
-            metalness={0.1}
-            color="#8B4513"
-          />
-        </mesh>
-      )
+    model.traverse((child) => {
+      if (child instanceof THREE.Mesh) {
+        console.log("🎨 Found mesh:", child.name || "unnamed")
+        
+        // Determine wood color based on texture path
+        let woodColor = 0x8B4513 // Default brown
+        if (woodTexture.includes('birds-eye-maple')) {
+          woodColor = 0xD2B48C // Light maple
+        } else if (woodTexture.includes('cherry')) {
+          woodColor = 0xA0522D // Cherry brown
+        } else if (woodTexture.includes('walnut')) {
+          woodColor = 0x3C2415 // Dark walnut
+        }
+        
+        // Try both texture and color - one should work
+        const material = new THREE.MeshStandardMaterial({
+          map: woodMap, // Try texture first
+          color: woodColor, // Fallback color that blends with texture
+          roughness: 0.8,
+          metalness: 0.1,
+        })
+        
+        child.material = material
+        console.log("✅ Applied wood material with texture and color fallback")
+      }
+    })
+  }, [model, woodMap, woodTexture])
+
+  // Update rotation
+  useFrame(() => {
+    if (groupRef.current) {
+      groupRef.current.rotation.y = rotation
     }
+  })
+
+  if (error || !model) {
+    return null // No fallback, just return nothing
   }
 
   return (
-    <group ref={meshRef} position={[0, 0, 0]} scale={[1, 1, 1]} />
+    <group ref={groupRef}>
+      <primitive 
+        object={model} 
+        scale={[0.4, 0.4, 0.4]} 
+        position={[0, 0, 0]} 
+        rotation={[0, 0, 0]}
+      />
+    </group>
   )
+}
+
+function DivotToolModel({ modelPath, woodTexture, logoTexture }: ModelProps) {
+  // Only try OBJ, no fallback
+  if (modelPath.endsWith('.obj')) {
+    return (
+      <Suspense fallback={null}>
+        <ObjModel 
+          modelPath={modelPath} 
+          woodTexture={woodTexture} 
+          logoTexture={logoTexture} 
+        />
+      </Suspense>
+    )
+  }
+  
+  // No fallback
+  return null
 }
 
 interface ThreeDModelViewerProps {
@@ -153,59 +181,36 @@ export default function ThreeDModelViewer({ modelPath, woodTexture, logoTexture 
   return (
     <div className="w-full h-full">
       <Canvas
-        camera={{ 
-          position: [10, 10, 10], 
-          fov: 75,
-          near: 0.01,
-          far: 10000
+        camera={{
+          position: [0, 0, 6],
+          fov: 50,
+          near: 0.1,
+          far: 1000,
         }}
-        style={{ background: 'transparent' }}
+        style={{ background: 'linear-gradient(to bottom, #f0f0f0, #e0e0e0)' }}
       >
+        <ambientLight intensity={0.4} />
+        <directionalLight position={[10, 10, 5]} intensity={1} />
+        
         <Suspense fallback={null}>
-          {/* Lighting */}
-          <ambientLight intensity={0.6} />
-          <directionalLight 
-            position={[5, 5, 5]} 
-            intensity={1}
-            castShadow
-            shadow-mapSize={[1024, 1024]}
-          />
-          <directionalLight 
-            position={[-5, 3, -2]} 
-            intensity={0.5}
-          />
-          <pointLight position={[0, 5, 0]} intensity={0.3} />
-          
-          {/* Environment for reflections */}
-          <Environment preset="studio" />
-          
           {/* 3D Model */}
           <DivotToolModel 
-            modelPath={modelPath}
-            woodTexture={woodTexture}
-            logoTexture={logoTexture}
-          />
-          
-          {/* Controls */}
-          <OrbitControls 
-            enablePan={true}
-            enableZoom={true}
-            enableRotate={true}
-            minDistance={2}
-            maxDistance={8}
-            autoRotate={false}
-            target={[0, 0, 0]}
+            modelPath={modelPath} 
+            woodTexture={woodTexture} 
+            logoTexture={logoTexture || undefined} 
           />
         </Suspense>
+        
+        <Environment preset="studio" />
       </Canvas>
       
-      {/* Instructions overlay */}
-      <div className="absolute bottom-4 left-4 text-xs text-gray-500 bg-white/80 px-2 py-1 rounded">
-        Click and drag to rotate • Scroll to zoom
+      {/* Instructions */}
+      <div className="absolute bottom-4 left-4 text-sm text-gray-500">
+        Click and drag to rotate
       </div>
     </div>
   )
 }
 
 // Preload the GLTF model
-useGLTF.preload("/glb/divot-tool.glb") 
+// useGLTF.preload("/glb/divot-tool.glb") 
