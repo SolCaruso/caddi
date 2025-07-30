@@ -6,7 +6,7 @@ import { ArrowLeft, Upload } from "lucide-react"
 import ThreeDModelViewer from "./ThreeDModelViewer"
 import { useCart, CartItem } from "@/lib/cart"
 
-interface WoodType {
+interface TextureOption {
   id: string
   name: string
   texture: string
@@ -16,11 +16,77 @@ interface WoodType {
 
 interface BuildYourOwnClientProps {
   modelPath: string
-  woodTypes: WoodType[]
 }
 
-export default function BuildYourOwnClient({ modelPath, woodTypes }: BuildYourOwnClientProps) {
-  const [selectedWood, setSelectedWood] = useState<WoodType>(woodTypes[0])
+export default function BuildYourOwnClient({ modelPath }: BuildYourOwnClientProps) {
+  // Available texture options
+  const textureOptions: TextureOption[] = [
+    {
+      id: 'zebrawood',
+      name: 'Zebrawood',
+      texture: '/textures/zebrawood.webp',
+      price: 189,
+      description: 'Bold striped pattern with dramatic contrast'
+    },
+    {
+      id: 'canarywood',
+      name: 'Canarywood',
+      texture: '/textures/canarywood.webp',
+      price: 169,
+      description: 'Rich golden yellow with subtle grain'
+    },
+    {
+      id: 'white-oak',
+      name: 'White Oak',
+      texture: '/textures/white-oak.webp',
+      price: 149,
+      description: 'Classic light wood with prominent grain'
+    },
+    {
+      id: 'wenge',
+      name: 'Wenge',
+      texture: '/textures/wenge.webp',
+      price: 199,
+      description: 'Dark chocolate brown with fine grain'
+    },
+    {
+      id: 'rosewood',
+      name: 'Rosewood',
+      texture: '/textures/rosewood.webp',
+      price: 179,
+      description: 'Rich reddish-brown with elegant patterns'
+    },
+    {
+      id: 'tigerwood',
+      name: 'Tigerwood',
+      texture: '/textures/tigerwood.webp',
+      price: 189,
+      description: 'Orange base with dark streaking stripes'
+    },
+    {
+      id: 'paduk',
+      name: 'Paduk',
+      texture: '/textures/paduk.webp',
+      price: 159,
+      description: 'Vibrant orange-red with smooth texture'
+    },
+    {
+      id: 'birds-eye',
+      name: 'Birds Eye Maple',
+      texture: '/textures/birds-eye.webp',
+      price: 199,
+      description: 'Light wood with distinctive eye patterns'
+    },
+    {
+      id: 'curly-maple',
+      name: 'Curly Maple',
+      texture: '/textures/curly-maple.webp',
+      price: 179,
+      description: 'Light maple with beautiful curly figure'
+    }
+  ]
+
+  const [selectedTexture, setSelectedTexture] = useState<TextureOption>(textureOptions[0])
   const [logoFile, setLogoFile] = useState<File | null>(null)
   const [logoUrl, setLogoUrl] = useState<string | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
@@ -39,13 +105,13 @@ export default function BuildYourOwnClient({ modelPath, woodTypes }: BuildYourOw
     // Create a custom product for the bag
     const customProduct: CartItem = {
       id: Date.now(), // Use timestamp as unique number ID
-      name: `Custom Divot Tool - ${selectedWood.name}`,
-      price: selectedWood.price + (logoFile ? 25 : 0), // Add $25 for custom logo
+      name: `Custom Divot Tool - ${selectedTexture.name}`,
+      price: selectedTexture.price + (logoFile ? 25 : 0), // Add $25 for custom logo
       image: "/webp/placeholder.webp", // You might want to generate a preview image
       quantity: 1,
       // Add customization data as additional properties (not part of CartItem interface but will be preserved)
       ...(logoFile && { customization: {
-        woodType: selectedWood.name,
+        woodType: selectedTexture.name,
         hasLogo: !!logoFile,
         logoFile: logoFile?.name
       }})
@@ -54,7 +120,7 @@ export default function BuildYourOwnClient({ modelPath, woodTypes }: BuildYourOw
     addItem(customProduct)
   }
 
-  const totalPrice = selectedWood.price + (logoFile ? 25 : 0)
+  const totalPrice = selectedTexture.price + (logoFile ? 25 : 0)
 
   return (
     <>
@@ -96,7 +162,7 @@ export default function BuildYourOwnClient({ modelPath, woodTypes }: BuildYourOw
             <Suspense fallback={<div className="flex items-center justify-center h-full text-gray-500">Loading 3D Model...</div>}>
               <ThreeDModelViewer 
                 modelPath={modelPath}
-                woodTexture={selectedWood.texture}
+                woodTexture={selectedTexture.texture}
                 logoTexture={logoUrl}
               />
             </Suspense>
@@ -105,30 +171,35 @@ export default function BuildYourOwnClient({ modelPath, woodTypes }: BuildYourOw
 
         {/* Customization Options */}
         <div className="space-y-8">
-          {/* Wood Selection */}
+          {/* Wood Texture Selection */}
           <div>
             <h3 className="text-lg font-semibold mb-4 text-caddi-blue">Wood Type:</h3>
-            <div className="flex flex-wrap gap-3">
-              {woodTypes.map((wood) => (
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+              {textureOptions.map((texture) => (
                 <button
-                  key={wood.id}
-                  onClick={() => setSelectedWood(wood)}
-                  className={`px-4 py-3 rounded-lg border-2 transition-all text-left min-w-[120px] ${
-                    selectedWood.id === wood.id
+                  key={texture.id}
+                  onClick={() => setSelectedTexture(texture)}
+                  className={`relative p-3 rounded-lg border-2 transition-all text-left overflow-hidden ${
+                    selectedTexture.id === texture.id
                       ? "border-caddi-blue bg-caddi-blue/5 text-caddi-blue"
                       : "border-gray-300 hover:border-caddi-blue/50"
                   }`}
                 >
+                  {/* Texture Preview */}
+                  <div 
+                    className="w-full h-16 rounded mb-2 bg-cover bg-center"
+                    style={{ backgroundImage: `url(${texture.texture})` }}
+                  />
                   <div className="font-medium text-sm whitespace-nowrap">
-                    {wood.name}
+                    {texture.name}
                   </div>
                   <div className="text-xs text-gray-500">
-                    ${wood.price}
+                    ${texture.price}
                   </div>
                 </button>
               ))}
             </div>
-            <p className="text-sm text-gray-600 mt-2">{selectedWood.description}</p>
+            <p className="text-sm text-gray-600 mt-2">{selectedTexture.description}</p>
           </div>
 
           {/* Logo Upload */}
@@ -177,7 +248,7 @@ export default function BuildYourOwnClient({ modelPath, woodTypes }: BuildYourOw
             <Suspense fallback={<div className="flex items-center justify-center h-full text-gray-500">Loading 3D Model...</div>}>
               <ThreeDModelViewer 
                 modelPath={modelPath}
-                woodTexture={selectedWood.texture}
+                woodTexture={selectedTexture.texture}
                 logoTexture={logoUrl}
               />
             </Suspense>
@@ -211,31 +282,44 @@ export default function BuildYourOwnClient({ modelPath, woodTypes }: BuildYourOw
             </p>
           </div>
 
-          {/* Wood Selection */}
+          {/* Wood Texture Selection */}
           <div>
             <h3 className="text-xl font-semibold mb-6 text-caddi-blue">Wood Type:</h3>
-            <div className="grid grid-cols-1 gap-4">
-              {woodTypes.map((wood) => (
+            <div className="grid grid-cols-2 gap-4">
+              {textureOptions.map((texture) => (
                 <button
-                  key={wood.id}
-                  onClick={() => setSelectedWood(wood)}
-                  className={`p-4 rounded-lg border-2 transition-all text-left ${
-                    selectedWood.id === wood.id
+                  key={texture.id}
+                  onClick={() => setSelectedTexture(texture)}
+                  className={`relative p-4 rounded-lg border-2 transition-all text-left overflow-hidden ${
+                    selectedTexture.id === texture.id
                       ? "border-caddi-blue bg-caddi-blue/5 text-caddi-blue"
                       : "border-gray-300 hover:border-caddi-blue/50"
                   }`}
                 >
+                  {/* Texture Preview */}
+                  <div 
+                    className="w-full h-20 rounded mb-3 bg-cover bg-center"
+                    style={{ backgroundImage: `url(${texture.texture})` }}
+                  />
                   <div className="font-medium text-lg">
-                    {wood.name}
+                    {texture.name}
                   </div>
                   <div className="text-base text-gray-500 mb-2">
-                    ${wood.price}
+                    ${texture.price}
                   </div>
                   <div className="text-sm text-gray-600">
-                    {wood.description}
+                    {texture.description}
                   </div>
                 </button>
               ))}
+            </div>
+            <div className="mt-4 p-4 bg-gray-50 rounded-lg">
+              <div className="font-medium text-lg text-caddi-blue mb-2">
+                Selected: {selectedTexture.name}
+              </div>
+              <div className="text-sm text-gray-600">
+                {selectedTexture.description}
+              </div>
             </div>
           </div>
 

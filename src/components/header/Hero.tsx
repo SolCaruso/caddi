@@ -9,13 +9,11 @@ export default function Hero() {
             <Image
                 src="/webp/zolas.webp"
                 alt="Hero background"
-                className="absolute inset-0 w-full h-full object-cover"
-                style={{
-                objectPosition: "center center",
-                }}
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                draggable={false}
                 fill
+                className="absolute inset-0 w-full h-full object-cover"
+                style={{ objectPosition: "center center" }}
+                sizes="100vw"
+                draggable={false}
                 priority
                 fetchPriority="high"
             />

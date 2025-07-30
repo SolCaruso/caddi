@@ -15,16 +15,12 @@ interface ModelProps {
 
 // Custom OBJ+MTL Model Component with manual rotation
 function ObjModel({ modelPath, woodTexture, logoTexture }: ModelProps) {
-  // map incoming key to actual texture file
-  const textureMap: Record<string, string> = {
-    'material1': '/textures/zebrawood.webp',
-    'material2': '/textures/curly-maple.webp',
-  }
-  const textureURL = textureMap[woodTexture] || textureMap.material1
-  // load and configure the wood texture override
-  const woodMap = useTexture(textureURL)
+  // Use the woodTexture path directly - no mapping needed
+  const woodMap = useTexture(woodTexture)
   woodMap.wrapS = woodMap.wrapT = THREE.ClampToEdgeWrapping
   woodMap.repeat.set(1, 1)
+  woodMap.colorSpace = THREE.SRGBColorSpace
+  woodMap.flipY = false
 
   const [model, setModel] = useState<THREE.Group | null>(null)
   const [error, setError] = useState<string | null>(null)
@@ -111,37 +107,40 @@ function ObjModel({ modelPath, woodTexture, logoTexture }: ModelProps) {
         }
       });
 
-      // override each mesh's material with woodMap + manual PBR maps
-      object.traverse((child) => {
-        if (!(child instanceof THREE.Mesh)) return
-        const mesh = child as THREE.Mesh
-        const pbrMat = mesh.material as THREE.MeshStandardMaterial
-        pbrMat.map = woodMap
-        // manually boost contrast by setting roughness/metalness
-        pbrMat.roughness = 0.4
-        pbrMat.metalness = 0.1
-        pbrMat.envMapIntensity = 0.7
-        pbrMat.needsUpdate = true
-      })
       setModel(object)
     }
     loadModel()
   }, [modelPath])
 
-  // Use the original MTL materials - don't override them
+  // Apply the selected wood texture whenever it changes
   useEffect(() => {
     if (!model) return
 
-    console.log("🎨 Using original MTL materials from OBJ export")
+    console.log("🎨 Applying wood texture:", woodTexture)
     
     model.traverse((child) => {
       if (child instanceof THREE.Mesh) {
-        console.log("🎨 Found mesh with material:", child.name || "unnamed", child.material)
-        // Don't modify the material - use exactly what came from MTL file
-        console.log("✅ Keeping original MTL material")
+        const mesh = child as THREE.Mesh
+        
+        // Create a completely new material to avoid MTL interference
+        const newMaterial = new THREE.MeshStandardMaterial({
+          map: woodMap,
+          roughness: 0.4, // Moderate gloss - polished but not mirror-like
+          metalness: 0.08, // Subtle metallic reflection 
+          transparent: false,
+          opacity: 1.0,
+          color: new THREE.Color(1.1, 1.1, 1.1), // Slightly brighter than white but not too much
+          toneMapped: false,
+          envMapIntensity: 0.5 // Moderate environment reflections
+        })
+        
+        // Replace the material entirely
+        mesh.material = newMaterial
+        
+        console.log("✅ Applied new material with texture to mesh:", child.name || "unnamed")
       }
     })
-  }, [model])
+  }, [model, woodMap, woodTexture])
 
   // Update rotation
   useFrame(() => {
@@ -201,9 +200,17 @@ export default function ThreeDModelViewer({ modelPath, woodTexture, logoTexture 
           far: 1000,
         }}
         style={{ background: 'linear-gradient(to bottom, #f0f0f0, #e0e0e0)' }}
+        gl={{ 
+          toneMapping: THREE.NoToneMapping,
+          outputColorSpace: THREE.SRGBColorSpace
+        }}
+        shadows
       >
-        <ambientLight intensity={0.4} />
-        <directionalLight position={[10, 10, 5]} intensity={1} />
+        <ambientLight intensity={0.3} />
+        <directionalLight position={[10, 10, 5]} intensity={0.7} castShadow />
+        <directionalLight position={[-8, 6, -3]} intensity={0.4} />
+        <directionalLight position={[5, -5, 8]} intensity={0.2} />
+        <spotLight position={[0, 15, 0]} angle={0.3} intensity={0.2} />
         
         <Suspense fallback={null}>
           {/* 3D Model */}
@@ -214,7 +221,7 @@ export default function ThreeDModelViewer({ modelPath, woodTexture, logoTexture 
           />
         </Suspense>
         
-        <Environment preset="studio" />
+        <Environment preset="warehouse" />
       </Canvas>
       
       {/* Instructions */}
