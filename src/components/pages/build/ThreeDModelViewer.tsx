@@ -194,8 +194,6 @@ function ForecaddiLogoOverlay() {
   // Load Forecaddi logo texture inside Canvas
   const forecaddiLogoMap = useTexture('/webp/forecaddi-logo.webp')
   
-  console.log("🎨 Forecaddi logo texture loaded:", { forecaddiLogoMap: !!forecaddiLogoMap })
-  
   if (forecaddiLogoMap) {
     forecaddiLogoMap.wrapS = forecaddiLogoMap.wrapT = THREE.ClampToEdgeWrapping
     forecaddiLogoMap.repeat.set(1, 1)
@@ -203,10 +201,8 @@ function ForecaddiLogoOverlay() {
     forecaddiLogoMap.flipY = false
   }
   
-  console.log("🎨 Rendering Forecaddi logo overlay")
-  
   return (
-    <mesh position={[-0.01, 1.1, 0.19]} scale={[1.5, 1.5, 1.5]}>
+    <mesh position={[-0.01, 1.1, 0.19]} scale={[1.5, -1.5, 1.5]}>
       <planeGeometry args={[1, 1]} />
       <meshStandardMaterial 
         color={forecaddiLogoMap ? undefined : "red"}
@@ -228,11 +224,6 @@ interface ThreeDModelViewerProps {
 
 export default function ThreeDModelViewer({ modelPath, woodTexture, logoTexture, showForecaddiLogo = false }: ThreeDModelViewerProps) {
   const [cursorStyle, setCursorStyle] = useState('cursor-grab')
-  
-  // Debug logging for props
-  useEffect(() => {
-    console.log("🎯 ThreeDModelViewer props:", { showForecaddiLogo, logoTexture })
-  }, [showForecaddiLogo, logoTexture])
   
   return (
     <div className={`w-full h-full ${cursorStyle}`}>
