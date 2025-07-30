@@ -1,16 +1,16 @@
-newmtl Material%2E001
+newmtl default_material Layer Stack
 illum 7
 Kd 0.735357 0.735357 0.735357
 adobe_interior_color 1 1 1
-Ni 1.45
+Ni 1.5
 adobe_density 0
 Tr 0
 d 1
 Ka 0 0 0
 Ke 0 0 0
-Pm 0
-adobe_translucence 0
-Pr 0.6
+map_Pm divot-tool/default_material Layer Stack_metallic.png
+adobe_map_translucence divot-tool/default_material Layer Stack_translucency.png
+map_Pr divot-tool/default_material Layer Stack_roughness.png
 Ns 16
 Ks 1 1 1
-map_Kd divot-tool1/Material%2E001_base_color.png
+map_Kd ../textures/zebrawood.webp

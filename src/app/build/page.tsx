@@ -3,29 +3,21 @@ import BuildYourOwnClient from "@/components/pages/build/BuildYourOwnClient"
 import { CartProvider } from "@/lib/cart"
 
 export default function BuildYourOwnPage() {
-  // Available wood types (you can expand this list)
+  // Available wood types - using MTL materials from Dimension export
   const woodTypes = [
     {
-      id: 'birds-eye-maple',
-      name: 'Birds Eye Maple',
-      texture: '/textures/birds-eye-maple.jpg',
+      id: 'material1',
+      name: 'Wood Option 1',
+      texture: 'material1', // This will correspond to first MTL material
       price: 149.99,
-      description: 'Premium birds eye maple with distinctive swirled grain pattern'
-    },
-    // You can add more wood types here as textures become available
-    {
-      id: 'cherry',
-      name: 'Cherry Wood',
-      texture: '/textures/cherry-wood.jpg',
-      price: 139.99,
-      description: 'Rich cherry wood with warm reddish tones'
+      description: 'First wood texture from Dimension export'
     },
     {
-      id: 'walnut',
-      name: 'Black Walnut',
-      texture: '/textures/walnut-wood.jpg',
+      id: 'material2', 
+      name: 'Wood Option 2',
+      texture: 'material2', // This will correspond to second MTL material
       price: 159.99,
-      description: 'Luxurious black walnut with deep chocolate brown color'
+      description: 'Second wood texture from Dimension export'
     }
   ]
 

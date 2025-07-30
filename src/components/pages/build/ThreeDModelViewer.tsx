@@ -15,6 +15,17 @@ interface ModelProps {
 
 // Custom OBJ+MTL Model Component with manual rotation
 function ObjModel({ modelPath, woodTexture, logoTexture }: ModelProps) {
+  // map incoming key to actual texture file
+  const textureMap: Record<string, string> = {
+    'material1': '/textures/zebrawood.webp',
+    'material2': '/textures/curly-maple.webp',
+  }
+  const textureURL = textureMap[woodTexture] || textureMap.material1
+  // load and configure the wood texture override
+  const woodMap = useTexture(textureURL)
+  woodMap.wrapS = woodMap.wrapT = THREE.ClampToEdgeWrapping
+  woodMap.repeat.set(1, 1)
+
   const [model, setModel] = useState<THREE.Group | null>(null)
   const [error, setError] = useState<string | null>(null)
   const groupRef = useRef<THREE.Group>(null)
@@ -22,8 +33,8 @@ function ObjModel({ modelPath, woodTexture, logoTexture }: ModelProps) {
   const [rotation, setRotation] = useState(0)
   const [lastMouseX, setLastMouseX] = useState(0)
 
-  // Load texture
-  const woodMap = useTexture(woodTexture)
+  
+
   const { gl } = useThree()
 
   // Handle mouse events for manual rotation
@@ -58,77 +69,74 @@ function ObjModel({ modelPath, woodTexture, logoTexture }: ModelProps) {
   }, [isDragging, lastMouseX, gl])
 
   useEffect(() => {
-    const loadModel = async () => {
-      try {
-        console.log("🔄 Loading OBJ+MTL:", modelPath)
-        
-        // Load MTL first
-        const mtlLoader = new MTLLoader()
-        const mtlPath = modelPath.replace('.obj', '.mtl')
-        const materials = await mtlLoader.loadAsync(mtlPath)
-        materials.preload()
-        
-        // Load OBJ with materials
-        const objLoader = new OBJLoader()
-        objLoader.setMaterials(materials)
-        const object = await objLoader.loadAsync(modelPath)
-        
-        console.log("✅ OBJ+MTL loaded successfully")
-        setModel(object)
-        setError(null)
-      } catch (err) {
-        console.error("❌ Failed to load OBJ+MTL:", err)
-        // Fallback: try loading just the OBJ without MTL
-        try {
-          console.log("🔄 Fallback: Loading OBJ without MTL")
-          const objLoader = new OBJLoader()
-          const object = await objLoader.loadAsync(modelPath)
-          console.log("✅ OBJ loaded successfully (no MTL)")
-          setModel(object)
-          setError(null)
-        } catch (objErr) {
-          console.error("❌ Failed to load OBJ:", objErr)
-          setError("Failed to load model")
+    async function loadModel() {
+      const mtlLoader = new MTLLoader()
+      const mtlPath = modelPath.replace('.obj', '.mtl')
+      const materials = await mtlLoader.loadAsync(mtlPath)
+      materials.preload()
+  
+      // ← clamp here
+      for (const matName in materials.materials) {
+        const mat = materials.materials[matName] as THREE.MeshPhongMaterial
+      
+        if (mat.map) {
+          mat.map.wrapS = mat.map.wrapT = THREE.ClampToEdgeWrapping
+          mat.map.repeat.set(1, 1)
+          mat.map.needsUpdate = true
         }
       }
-    }
+  
+      const objLoader = new OBJLoader()
+      objLoader.setMaterials(materials)
+      const object = await objLoader.loadAsync(modelPath)
 
+      // generate planar UVs from mesh bounding box (X→U, Y→V)
+      object.traverse((child) => {
+        if (child instanceof THREE.Mesh) {
+          const geom = child.geometry as THREE.BufferGeometry;
+          geom.computeBoundingBox();
+          const bbox = geom.boundingBox!;
+          const size = new THREE.Vector3();
+          bbox.getSize(size);
+          const posAttr = geom.attributes.position as THREE.BufferAttribute;
+          if (posAttr) {
+            const uvs = new Float32Array(posAttr.count * 2);
+            for (let i = 0; i < posAttr.count; i++) {
+              const x = posAttr.getX(i), y = posAttr.getY(i);
+              uvs[2 * i] = size.x ? (x - bbox.min.x) / size.x : 0;
+              uvs[2 * i + 1] = size.y ? (y - bbox.min.y) / size.y : 0;
+            }
+            geom.setAttribute('uv', new THREE.BufferAttribute(uvs, 2));
+          }
+        }
+      });
+
+      // override each mesh's diffuse map with our woodMap
+      object.traverse((child) => {
+        if (child instanceof THREE.Mesh) {
+          child.material.map = woodMap
+          child.material.needsUpdate = true
+        }
+      })
+      setModel(object)
+    }
     loadModel()
   }, [modelPath])
 
-  // Apply wood texture when model and texture are loaded
+  // Use the original MTL materials - don't override them
   useEffect(() => {
-    if (!model || !woodMap) return
+    if (!model) return
 
-    console.log("🎨 Applying wood texture to OBJ model")
+    console.log("🎨 Using original MTL materials from OBJ export")
     
     model.traverse((child) => {
       if (child instanceof THREE.Mesh) {
-        console.log("🎨 Found mesh:", child.name || "unnamed")
-        
-        // Determine wood color based on texture path
-        let woodColor = 0x8B4513 // Default brown
-        if (woodTexture.includes('birds-eye-maple')) {
-          woodColor = 0xD2B48C // Light maple
-        } else if (woodTexture.includes('cherry')) {
-          woodColor = 0xA0522D // Cherry brown
-        } else if (woodTexture.includes('walnut')) {
-          woodColor = 0x3C2415 // Dark walnut
-        }
-        
-        // Try both texture and color - one should work
-        const material = new THREE.MeshStandardMaterial({
-          map: woodMap, // Try texture first
-          color: woodColor, // Fallback color that blends with texture
-          roughness: 0.8,
-          metalness: 0.1,
-        })
-        
-        child.material = material
-        console.log("✅ Applied wood material with texture and color fallback")
+        console.log("🎨 Found mesh with material:", child.name || "unnamed", child.material)
+        // Don't modify the material - use exactly what came from MTL file
+        console.log("✅ Keeping original MTL material")
       }
     })
-  }, [model, woodMap, woodTexture])
+  }, [model])
 
   // Update rotation
   useFrame(() => {
