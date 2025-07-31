@@ -505,7 +505,7 @@ export default function ThreeDModelViewer({ modelPath, woodTexture, showForecadd
           near: 0.1,
           far: 1000,
         }}
-        style={{ background: 'rgba(217, 217, 217, 0.3)', borderRadius: '10px' }}
+        style={{ background: '#F3F3F3', borderRadius: '10px' }}
         gl={{ 
           toneMapping: THREE.NoToneMapping,
           outputColorSpace: THREE.SRGBColorSpace
