@@ -17,22 +17,22 @@ interface ModelProps {
 
 // Texture preloader component
 function TexturePreloader() {
-  const textureLoader = new THREE.TextureLoader()
-  
-  // All available wood textures
-  const texturePaths = [
-    '/textures/canarywood.webp',
-    '/textures/zebrawood.webp',
-    '/textures/white-oak.webp',
-    '/textures/wenge.webp',
-    '/textures/rosewood.webp',
-    '/textures/tigerwood.webp',
-    '/textures/paduk.webp',
-    '/textures/birds-eye.webp',
-    '/textures/curly-maple.webp'
-  ]
-
   useEffect(() => {
+    const textureLoader = new THREE.TextureLoader()
+    
+    // All available wood textures
+    const texturePaths = [
+      '/textures/canarywood.webp',
+      '/textures/zebrawood.webp',
+      '/textures/white-oak.webp',
+      '/textures/wenge.webp',
+      '/textures/rosewood.webp',
+      '/textures/tigerwood.webp',
+      '/textures/paduk.webp',
+      '/textures/birds-eye.webp',
+      '/textures/curly-maple.webp'
+    ]
+
     // Preload all textures
     texturePaths.forEach(path => {
       textureLoader.load(
@@ -44,13 +44,13 @@ function TexturePreloader() {
           texture.colorSpace = THREE.SRGBColorSpace
           texture.flipY = false
           // Store in cache using a custom cache object
-          if (!(window as any).textureCache) {
-            (window as any).textureCache = new Map()
+          if (!(window as unknown as Record<string, unknown>).textureCache) {
+            (window as unknown as Record<string, unknown>).textureCache = new Map()
           }
-          (window as any).textureCache.set(path, texture)
+          ;((window as unknown as Record<string, unknown>).textureCache as Map<string, THREE.Texture>).set(path, texture)
         },
         undefined,
-        (error) => {
+        (error: unknown) => {
           console.warn(`Failed to preload texture: ${path}`, error)
         }
       )
@@ -62,14 +62,15 @@ function TexturePreloader() {
 
 // Custom OBJ+MTL Model Component with manual rotation
 function ObjModel({ modelPath, woodTexture, showForecaddiLogo = false, logoColor = 'neutral', customLogoFile = null }: ModelProps) {
-  const textureLoader = new THREE.TextureLoader()
   const [woodMap, setWoodMap] = useState<THREE.Texture | null>(null)
 
   // Load texture from cache or load if not cached
   useEffect(() => {
     const loadTexture = () => {
+      const textureLoader = new THREE.TextureLoader()
       // Check if texture is already cached
-      const cachedTexture = (window as any).textureCache?.get(woodTexture)
+      const textureCache = (window as unknown as Record<string, unknown>).textureCache as Map<string, THREE.Texture> | undefined
+      const cachedTexture = textureCache?.get(woodTexture)
       if (cachedTexture) {
         setWoodMap(cachedTexture)
       } else {
@@ -84,7 +85,7 @@ function ObjModel({ modelPath, woodTexture, showForecaddiLogo = false, logoColor
             setWoodMap(texture)
           },
           undefined,
-          (error) => {
+          (error: unknown) => {
             console.error('Error loading wood texture:', error)
           }
         )
@@ -376,11 +377,11 @@ function CustomLogoOverlay({ logoFile, woodTexture, logoColor = 'neutral' }: { l
     const logoKey = `${logoFile.name}-${logoFile.size}-${logoFile.lastModified}`
     
     // Check if we already have this texture cached
-    if (!(window as any).customLogoCache) {
-      (window as any).customLogoCache = new Map<string, THREE.Texture>()
+    if (!(window as unknown as Record<string, unknown>).customLogoCache) {
+      (window as unknown as Record<string, unknown>).customLogoCache = new Map<string, THREE.Texture>()
     }
     
-    const customLogoCache = (window as any).customLogoCache as Map<string, THREE.Texture>
+    const customLogoCache = (window as unknown as Record<string, unknown>).customLogoCache as Map<string, THREE.Texture>
     const cachedTexture = customLogoCache.get(logoKey)
     if (cachedTexture) {
       setLogoTexture(cachedTexture)

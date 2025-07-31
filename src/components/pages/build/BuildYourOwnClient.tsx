@@ -31,6 +31,22 @@ interface BuildYourOwnClientProps {
 }
 
 export default function BuildYourOwnClient({ modelPath, initialSettings }: BuildYourOwnClientProps) {
+  // Add CSS keyframes for fadeIn animation
+  useEffect(() => {
+    const style = document.createElement('style')
+    style.textContent = `
+      @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+      }
+    `
+    document.head.appendChild(style)
+    return () => {
+      if (document.head.contains(style)) {
+        document.head.removeChild(style)
+      }
+    }
+  }, [])
   // Available texture options
   const textureOptions: TextureOption[] = [
     {
@@ -128,12 +144,17 @@ export default function BuildYourOwnClient({ modelPath, initialSettings }: Build
   const [showForecaddiLogo, setShowForecaddiLogo] = useState(getInitialForecaddiLogo())
   const [logoColor, setLogoColor] = useState<'black' | 'white' | 'neutral'>(getInitialLogoColor())
   const [uploadError, setUploadError] = useState<string | null>(null)
+  const [showDesktop, setShowDesktop] = useState(false)
   
 
   
 
   const fileInputRef = useRef<HTMLInputElement>(null)
   const { addItem } = useCart()
+
+  useEffect(() => {
+    setShowDesktop(true)
+  }, [])
 
   const handleLogoUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
@@ -258,7 +279,7 @@ export default function BuildYourOwnClient({ modelPath, initialSettings }: Build
         <div className="mb-8 -mx-4 lg:mx-0">
           <div className="relative aspect-square bg-[#D9D9D9]/30 overflow-hidden w-full lg:rounded-lg" style={{backgroundColor: '#F3F3F3'}}>
             <Suspense fallback={<div className="flex items-center justify-center h-full">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-caddi-blue"></div>
+              <div className="animate-spin rounded-full h-8 w-8 border-2 border-gray-300 border-t-gray-600"></div>
             </div>}>
               <ThreeDModelViewer 
                 modelPath={modelPath}
@@ -440,7 +461,6 @@ export default function BuildYourOwnClient({ modelPath, initialSettings }: Build
 
           {/* Add to Bag Button with Cart Notification */}
           <DrawerDialogDemo
-            productId={Date.now()}
             productName={`Custom Divot Tool - ${selectedTexture.name}`}
             productPrice={Math.round((selectedTexture.price + (logoFile ? 25 : 0) + (showForecaddiLogo ? 3.95 : 0)) * 100) / 100}
             productImage={selectedTexture.texture}
@@ -452,12 +472,12 @@ export default function BuildYourOwnClient({ modelPath, initialSettings }: Build
       </div>
 
       {/* Desktop Layout */}
-      <div className="hidden lg:grid lg:grid-cols-2 lg:gap-16 lg:items-start">
+      <div className={`lg:grid lg:grid-cols-2 lg:gap-16 lg:items-start transition-opacity duration-500 ease-in-out ${showDesktop ? 'opacity-100' : 'opacity-0'} hidden lg:block`}>
         {/* Left: 3D Model Viewer */}
         <div className="pr-8 sticky top-8">
           <div className="relative bg-[#D9D9D9]/30 overflow-hidden rounded-lg max-w-[650px] w-full h-[750px]" style={{backgroundColor: '#F3F3F3'}}>
             <Suspense fallback={<div className="flex items-center justify-center h-full">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-caddi-blue"></div>
+              <div className="animate-spin rounded-full h-8 w-8 border-2 border-gray-300 border-t-gray-600"></div>
             </div>}>
               <ThreeDModelViewer 
                 modelPath={modelPath}
@@ -671,7 +691,6 @@ export default function BuildYourOwnClient({ modelPath, initialSettings }: Build
 
           {/* Add to Bag Button with Cart Notification */}
           <DrawerDialogDemo
-            productId={Date.now()}
             productName={`Custom Divot Tool - ${selectedTexture.name}`}
             productPrice={Math.round((selectedTexture.price + (logoFile ? 25 : 0) + (showForecaddiLogo ? 3.95 : 0)) * 100) / 100}
             productImage={selectedTexture.texture}

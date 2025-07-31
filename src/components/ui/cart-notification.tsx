@@ -26,7 +26,6 @@ import {
 } from "@/components/ui/drawer"
 
 interface DrawerDialogDemoProps {
-  productId: number
   productName: string
   productPrice: number
   productImage: string
@@ -38,8 +37,6 @@ interface DrawerDialogDemoProps {
 }
 
 export function DrawerDialogDemo({
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  productId,
   productName,
   productPrice,
   productImage,
@@ -106,7 +103,7 @@ export function DrawerDialogDemo({
           setIsLoading(false)
         }
       }
-    } catch (error) {
+    } catch {
       setIsLoading(false)
     }
   }
