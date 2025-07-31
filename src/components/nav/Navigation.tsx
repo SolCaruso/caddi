@@ -39,12 +39,12 @@ export const navLinks = [
     dropdown: [
       {
         label: "Forecaddie Golf App",
-        href: "#",
+        href: "/forecaddi",
         description: "Track rounds, stats, and performance with our digital caddie.",
       },
       {
         label: "App Instructions",
-        href: "#",
+        href: "/forecaddi",
         description: "Quick start guide and tips to get the most out of the app.",
       },
     ],
