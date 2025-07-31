@@ -5,6 +5,7 @@ import Link from "next/link"
 import { Upload, AlertCircle, X } from "lucide-react"
 import ThreeDModelViewer from "./ThreeDModelViewer"
 import { useCart, CartItem } from "@/lib/cart"
+import { DrawerDialogDemo } from "@/components/ui/cart-notification"
 // import {
 //   Alert,
 //   AlertDescription,
@@ -21,9 +22,15 @@ interface TextureOption {
 
 interface BuildYourOwnClientProps {
   modelPath: string
+  initialSettings?: {
+    wood?: string
+    forecaddi?: string
+    logoColor?: string
+    model?: string
+  }
 }
 
-export default function BuildYourOwnClient({ modelPath }: BuildYourOwnClientProps) {
+export default function BuildYourOwnClient({ modelPath, initialSettings }: BuildYourOwnClientProps) {
   // Available texture options
   const textureOptions: TextureOption[] = [
     {
@@ -91,23 +98,40 @@ export default function BuildYourOwnClient({ modelPath }: BuildYourOwnClientProp
     // }
   ]
 
-  const [selectedTexture, setSelectedTexture] = useState<TextureOption>(textureOptions[0])
+  // Initialize state based on URL parameters
+  const getInitialTexture = () => {
+    if (initialSettings?.wood) {
+      const found = textureOptions.find(option => 
+        option.name.toLowerCase().replace(/\s+/g, '-') === initialSettings.wood?.toLowerCase().replace(/\s+/g, '-')
+      )
+      return found || textureOptions[0]
+    }
+    return textureOptions[0]
+  }
+
+  const getInitialForecaddiLogo = () => {
+    if (initialSettings?.forecaddi) {
+      return initialSettings.forecaddi === 'true'
+    }
+    return true
+  }
+
+  const getInitialLogoColor = () => {
+    if (initialSettings?.logoColor && ['black', 'white', 'neutral'].includes(initialSettings.logoColor)) {
+      return initialSettings.logoColor as 'black' | 'white' | 'neutral'
+    }
+    return 'neutral'
+  }
+
+  const [selectedTexture, setSelectedTexture] = useState<TextureOption>(getInitialTexture())
   const [logoFile, setLogoFile] = useState<File | null>(null)
-  const [showForecaddiLogo, setShowForecaddiLogo] = useState(true)
-  const [logoColor, setLogoColor] = useState<'black' | 'white' | 'neutral'>('neutral')
+  const [showForecaddiLogo, setShowForecaddiLogo] = useState(getInitialForecaddiLogo())
+  const [logoColor, setLogoColor] = useState<'black' | 'white' | 'neutral'>(getInitialLogoColor())
   const [uploadError, setUploadError] = useState<string | null>(null)
   
 
   
-  // Debug logging for Forecaddi logo state
-  useEffect(() => {
-    console.log("🔍 Forecaddi logo state changed:", showForecaddiLogo)
-  }, [showForecaddiLogo])
-  
-  // Debug logging for logo color state
-  useEffect(() => {
-    console.log("🎨 Logo color state changed:", logoColor)
-  }, [logoColor])
+
   const fileInputRef = useRef<HTMLInputElement>(null)
   const { addItem } = useCart()
 
@@ -166,6 +190,10 @@ export default function BuildYourOwnClient({ modelPath }: BuildYourOwnClientProp
   const handleRemoveLogo = () => {
     setLogoFile(null)
     setUploadError(null)
+    // Reset the file input
+    if (fileInputRef.current) {
+      fileInputRef.current.value = ''
+    }
   }
 
   const handleAddToBag = () => {
@@ -173,21 +201,23 @@ export default function BuildYourOwnClient({ modelPath }: BuildYourOwnClientProp
     const customProduct: CartItem = {
       id: Date.now(), // Use timestamp as unique number ID
       name: `Custom Divot Tool - ${selectedTexture.name}`,
-      price: selectedTexture.price + (logoFile ? 25 : 0), // Add $25 for custom logo
-      image: "/webp/placeholder.webp", // You might want to generate a preview image
+      price: Math.round((selectedTexture.price + (logoFile ? 25 : 0) + (showForecaddiLogo ? 3.95 : 0)) * 100) / 100, // Add $25 for custom logo, $3.95 for Forecaddi logo
+      image: selectedTexture.texture, // Use the wood texture as the product image
       quantity: 1,
-      // Add customization data as additional properties (not part of CartItem interface but will be preserved)
-      ...(logoFile && { customization: {
+      // Add custom build data
+      customBuildData: {
         woodType: selectedTexture.name,
-        hasLogo: !!logoFile,
-        logoFile: logoFile?.name
-      }})
+        showForecaddiLogo,
+        logoColor,
+        customLogoFile: logoFile || undefined,
+        modelPath
+      }
     }
 
     addItem(customProduct)
   }
 
-  const totalPrice = selectedTexture.price + (logoFile ? 25 : 0) + (showForecaddiLogo ? 3.95 : 0)
+  const totalPrice = Math.round((selectedTexture.price + (logoFile ? 25 : 0) + (showForecaddiLogo ? 3.95 : 0)) * 100) / 100
 
   return (
     <>
@@ -408,13 +438,16 @@ export default function BuildYourOwnClient({ modelPath }: BuildYourOwnClientProp
             </div>
           </div>
 
-          {/* Add to Bag Button - Match Shop Page Style */}
-          <button
-            onClick={handleAddToBag}
-            className="bg-white text-lg border border-caddi-blue text-caddi-black font-medium py-4.5 px-38 rounded-full hover:bg-caddi-blue hover:text-white transition-all duration-100 ease-in-out cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed w-full"
+          {/* Add to Bag Button with Cart Notification */}
+          <DrawerDialogDemo
+            productId={Date.now()}
+            productName={`Custom Divot Tool - ${selectedTexture.name}`}
+            productPrice={Math.round((selectedTexture.price + (logoFile ? 25 : 0) + (showForecaddiLogo ? 3.95 : 0)) * 100) / 100}
+            productImage={selectedTexture.texture}
+            onButtonClick={handleAddToBag}
           >
-            Add to Bag
-          </button>
+            Add to Bag - ${totalPrice.toFixed(2)}
+          </DrawerDialogDemo>
         </div>
       </div>
 
@@ -636,13 +669,16 @@ export default function BuildYourOwnClient({ modelPath }: BuildYourOwnClientProp
             </div>
           </div>
 
-          {/* Add to Bag Button - Match Shop Page Style */}
-          <button
-            onClick={handleAddToBag}
-            className="bg-white text-lg border border-caddi-blue text-caddi-black font-medium py-4.5 px-38 rounded-full hover:bg-caddi-blue hover:text-white transition-all duration-100 ease-in-out cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed w-full"
+          {/* Add to Bag Button with Cart Notification */}
+          <DrawerDialogDemo
+            productId={Date.now()}
+            productName={`Custom Divot Tool - ${selectedTexture.name}`}
+            productPrice={Math.round((selectedTexture.price + (logoFile ? 25 : 0) + (showForecaddiLogo ? 3.95 : 0)) * 100) / 100}
+            productImage={selectedTexture.texture}
+            onButtonClick={handleAddToBag}
           >
             Add to Bag - ${totalPrice.toFixed(2)}
-          </button>
+          </DrawerDialogDemo>
         </div>
       </div>
     </>

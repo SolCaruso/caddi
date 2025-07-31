@@ -36,13 +36,20 @@ export default function CartPageClient() {
         }),
       })
 
-      const { sessionId } = await response.json()
+      const data = await response.json()
+      console.log('Checkout session response:', data)
+      
+      if (!data.sessionId) {
+        console.error('No sessionId received from API')
+        setIsLoading(false)
+        return
+      }
       
       // Redirect to Stripe Checkout
       const stripe = await stripePromise
       if (stripe) {
         const { error } = await stripe.redirectToCheckout({
-          sessionId,
+          sessionId: data.sessionId,
         })
         
         if (error) {
@@ -160,6 +167,26 @@ export default function CartPageClient() {
                   {/* Product Details */}
                   <div className="flex-1 min-w-0">
                     {(() => {
+                      // Check if this is a custom build item
+                      if (item.customBuildData) {
+                        const buildParams = new URLSearchParams({
+                          wood: item.customBuildData.woodType,
+                          forecaddi: item.customBuildData.showForecaddiLogo.toString(),
+                          logoColor: item.customBuildData.logoColor,
+                          model: item.customBuildData.modelPath
+                        })
+                        return (
+                          <h3 className="text-lg font-medium text-gray-900 truncate">
+                            <Link 
+                              href={`/build?${buildParams.toString()}`}
+                              className="hover:text-caddi-blue transition-colors cursor-pointer"
+                            >
+                              {item.name}
+                            </Link>
+                          </h3>
+                        )
+                      }
+                      
                       const product = getProductById(item.id)
                       const hasVariants = item.variantId !== undefined
                       
@@ -190,6 +217,17 @@ export default function CartPageClient() {
                         )
                       }
                     })()}
+                    {item.customBuildData && (
+                      <>
+                        <p className="text-sm text-gray-500">Wood: {item.customBuildData.woodType}</p>
+                        {item.customBuildData.showForecaddiLogo && (
+                          <p className="text-sm text-gray-500">Forecaddi Logo: {item.customBuildData.logoColor}</p>
+                        )}
+                        {item.customBuildData.customLogoFile && (
+                          <p className="text-sm text-gray-500">Custom Logo: {item.customBuildData.logoColor}</p>
+                        )}
+                      </>
+                    )}
                     {item.color && (
                       <p className="text-sm text-gray-500">Color: {item.color}</p>
                     )}

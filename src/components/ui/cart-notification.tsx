@@ -103,12 +103,10 @@ export function DrawerDialogDemo({
         })
         
         if (error) {
-          console.error('Error redirecting to checkout:', error)
           setIsLoading(false)
         }
       }
     } catch (error) {
-      console.error('Error creating checkout session:', error)
       setIsLoading(false)
     }
   }

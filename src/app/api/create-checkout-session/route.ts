@@ -15,6 +15,13 @@ interface CartItem {
   variantId?: number
   color?: string
   size?: string
+  customBuildData?: {
+    woodType: string
+    showForecaddiLogo: boolean
+    logoColor: 'black' | 'white' | 'neutral'
+    customLogoFile?: File
+    modelPath: string
+  }
 }
 
 export async function POST(request: NextRequest) {
@@ -50,23 +57,38 @@ export async function POST(request: NextRequest) {
     }
 
     // Create line items for Stripe
-    const lineItems = items.map((item: CartItem) => ({
-      price_data: {
-        currency: 'cad',
-        product_data: {
-          name: item.name,
-          images: [item.image],
-          metadata: {
-            productId: item.id.toString(),
-            variantId: item.variantId?.toString() || '',
-            color: item.color || '',
-            size: item.size || '',
+    const lineItems = items.map((item: CartItem) => {
+      const metadata: Record<string, string> = {
+        productId: item.id.toString(),
+        variantId: item.variantId?.toString() || '',
+        color: item.color || '',
+        size: item.size || '',
+      }
+      
+      // Add custom build data if present
+      if (item.customBuildData) {
+        metadata.customBuildData = JSON.stringify(item.customBuildData)
+      }
+      
+      // Convert relative image URLs to absolute URLs for Stripe
+      let imageUrl = item.image
+      if (imageUrl.startsWith('/')) {
+        imageUrl = `${process.env.NEXT_PUBLIC_BASE_URL}${imageUrl}`
+      }
+      
+      return {
+        price_data: {
+          currency: 'cad',
+          product_data: {
+            name: item.name,
+            images: [imageUrl],
+            metadata,
           },
+          unit_amount: Math.round(item.price * 100), // Convert to cents
         },
-        unit_amount: Math.round(item.price * 100), // Convert to cents
-      },
-      quantity: item.quantity,
-    }))
+        quantity: item.quantity,
+      }
+    })
 
     // Create checkout session
     const session = await stripe.checkout.sessions.create({

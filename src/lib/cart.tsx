@@ -11,6 +11,14 @@ export interface CartItem {
   variantId?: number
   color?: string
   size?: string
+  // Custom build data
+  customBuildData?: {
+    woodType: string
+    showForecaddiLogo: boolean
+    logoColor: 'black' | 'white' | 'neutral'
+    customLogoFile?: File
+    modelPath: string
+  }
 }
 
 interface CartState {

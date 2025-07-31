@@ -35,10 +35,7 @@ export function normalizeImageUrl(url: string): string {
     normalizedUrl = normalizedUrl.replace(/\/+/g, '/')
   }
   
-  // Debug logging in development
-  if (process.env.NODE_ENV === 'development' && url !== normalizedUrl) {
-    console.log('🔧 URL normalized:', url, '→', normalizedUrl)
-  }
+
   
   return normalizedUrl
 }

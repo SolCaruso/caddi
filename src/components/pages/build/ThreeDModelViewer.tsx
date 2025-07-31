@@ -15,14 +15,84 @@ interface ModelProps {
   customLogoFile?: File | null
 }
 
+// Texture preloader component
+function TexturePreloader() {
+  const textureLoader = new THREE.TextureLoader()
+  
+  // All available wood textures
+  const texturePaths = [
+    '/textures/canarywood.webp',
+    '/textures/zebrawood.webp',
+    '/textures/white-oak.webp',
+    '/textures/wenge.webp',
+    '/textures/rosewood.webp',
+    '/textures/tigerwood.webp',
+    '/textures/paduk.webp',
+    '/textures/birds-eye.webp',
+    '/textures/curly-maple.webp'
+  ]
+
+  useEffect(() => {
+    // Preload all textures
+    texturePaths.forEach(path => {
+      textureLoader.load(
+        path,
+        (texture) => {
+          // Configure texture properties
+          texture.wrapS = texture.wrapT = THREE.ClampToEdgeWrapping
+          texture.repeat.set(1, 1)
+          texture.colorSpace = THREE.SRGBColorSpace
+          texture.flipY = false
+          // Store in cache using a custom cache object
+          if (!(window as any).textureCache) {
+            (window as any).textureCache = new Map()
+          }
+          (window as any).textureCache.set(path, texture)
+        },
+        undefined,
+        (error) => {
+          console.warn(`Failed to preload texture: ${path}`, error)
+        }
+      )
+    })
+  }, [])
+
+  return null
+}
+
 // Custom OBJ+MTL Model Component with manual rotation
 function ObjModel({ modelPath, woodTexture, showForecaddiLogo = false, logoColor = 'neutral', customLogoFile = null }: ModelProps) {
-  // Use the woodTexture path directly - no mapping needed
-  const woodMap = useTexture(woodTexture)
-  woodMap.wrapS = woodMap.wrapT = THREE.ClampToEdgeWrapping
-  woodMap.repeat.set(1, 1)
-  woodMap.colorSpace = THREE.SRGBColorSpace
-  woodMap.flipY = false
+  const textureLoader = new THREE.TextureLoader()
+  const [woodMap, setWoodMap] = useState<THREE.Texture | null>(null)
+
+  // Load texture from cache or load if not cached
+  useEffect(() => {
+    const loadTexture = () => {
+      // Check if texture is already cached
+      const cachedTexture = (window as any).textureCache?.get(woodTexture)
+      if (cachedTexture) {
+        setWoodMap(cachedTexture)
+      } else {
+        // Load texture if not cached
+        textureLoader.load(
+          woodTexture,
+          (texture) => {
+            texture.wrapS = texture.wrapT = THREE.ClampToEdgeWrapping
+            texture.repeat.set(1, 1)
+            texture.colorSpace = THREE.SRGBColorSpace
+            texture.flipY = false
+            setWoodMap(texture)
+          },
+          undefined,
+          (error) => {
+            console.error('Error loading wood texture:', error)
+          }
+        )
+      }
+    }
+
+    loadTexture()
+  }, [woodTexture])
 
   const [model, setModel] = useState<THREE.Group | null>(null)
   const groupRef = useRef<THREE.Group>(null)
@@ -144,9 +214,8 @@ function ObjModel({ modelPath, woodTexture, showForecaddiLogo = false, logoColor
 
   // Apply the selected wood texture whenever it changes
   useEffect(() => {
-    if (!model) return
+    if (!model || !woodMap) return
 
-    console.log("🎨 Applying wood texture:", woodTexture, "Forecaddi logo:", showForecaddiLogo)
     
     model.traverse((child) => {
       if (child instanceof THREE.Mesh) {
@@ -169,7 +238,7 @@ function ObjModel({ modelPath, woodTexture, showForecaddiLogo = false, logoColor
         // Replace the material entirely
         mesh.material = newMaterial
         
-        console.log("✅ Applied new material with texture to mesh:", child.name || "unnamed")
+
       }
     })
   }, [model, woodMap, woodTexture, showForecaddiLogo])
@@ -198,7 +267,7 @@ function ObjModel({ modelPath, woodTexture, showForecaddiLogo = false, logoColor
       {showForecaddiLogo && (
         <ForecaddiLogoOverlay 
           logoColor={logoColor} 
-          woodTexture={woodMap}
+          woodTexture={woodMap || undefined}
           key={`logo-${logoColor}`}
         />
       )}
@@ -207,9 +276,9 @@ function ObjModel({ modelPath, woodTexture, showForecaddiLogo = false, logoColor
       {customLogoFile && (
         <CustomLogoOverlay 
           logoFile={customLogoFile}
-          woodTexture={woodMap}
+          woodTexture={woodMap || undefined}
           logoColor={logoColor}
-          key={`custom-logo-${customLogoFile.name}-${logoColor}`}
+          key={`custom-logo-${customLogoFile.name}-${customLogoFile.size}-${customLogoFile.lastModified}-${Date.now()}`}
         />
       )}
     </group>
@@ -247,7 +316,7 @@ function ForecaddiLogoOverlay({ logoColor = 'neutral', woodTexture }: { logoColo
     forecaddiLogoMap.flipY = false
   }
   
-  console.log("🎨 ForecaddiLogoOverlay received logoColor:", logoColor)
+
   
   return (
     <mesh position={[-0.03, 1.1, 0.19]} scale={[1.5, -1.5, 1.5]}>
@@ -297,27 +366,67 @@ function CustomLogoOverlay({ logoFile, woodTexture, logoColor = 'neutral' }: { l
   const [logoTexture, setLogoTexture] = useState<THREE.Texture | null>(null)
   
   useEffect(() => {
-    if (logoFile) {
-      const url = URL.createObjectURL(logoFile)
+    // Clear texture when logoFile is null
+    if (!logoFile) {
+      setLogoTexture(null)
+      return
+    }
+    
+    // Create a unique key for this logo file
+    const logoKey = `${logoFile.name}-${logoFile.size}-${logoFile.lastModified}`
+    
+    // Check if we already have this texture cached
+    if (!(window as any).customLogoCache) {
+      (window as any).customLogoCache = new Map<string, THREE.Texture>()
+    }
+    
+    const customLogoCache = (window as any).customLogoCache as Map<string, THREE.Texture>
+    const cachedTexture = customLogoCache.get(logoKey)
+    if (cachedTexture) {
+      setLogoTexture(cachedTexture)
+      return
+    }
+    
+    let url: string | null = null
+    let isCancelled = false
+    
+    try {
+      url = URL.createObjectURL(logoFile)
       const textureLoader = new THREE.TextureLoader()
       
       textureLoader.load(
         url,
         (texture) => {
+          if (isCancelled) {
+            texture.dispose()
+            return
+          }
           texture.wrapS = texture.wrapT = THREE.ClampToEdgeWrapping
           texture.repeat.set(1, 1)
           texture.colorSpace = THREE.SRGBColorSpace
           texture.flipY = false
+          
+          // Cache the texture
+          customLogoCache.set(logoKey, texture)
           setLogoTexture(texture)
         },
         undefined,
         (error) => {
-          console.error('Error loading custom logo texture:', error)
-          URL.revokeObjectURL(url)
+          if (!isCancelled) {
+            // Only log if it's a real error, not just a cancelled load
+            if (error && typeof error === 'object' && 'type' in error) {
+              console.warn('Custom logo texture load cancelled or failed:', error)
+            }
+          }
         }
       )
-      
-      return () => {
+    } catch (error) {
+      console.warn('Error creating blob URL for custom logo:', error)
+    }
+    
+    return () => {
+      isCancelled = true
+      if (url) {
         URL.revokeObjectURL(url)
       }
     }
@@ -325,12 +434,13 @@ function CustomLogoOverlay({ logoFile, woodTexture, logoColor = 'neutral' }: { l
   
   if (!logoTexture) return null
   
-  console.log("🎨 CustomLogoOverlay loaded texture for:", logoFile.name)
+
   
   return (
     <mesh position={[-0.03, 1.1, 0.19]} scale={[1.5, -1.5, 1.5]}>
       <planeGeometry args={[1, 1]} />
       <shaderMaterial
+        key={`custom-logo-shader-${logoColor}`}
         transparent={true}
         opacity={0.8}
         side={THREE.DoubleSide}
@@ -355,16 +465,13 @@ function CustomLogoOverlay({ logoFile, woodTexture, logoColor = 'neutral' }: { l
           varying vec2 vUv;
           void main() {
             vec4 texColor = texture2D(map, vUv);
-            vec4 woodColor = texture2D(woodTexture, vUv);
-            
             if (invert > 0.5) {
-              // White logo - invert the colors
               gl_FragColor = vec4(1.0 - texColor.rgb, texColor.a);
             } else if (neutral > 0.5) {
-              // Neutral - darken the wood texture for laser etching effect
+              // For neutral, sample the wood texture and darken it for laser etching
+              vec4 woodColor = texture2D(woodTexture, vUv);
               gl_FragColor = vec4(woodColor.rgb * 0.7, texColor.a);
             } else {
-              // Black logo - use original colors
               gl_FragColor = texColor;
             }
           }
@@ -386,7 +493,7 @@ export default function ThreeDModelViewer({ modelPath, woodTexture, showForecadd
   const [cursorStyle, setCursorStyle] = useState('cursor-grab')
   const [isRotating, setIsRotating] = useState(false)
   
-  console.log("🎨 ThreeDModelViewer received logoColor:", logoColor)
+
   
   return (
     <div className={`w-full h-full ${cursorStyle}`}>
@@ -450,6 +557,9 @@ export default function ThreeDModelViewer({ modelPath, woodTexture, showForecadd
         <spotLight position={[0, 15, 0]} angle={0.3} intensity={0.2} />
         
                 <Suspense fallback={null}>
+          {/* Texture Preloader */}
+          <TexturePreloader />
+          
           {/* 3D Model */}
           <DivotToolModel 
             modelPath={modelPath} 
