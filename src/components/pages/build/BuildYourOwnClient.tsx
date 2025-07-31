@@ -88,7 +88,6 @@ export default function BuildYourOwnClient({ modelPath }: BuildYourOwnClientProp
 
   const [selectedTexture, setSelectedTexture] = useState<TextureOption>(textureOptions[0])
   const [logoFile, setLogoFile] = useState<File | null>(null)
-  const [logoUrl, setLogoUrl] = useState<string | null>(null)
   const [showForecaddiLogo, setShowForecaddiLogo] = useState(false)
   const [logoColor, setLogoColor] = useState<'black' | 'white' | 'neutral'>('neutral')
   
@@ -110,8 +109,6 @@ export default function BuildYourOwnClient({ modelPath }: BuildYourOwnClientProp
     const file = event.target.files?.[0]
     if (file) {
       setLogoFile(file)
-      const url = URL.createObjectURL(file)
-      setLogoUrl(url)
       // Automatically uncheck Forecaddi logo when custom logo is uploaded
       setShowForecaddiLogo(false)
     }
