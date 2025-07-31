@@ -8,7 +8,7 @@ export default function HeroCards() {
             {/* Left Card */}
             <div className="relative md:flex-1 rounded-lg overflow-hidden flex mx-2 mt-2 md:ml-3 md:mr-1.5 md:my-3 md:w-full h-[500px] sm:h-[350px] xl:h-[450px] 3xl:h-[550px] 4xl:h-[650px] 5xl:h-[750px]">
                 {/* Background Image */}
-                <picture>
+                <picture className="absolute inset-0">
                     <source srcSet="/avif/zolas-8.avif" type="image/avif" />
                     <source srcSet="/webp/zolas-8.webp" type="image/webp" />
                     <Image
@@ -54,7 +54,7 @@ export default function HeroCards() {
             {/* Right Card */}
             <div className="relative md:flex-1 rounded-lg overflow-hidden flex mx-2 mt-2 md:mr-3 md:ml-1.5 md:my-3 md:w-full h-[500px] sm:h-[350px] xl:h-[450px] 3xl:h-[550px] 4xl:h-[650px] 5xl:h-[750px]">
                 {/* Background Image */}
-                <picture>
+                <picture className="absolute inset-0">
                     <source srcSet="/avif/zolas-36.avif" type="image/avif" />
                     <source srcSet="/webp/zolas-36.webp" type="image/webp" />
                     <Image
