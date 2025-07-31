@@ -2,7 +2,7 @@ import { ChevronRight } from "lucide-react";
 import Link from 'next/link';
 import Image from 'next/image';
 import { Container } from "@/components/ui/container";
-import heroImg from "@/assets/webp/zolas.webp";
+import heroImg from "../../assets/webp/zolas.webp";
 
 export default function Hero() {
     return (
@@ -16,9 +16,6 @@ export default function Hero() {
                 style={{ objectPosition: "center center" }}
                 sizes="100vw"
                 draggable={false}
-                priority
-                fetchPriority="high"
-                loading="eager"
             />
             <div className="absolute inset-0 bg-gradient-to-r from-black/70 to-transparent" />
             <div className="absolute inset-0 flex items-center">

@@ -1,26 +1,24 @@
 import Link from 'next/link';
 import Image from 'next/image';
+import img8 from "@/assets/webp/zolas-8.webp";
+import img36 from "@/assets/webp/zolas-36.webp";
 
 export default function HeroCards() {
     return (
         <div className="flex flex-col md:flex-row w-full mx-auto ">
 
             {/* Left Card */}
-            <div className="relative md:flex-1 rounded-lg overflow-hidden flex mx-2 mt-2 md:ml-3 md:mr-1.5 md:my-3 md:w-full h-[500px] sm:h-[350px] xl:h-[450px] 3xl:h-[550px] 4xl:h-[650px] 5xl:h-[750px]">
-                {/* Background Image */}
-                <picture className="absolute inset-0">
-                    <source srcSet="/avif/zolas-8.avif" type="image/avif" />
-                    <source srcSet="/webp/zolas-8.webp" type="image/webp" />
-                    <Image
-                        src="/webp/zolas-8.webp"
-                        alt="Custom Golf Course Materials & Trophies"
-                        fill
-                        className="object-cover"
-                        priority
-                        draggable={false}
-                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                    />
-                </picture>
+            <div className="relative md:flex-1 rounded-lg overflow-hidden bg-black flex mx-2 mt-2 md:ml-3 md:mr-1.5 md:my-3 md:w-full h-[500px] sm:h-[350px] xl:h-[450px] 3xl:h-[550px] 4xl:h-[650px] 5xl:h-[750px]">
+                <Image
+                    src={img8}
+                    placeholder="blur"
+                    alt="Custom Golf Course Materials & Trophies"
+                    fill
+                    className="absolute inset-0 object-cover"
+                    style={{ objectPosition: "center center" }}
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    draggable={false}
+                />
 
                 {/* Render content immediately */}
                 <div className="absolute inset-0 bg-gradient-to-r from-black/100 to-transparent z-10"/>
@@ -52,21 +50,17 @@ export default function HeroCards() {
             </div>
 
             {/* Right Card */}
-            <div className="relative md:flex-1 rounded-lg overflow-hidden flex mx-2 mt-2 md:mr-3 md:ml-1.5 md:my-3 md:w-full h-[500px] sm:h-[350px] xl:h-[450px] 3xl:h-[550px] 4xl:h-[650px] 5xl:h-[750px]">
-                {/* Background Image */}
-                <picture className="absolute inset-0">
-                    <source srcSet="/avif/zolas-36.avif" type="image/avif" />
-                    <source srcSet="/webp/zolas-36.webp" type="image/webp" />
-                    <Image
-                        src="/webp/zolas-36.webp"
-                        alt="Forecaddie Golf App on IOS and Android"
-                        fill
-                        className="object-cover"
-                        priority
-                        draggable={false}
-                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                    />
-                </picture>
+            <div className="relative md:flex-1 rounded-lg overflow-hidden bg-black flex mx-2 mt-2 md:mr-3 md:ml-1.5 md:my-3 md:w-full h-[500px] sm:h-[350px] xl:h-[450px] 3xl:h-[550px] 4xl:h-[650px] 5xl:h-[750px]">
+                <Image
+                    src={img36}
+                    placeholder="blur"
+                    alt="Forecaddie Golf App on IOS and Android"
+                    fill
+                    className="absolute inset-0 object-cover"
+                    style={{ objectPosition: "center center" }}
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    draggable={false}
+                />
 
                 {/* Render content immediately */}
                 <div className="absolute inset-0 bg-gradient-to-r from-black/70 to-transparent z-10"/>
