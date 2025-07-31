@@ -82,16 +82,18 @@ export default function Navigation() {
         <div className="flex items-center justify-between">
           {/* Desktop Layout */}
           <div className="hidden md:flex items-center w-full">
-            {/* Logo */}
-            <div className="flex items-center">
+            {/* Left Section */}
+            <div className="flex items-center justify-start w-1/3">
               <Logo className="h-12 w-auto -ml-2 hover:opacity-80 transition-all duration-100 ease-in-out-quad cursor-pointer"/>
             </div>
-            {/* NavigationMenu (center) */}
-            <div className="flex-1 items-center justify-center flex">
+            
+            {/* Center Section - Navigation Menu */}
+            <div className="flex items-center justify-center w-1/3">
               <DesktopMenu navLinks={navLinks} />
             </div>
-            {/* Download Button & Cart */}
-            <div className="items-center gap-4 flex">
+            
+            {/* Right Section */}
+            <div className="flex items-center justify-end w-1/3 gap-4">
               <DownloadButton />
               <CartButton />
             </div>

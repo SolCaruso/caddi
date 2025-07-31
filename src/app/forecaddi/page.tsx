@@ -6,9 +6,9 @@ import Explore from "@/components/pages/forecaddi/Explore"
 
 export default function Forecaddi() {
     return (
-        <main className="flex-grow bg-white">
+        <main className="flex-grow">
             {/* Hero Section */}
-            <section className="w-full py-20 bg-white">
+            {/* <section className="w-full py-20">
                 <div className="max-w-4xl mx-auto px-4 text-center">
                     <h1 className="text-caddi-blue text-4xl md:text-5xl lg:text-6xl font-proxima-nova-extra-condensed font-bold mb-6 uppercase">
                         Forecaddie Golf App
@@ -18,7 +18,7 @@ export default function Forecaddi() {
                         Forecaddie gives you real-time, personalized golf advice—factoring in wind, slope, lie, and your own club data to help you swing smarter and score lower.
                     </p>
                 </div>
-            </section>
+            </section> */}
             {/* Components */}
             <Carousel />
             <Explore />
