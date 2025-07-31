@@ -33,14 +33,14 @@ function ObjModel({ modelPath, woodTexture, showForecaddiLogo = false, logoColor
 
   const { gl } = useThree()
 
-  // Handle mouse events for manual rotation
+  // Handle mouse and touch events for manual rotation
   useEffect(() => {
-    const handleMouseDown = (event: MouseEvent) => {
+    const handlePointerDown = (event: PointerEvent) => {
       setIsDragging(true)
       setLastMouseX(event.clientX)
     }
 
-    const handleMouseMove = (event: MouseEvent) => {
+    const handlePointerMove = (event: PointerEvent) => {
       if (!isDragging) return
       
       const deltaX = event.clientX - lastMouseX
@@ -48,19 +48,19 @@ function ObjModel({ modelPath, woodTexture, showForecaddiLogo = false, logoColor
       setLastMouseX(event.clientX)
     }
 
-    const handleMouseUp = () => {
+    const handlePointerUp = () => {
       setIsDragging(false)
     }
 
     const canvas = gl.domElement
-    canvas.addEventListener('mousedown', handleMouseDown)
-    window.addEventListener('mousemove', handleMouseMove)
-    window.addEventListener('mouseup', handleMouseUp)
+    canvas.addEventListener('pointerdown', handlePointerDown)
+    window.addEventListener('pointermove', handlePointerMove)
+    window.addEventListener('pointerup', handlePointerUp)
 
     return () => {
-      canvas.removeEventListener('mousedown', handleMouseDown)
-      window.removeEventListener('mousemove', handleMouseMove)
-      window.removeEventListener('mouseup', handleMouseUp)
+      canvas.removeEventListener('pointerdown', handlePointerDown)
+      window.removeEventListener('pointermove', handlePointerMove)
+      window.removeEventListener('pointerup', handlePointerUp)
     }
   }, [isDragging, lastMouseX, gl])
 
@@ -282,6 +282,8 @@ export default function ThreeDModelViewer({ modelPath, woodTexture, showForecadd
         onPointerDown={() => setCursorStyle('cursor-grabbing')}
         onPointerUp={() => setCursorStyle('cursor-grab')}
         onPointerLeave={() => setCursorStyle('cursor-grab')}
+        onTouchStart={(e) => e.preventDefault()}
+        onTouchMove={(e) => e.preventDefault()}
       >
         <ambientLight intensity={0.3} />
         <directionalLight position={[10, 10, 5]} intensity={0.7} castShadow />
