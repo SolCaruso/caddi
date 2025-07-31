@@ -94,7 +94,7 @@ export default function VerticalCardsContent({ cardData }: VerticalCardsContentP
           align: "start", 
           slidesToScroll: 1, 
           dragFree: true, 
-          containScroll: "keepSnaps" 
+          containScroll: "trimSnaps" 
         })
       } else {
         // Desktop: Keep discrete sliding
