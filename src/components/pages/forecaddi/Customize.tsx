@@ -18,7 +18,7 @@ export default function Customize() {
                     <div className="grid lg:grid-cols-2 gap-12 items-start">
                         <div className="space-y-6">
                             <h3 className="text-caddi-blue text-xl font-semibold">
-                                Here's what you can adjust:
+                                Here&apos;s what you can adjust:
                             </h3>
                             <ul className="space-y-3 text-black/50">
                                 <li className="flex items-start">

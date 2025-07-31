@@ -11,7 +11,7 @@ export default function Info() {
                             Setting Up Your Clubs
                         </h2>
                         <p className="text-black/50 text-lg max-w-2xl mx-auto">
-                            The Clubs tab is where you build your personal golf bag. You'll see a few sample clubs to start.
+                            The Clubs tab is where you build your personal golf bag. You&apos;ll see a few sample clubs to start.
                         </p>
                     </div>
                     
@@ -46,7 +46,7 @@ export default function Info() {
                                 </li>
                                 <li className="flex items-start">
                                     <span className="w-2 h-2 bg-caddi-blue rounded-full mt-2 mr-3 flex-shrink-0"></span>
-                                    <span>Name your club (e.g., "7 Iron")</span>
+                                    <span>Name your club (e.g., &ldquo;7 Iron&rdquo;)</span>
                                 </li>
                                 <li className="flex items-start">
                                     <span className="w-2 h-2 bg-caddi-blue rounded-full mt-2 mr-3 flex-shrink-0"></span>
@@ -54,7 +54,7 @@ export default function Info() {
                                 </li>
                                 <li className="flex items-start">
                                     <span className="w-2 h-2 bg-caddi-blue rounded-full mt-2 mr-3 flex-shrink-0"></span>
-                                    <span>Include swing notes or reminders (they'll pop up when the club is recommended)</span>
+                                    <span>Include swing notes or reminders (they&apos;ll pop up when the club is recommended)</span>
                                 </li>
                             </ul>
                         </div>

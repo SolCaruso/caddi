@@ -2,10 +2,8 @@
 
 import { Container } from "@/components/ui/container"
 import Image from "next/image"
-import useEmblaCarousel, { type UseEmblaCarouselType } from "embla-carousel-react"
+import useEmblaCarousel from "embla-carousel-react"
 import { useEffect, useState } from "react"
-
-type CarouselApi = UseEmblaCarouselType[1]
 
 const carouselImages = [
   {
