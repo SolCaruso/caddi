@@ -92,8 +92,7 @@ export default function BuildYourOwnClient({ modelPath }: BuildYourOwnClientProp
   const [showForecaddiLogo, setShowForecaddiLogo] = useState(false)
   const [logoColor, setLogoColor] = useState<'black' | 'white' | 'neutral'>('neutral')
   
-  // Force re-render when logoColor changes
-  const logoColorKey = `${logoColor}-${Date.now()}`
+
   
   // Debug logging for Forecaddi logo state
   useEffect(() => {
@@ -183,7 +182,6 @@ export default function BuildYourOwnClient({ modelPath }: BuildYourOwnClientProp
               <ThreeDModelViewer 
                 modelPath={modelPath}
                 woodTexture={selectedTexture.texture}
-                logoTexture={logoUrl}
                 showForecaddiLogo={showForecaddiLogo}
                 logoColor={logoColor}
               />
@@ -331,7 +329,6 @@ export default function BuildYourOwnClient({ modelPath }: BuildYourOwnClientProp
               <ThreeDModelViewer 
                 modelPath={modelPath}
                 woodTexture={selectedTexture.texture}
-                logoTexture={logoUrl}
                 showForecaddiLogo={showForecaddiLogo}
                 logoColor={logoColor}
               />

@@ -10,13 +10,12 @@ import { MTLLoader } from 'three/addons/loaders/MTLLoader.js'
 interface ModelProps {
   modelPath: string
   woodTexture: string
-  logoTexture?: string
   showForecaddiLogo?: boolean
   logoColor?: 'black' | 'white' | 'neutral'
 }
 
 // Custom OBJ+MTL Model Component with manual rotation
-function ObjModel({ modelPath, woodTexture, logoTexture, showForecaddiLogo = false, logoColor = 'neutral' }: ModelProps) {
+function ObjModel({ modelPath, woodTexture, showForecaddiLogo = false, logoColor = 'neutral' }: ModelProps) {
   // Use the woodTexture path directly - no mapping needed
   const woodMap = useTexture(woodTexture)
   woodMap.wrapS = woodMap.wrapT = THREE.ClampToEdgeWrapping
@@ -25,7 +24,6 @@ function ObjModel({ modelPath, woodTexture, logoTexture, showForecaddiLogo = fal
   woodMap.flipY = false
 
   const [model, setModel] = useState<THREE.Group | null>(null)
-  const [error, setError] = useState<string | null>(null)
   const groupRef = useRef<THREE.Group>(null)
   const [isDragging, setIsDragging] = useState(false)
   const [rotation, setRotation] = useState(0)
@@ -144,7 +142,7 @@ function ObjModel({ modelPath, woodTexture, logoTexture, showForecaddiLogo = fal
         console.log("✅ Applied new material with texture to mesh:", child.name || "unnamed")
       }
     })
-  }, [model, woodMap, woodTexture])
+  }, [model, woodMap, woodTexture, showForecaddiLogo])
 
   // Update rotation
   useFrame(() => {
@@ -153,7 +151,7 @@ function ObjModel({ modelPath, woodTexture, logoTexture, showForecaddiLogo = fal
     }
   })
 
-  if (error || !model) {
+  if (!model) {
     return null // No fallback, just return nothing
   }
 
@@ -178,7 +176,7 @@ function ObjModel({ modelPath, woodTexture, logoTexture, showForecaddiLogo = fal
   )
 }
 
-function DivotToolModel({ modelPath, woodTexture, logoTexture, showForecaddiLogo = false, logoColor = 'neutral' }: ModelProps) {
+function DivotToolModel({ modelPath, woodTexture, showForecaddiLogo = false, logoColor = 'neutral' }: ModelProps) {
   // Only try OBJ, no fallback
   if (modelPath.endsWith('.obj')) {
     return (
@@ -186,7 +184,6 @@ function DivotToolModel({ modelPath, woodTexture, logoTexture, showForecaddiLogo
         <ObjModel 
           modelPath={modelPath} 
           woodTexture={woodTexture} 
-          logoTexture={logoTexture} 
           showForecaddiLogo={showForecaddiLogo}
           logoColor={logoColor}
         />
@@ -258,12 +255,11 @@ function ForecaddiLogoOverlay({ logoColor = 'neutral', woodTexture }: { logoColo
 interface ThreeDModelViewerProps {
   modelPath: string
   woodTexture: string
-  logoTexture?: string | null
   showForecaddiLogo?: boolean
   logoColor?: 'black' | 'white' | 'neutral'
 }
 
-export default function ThreeDModelViewer({ modelPath, woodTexture, logoTexture, showForecaddiLogo = false, logoColor = 'neutral' }: ThreeDModelViewerProps) {
+export default function ThreeDModelViewer({ modelPath, woodTexture, showForecaddiLogo = false, logoColor = 'neutral' }: ThreeDModelViewerProps) {
   const [cursorStyle, setCursorStyle] = useState('cursor-grab')
   
   console.log("🎨 ThreeDModelViewer received logoColor:", logoColor)
@@ -298,7 +294,6 @@ export default function ThreeDModelViewer({ modelPath, woodTexture, logoTexture,
           <DivotToolModel 
             modelPath={modelPath} 
             woodTexture={woodTexture} 
-            logoTexture={logoTexture || undefined}
             showForecaddiLogo={showForecaddiLogo}
             logoColor={logoColor}
           />
