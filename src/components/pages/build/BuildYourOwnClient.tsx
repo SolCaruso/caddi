@@ -2,9 +2,14 @@
 
 import { useState, useRef, Suspense, useEffect } from "react"
 import Link from "next/link"
-import { Upload } from "lucide-react"
+import { Upload, AlertCircle, X } from "lucide-react"
 import ThreeDModelViewer from "./ThreeDModelViewer"
 import { useCart, CartItem } from "@/lib/cart"
+// import {
+//   Alert,
+//   AlertDescription,
+//   AlertTitle,
+// } from "@/components/ui/alert"
 
 interface TextureOption {
   id: string
@@ -25,71 +30,72 @@ export default function BuildYourOwnClient({ modelPath }: BuildYourOwnClientProp
       id: 'canarywood',
       name: 'Canarywood',
       texture: '/textures/canarywood.webp',
-      price: 169,
+      price: 17.99,
       description: 'Rich golden yellow with subtle grain'
     },
     {
       id: 'zebrawood',
       name: 'Zebrawood',
       texture: '/textures/zebrawood.webp',
-      price: 189,
+      price: 21.99,
       description: 'Bold striped pattern with dramatic contrast'
     },
     {
       id: 'white-oak',
-      name: 'White Oak',
+      name: 'Quarter-Sawn White Oak',
       texture: '/textures/white-oak.webp',
-      price: 149,
+      price: 15.99,
       description: 'Classic light wood with prominent grain'
     },
     {
       id: 'wenge',
       name: 'Wenge',
       texture: '/textures/wenge.webp',
-      price: 199,
+      price: 19.99,
       description: 'Dark chocolate brown with fine grain'
     },
     {
       id: 'rosewood',
-      name: 'Rosewood',
+      name: ' Bolivian Rosewood',
       texture: '/textures/rosewood.webp',
-      price: 179,
+      price: 22.99,
       description: 'Rich reddish-brown with elegant patterns'
     },
     {
       id: 'tigerwood',
       name: 'Tigerwood',
       texture: '/textures/tigerwood.webp',
-      price: 189,
+      price: 19.99,
       description: 'Orange base with dark streaking stripes'
     },
     {
       id: 'paduk',
       name: 'Paduk',
       texture: '/textures/paduk.webp',
-      price: 159,
+      price: 17.99,
       description: 'Vibrant orange-red with smooth texture'
     },
     {
       id: 'birds-eye',
       name: 'Birds Eye Maple',
       texture: '/textures/birds-eye.webp',
-      price: 199,
+      price: 15.99,
       description: 'Light wood with distinctive eye patterns'
     },
-    {
-      id: 'curly-maple',
-      name: 'Curly Maple',
-      texture: '/textures/curly-maple.webp',
-      price: 179,
-      description: 'Light maple with beautiful curly figure'
-    }
+    // {
+    //   id: 'curly-maple',
+    //   name: 'Curly Maple',
+    //   texture: '/textures/curly-maple.webp',
+    //   price: 179,
+    //   description: 'Light maple with beautiful curly figure'
+    // }
   ]
 
   const [selectedTexture, setSelectedTexture] = useState<TextureOption>(textureOptions[0])
   const [logoFile, setLogoFile] = useState<File | null>(null)
-  const [showForecaddiLogo, setShowForecaddiLogo] = useState(false)
+  const [showForecaddiLogo, setShowForecaddiLogo] = useState(true)
   const [logoColor, setLogoColor] = useState<'black' | 'white' | 'neutral'>('neutral')
+  const [uploadError, setUploadError] = useState<string | null>(null)
   
 
   
@@ -108,10 +114,58 @@ export default function BuildYourOwnClient({ modelPath }: BuildYourOwnClientProp
   const handleLogoUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
     if (file) {
-      setLogoFile(file)
-      // Automatically uncheck Forecaddi logo when custom logo is uploaded
-      setShowForecaddiLogo(false)
+      // Validate file type
+      const validTypes = ['image/png', 'image/webp']
+      if (!validTypes.includes(file.type)) {
+        setUploadError('Please upload a PNG or WebP file only.')
+        return
+      }
+
+      // Validate file size (2MB = 2 * 1024 * 1024 bytes)
+      const maxSize = 2 * 1024 * 1024
+      if (file.size > maxSize) {
+        setUploadError('File size must be 2MB or less.')
+        return
+      }
+
+      // Validate image dimensions
+      const img = new Image()
+      const url = URL.createObjectURL(file)
+      
+      img.onload = () => {
+        URL.revokeObjectURL(url)
+        
+        // Check if image is square (aspect ratio 1:1)
+        if (img.width !== img.height) {
+          setUploadError('Please upload a square image (same width and height).')
+          return
+        }
+        
+        // Check if image is 500px or smaller
+        if (img.width > 500 || img.height > 500) {
+          setUploadError('Please upload an image that is 500px x 500px or smaller.')
+          return
+        }
+
+        // If all validations pass, set the file
+        setLogoFile(file)
+        setUploadError(null) // Clear any previous errors
+        // Automatically uncheck Forecaddi logo when custom logo is uploaded
+        setShowForecaddiLogo(false)
+      }
+
+      img.onerror = () => {
+        URL.revokeObjectURL(url)
+        setUploadError('Unable to read the image file. Please try again.')
+      }
+
+      img.src = url
     }
+  }
+
+  const handleRemoveLogo = () => {
+    setLogoFile(null)
+    setUploadError(null)
   }
 
   const handleAddToBag = () => {
@@ -181,6 +235,7 @@ export default function BuildYourOwnClient({ modelPath }: BuildYourOwnClientProp
                 woodTexture={selectedTexture.texture}
                 showForecaddiLogo={showForecaddiLogo}
                 logoColor={logoColor}
+                customLogoFile={logoFile}
               />
             </Suspense>
           </div>
@@ -223,20 +278,38 @@ export default function BuildYourOwnClient({ modelPath }: BuildYourOwnClientProp
           </div>
 
           {/* Forecaddi Logo Option */}
-          <div>
-            <div className="flex items-center gap-3 mb-4">
-              <input
-                type="checkbox"
-                id="forecaddi-logo"
-                checked={showForecaddiLogo}
-                onChange={(e) => setShowForecaddiLogo(e.target.checked)}
-                className="w-4 h-4 text-caddi-blue border-gray-300 rounded focus:ring-caddi-blue"
-              />
-              <label htmlFor="forecaddi-logo" className="text-lg font-semibold text-caddi-blue cursor-pointer">
-                Forecaddi Logo (etched): <span className="text-sm font-normal text-gray-500">(+$3.95)</span>
-              </label>
+          {!logoFile && (
+            <div>
+              <div className="flex items-center gap-3 mb-4">
+                <div className="relative">
+                  <input
+                    type="checkbox"
+                    id="forecaddi-logo"
+                    checked={showForecaddiLogo}
+                    onChange={(e) => setShowForecaddiLogo(e.target.checked)}
+                    className="sr-only"
+                  />
+                  <label 
+                    htmlFor="forecaddi-logo" 
+                    className={`w-4 h-4 border-2 rounded-sm cursor-pointer flex items-center justify-center transition-colors ${
+                      showForecaddiLogo 
+                        ? 'bg-caddi-blue border-caddi-blue' 
+                        : 'bg-white border-gray-300'
+                    }`}
+                  >
+                    {showForecaddiLogo && (
+                      <svg className="w-2.5 h-2.5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                      </svg>
+                    )}
+                  </label>
+                </div>
+                <label htmlFor="forecaddi-logo" className="text-lg font-semibold text-caddi-blue cursor-pointer">
+                  Forecaddi Logo (etched): <span className="text-sm font-normal text-gray-500">(+$3.95)</span>
+                </label>
+              </div>
             </div>
-          </div>
+          )}
 
           {/* Logo Color Selection */}
           {(showForecaddiLogo || logoFile) && (
@@ -281,25 +354,55 @@ export default function BuildYourOwnClient({ modelPath }: BuildYourOwnClientProp
           <div>
             <h3 className="text-lg font-semibold mb-4 text-caddi-blue">Custom Logo: <span className="text-sm font-normal text-gray-500">(+$25)</span></h3>
             <div className="space-y-4">
-              <button
-                onClick={() => fileInputRef.current?.click()}
-                className="flex items-center gap-3 px-4 py-3 border-2 border-dashed border-gray-300 rounded-lg hover:border-caddi-blue/50 transition-colors w-full"
-              >
-                <Upload className="w-5 h-5 text-gray-400" />
-                <span className="text-gray-600">
-                  {logoFile ? `Selected: ${logoFile.name}` : "Upload Logo (PNG, JPG, SVG)"}
-                </span>
-              </button>
+              <div className="relative">
+                <button
+                  onClick={() => fileInputRef.current?.click()}
+                  className="flex items-center gap-3 px-4 py-3 border-2 border-dashed border-gray-300 rounded-lg hover:border-caddi-blue transition-colors w-full group relative cursor-pointer"
+                >
+                  <Upload className="w-5 h-5 text-gray-400 group-hover:text-caddi-blue transition-colors" />
+                  <span className="text-gray-600 group-hover:text-caddi-blue transition-colors">
+                    {logoFile ? (
+                      <>
+                        <span className="opacity-100 group-hover:opacity-0 transition-all duration-300 ease-in-out-quad absolute">Selected: {logoFile.name}</span>
+                        <span className="opacity-0 group-hover:opacity-100 transition-all duration-300 ease-in-out-quad">Upload different logo</span>
+                      </>
+                    ) : "Upload Logo (PNG/WebP, 500x500px max, 2MB)"}
+                  </span>
+                  {logoFile && (
+                    <div
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        handleRemoveLogo()
+                      }}
+                      className="absolute right-2 top-1/2 -translate-y-1/2 w-6 h-6 flex items-center justify-center rounded-sm hover:bg-gray-200 transition-colors cursor-pointer group"
+                      title="Remove logo"
+                    >
+                      <X className="w-4 h-4 text-gray-400 group-hover:text-caddi-blue" />
+                    </div>
+                  )}
+                </button>
+              </div>
               <input
                 ref={fileInputRef}
                 type="file"
-                accept="image/*"
+                accept="image/png,image/webp"
                 onChange={handleLogoUpload}
                 className="hidden"
               />
               {logoFile && (
                 <div className="text-sm text-gray-600">
                   Logo will be laser etched on your divot tool
+                </div>
+              )}
+              
+              {/* Upload Error Alert */}
+              {uploadError && (
+                <div className="mt-4 p-4 bg-red-50 border border-red-200 rounded-lg">
+                  <div className="flex items-center gap-2">
+                    <AlertCircle className="h-4 w-4 text-red-500" />
+                    <h5 className="font-medium text-red-800">Upload Error</h5>
+                  </div>
+                  <p className="text-sm text-red-700 mt-1">{uploadError}</p>
                 </div>
               )}
             </div>
@@ -328,6 +431,7 @@ export default function BuildYourOwnClient({ modelPath }: BuildYourOwnClientProp
                 woodTexture={selectedTexture.texture}
                 showForecaddiLogo={showForecaddiLogo}
                 logoColor={logoColor}
+                customLogoFile={logoFile}
               />
             </Suspense>
           </div>
@@ -402,20 +506,38 @@ export default function BuildYourOwnClient({ modelPath }: BuildYourOwnClientProp
           </div>
 
           {/* Forecaddi Logo Option */}
-          <div>
-            <div className="flex items-center gap-4 mb-6">
-              <input
-                type="checkbox"
-                id="forecaddi-logo-desktop"
-                checked={showForecaddiLogo}
-                onChange={(e) => setShowForecaddiLogo(e.target.checked)}
-                className="w-5 h-5 text-caddi-blue border-gray-300 rounded focus:ring-caddi-blue"
-              />
-              <label htmlFor="forecaddi-logo-desktop" className="text-xl font-semibold text-caddi-blue cursor-pointer">
-                Forecaddi Logo (etched): <span className="text-base font-normal text-gray-500">(+$3.95)</span>
-              </label>
+          {!logoFile && (
+            <div>
+              <div className="flex items-center gap-4 mb-6">
+                <div className="relative">
+                  <input
+                    type="checkbox"
+                    id="forecaddi-logo-desktop"
+                    checked={showForecaddiLogo}
+                    onChange={(e) => setShowForecaddiLogo(e.target.checked)}
+                    className="sr-only"
+                  />
+                  <label 
+                    htmlFor="forecaddi-logo-desktop" 
+                    className={`w-5 h-5 border-2 rounded-sm cursor-pointer flex items-center justify-center transition-colors ${
+                      showForecaddiLogo 
+                        ? 'bg-caddi-blue border-caddi-blue' 
+                        : 'bg-white border-gray-300'
+                    }`}
+                  >
+                    {showForecaddiLogo && (
+                      <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                      </svg>
+                    )}
+                  </label>
+                </div>
+                <label htmlFor="forecaddi-logo-desktop" className="text-xl font-semibold text-caddi-blue cursor-pointer">
+                  Forecaddi Logo (etched): <span className="text-base font-normal text-gray-500">(+$3.95)</span>
+                </label>
+              </div>
             </div>
-          </div>
+          )}
 
           {/* Logo Color Selection */}
           {(showForecaddiLogo || logoFile) && (
@@ -460,15 +582,34 @@ export default function BuildYourOwnClient({ modelPath }: BuildYourOwnClientProp
           <div>
             <h3 className="text-xl font-semibold mb-6 text-caddi-blue">Custom Logo: <span className="text-base font-normal text-gray-500">(+$25)</span></h3>
             <div className="space-y-4">
-              <button
-                onClick={() => fileInputRef.current?.click()}
-                className="flex items-center gap-4 px-6 py-4 border-2 border-dashed border-gray-300 rounded-lg hover:border-caddi-blue/50 transition-colors w-full"
-              >
-                <Upload className="w-6 h-6 text-gray-400" />
-                <span className="text-gray-600 text-lg">
-                  {logoFile ? `Selected: ${logoFile.name}` : "Upload Logo (PNG, JPG, SVG)"}
-                </span>
-              </button>
+              <div className="relative">
+                <button
+                  onClick={() => fileInputRef.current?.click()}
+                  className="flex items-center gap-4 px-6 py-4 border-2 border-dashed border-gray-300 rounded-lg hover:border-caddi-blue transition-colors w-full group relative cursor-pointer"
+                >
+                  <Upload className="w-6 h-6 text-gray-400 group-hover:text-caddi-blue transition-colors" />
+                  <span className="text-gray-600 text-lg group-hover:text-caddi-blue transition-colors">
+                    {logoFile ? (
+                      <>
+                        <span className="opacity-100 group-hover:opacity-0 transition-all duration-300 absolute">Selected: {logoFile.name}</span>
+                        <span className="opacity-0 group-hover:opacity-100 transition-all duration-300">Upload different logo</span>
+                      </>
+                    ) : "Upload Logo (PNG/WebP, 500x500px max, 2MB)"}
+                  </span>
+                  {logoFile && (
+                    <div
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        handleRemoveLogo()
+                      }}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 flex items-center justify-center rounded-sm hover:bg-gray-100 transition-colors cursor-pointer group"
+                      title="Remove logo"
+                    >
+                      <X className="w-5 h-5 text-gray-400 group-hover:text-caddi-blue" />
+                    </div>
+                  )}
+                </button>
+              </div>
               <input
                 ref={fileInputRef}
                 type="file"
@@ -479,6 +620,17 @@ export default function BuildYourOwnClient({ modelPath }: BuildYourOwnClientProp
               {logoFile && (
                 <div className="text-base text-gray-600">
                   Logo will be laser etched on your divot tool
+                </div>
+              )}
+              
+              {/* Upload Error Alert */}
+              {uploadError && (
+                <div className="mt-4 p-4 bg-red-50 border border-red-200 rounded-lg">
+                  <div className="flex items-center gap-2">
+                    <AlertCircle className="h-4 w-4 text-red-500" />
+                    <h5 className="font-medium text-red-800">Upload Error</h5>
+                  </div>
+                  <p className="text-sm text-red-700 mt-1">{uploadError}</p>
                 </div>
               )}
             </div>

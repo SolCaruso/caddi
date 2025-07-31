@@ -12,10 +12,11 @@ interface ModelProps {
   woodTexture: string
   showForecaddiLogo?: boolean
   logoColor?: 'black' | 'white' | 'neutral'
+  customLogoFile?: File | null
 }
 
 // Custom OBJ+MTL Model Component with manual rotation
-function ObjModel({ modelPath, woodTexture, showForecaddiLogo = false, logoColor = 'neutral' }: ModelProps) {
+function ObjModel({ modelPath, woodTexture, showForecaddiLogo = false, logoColor = 'neutral', customLogoFile = null }: ModelProps) {
   // Use the woodTexture path directly - no mapping needed
   const woodMap = useTexture(woodTexture)
   woodMap.wrapS = woodMap.wrapT = THREE.ClampToEdgeWrapping
@@ -28,6 +29,9 @@ function ObjModel({ modelPath, woodTexture, showForecaddiLogo = false, logoColor
   const [isDragging, setIsDragging] = useState(false)
   const [rotation, setRotation] = useState(0)
   const [lastMouseX, setLastMouseX] = useState(0)
+  const [touchStartY, setTouchStartY] = useState(0)
+  const [touchStartX, setTouchStartX] = useState(0)
+  const [isRotating, setIsRotating] = useState(false)
 
   
 
@@ -38,18 +42,44 @@ function ObjModel({ modelPath, woodTexture, showForecaddiLogo = false, logoColor
     const handlePointerDown = (event: PointerEvent) => {
       setIsDragging(true)
       setLastMouseX(event.clientX)
+      
+      // For touch events, store initial position
+      if (event.pointerType === 'touch') {
+        setTouchStartX(event.clientX)
+        setTouchStartY(event.clientY)
+        setIsRotating(false)
+      }
     }
 
     const handlePointerMove = (event: PointerEvent) => {
       if (!isDragging) return
       
-      const deltaX = event.clientX - lastMouseX
-      setRotation(prev => prev + deltaX * 0.01) // Adjust sensitivity
-      setLastMouseX(event.clientX)
+      if (event.pointerType === 'touch') {
+        const deltaX = Math.abs(event.clientX - touchStartX)
+        const deltaY = Math.abs(event.clientY - touchStartY)
+        
+        // If horizontal movement is greater than vertical, and we've moved enough, start rotating
+        if (deltaX > deltaY && deltaX > 10) {
+          setIsRotating(true)
+        }
+        
+        // Only rotate if we've determined this is a rotation gesture
+        if (isRotating) {
+          const deltaX = event.clientX - lastMouseX
+          setRotation(prev => prev + deltaX * 0.01)
+          setLastMouseX(event.clientX)
+        }
+      } else {
+        // Mouse events work as before
+        const deltaX = event.clientX - lastMouseX
+        setRotation(prev => prev + deltaX * 0.01)
+        setLastMouseX(event.clientX)
+      }
     }
 
     const handlePointerUp = () => {
       setIsDragging(false)
+      setIsRotating(false)
     }
 
     const canvas = gl.domElement
@@ -62,7 +92,7 @@ function ObjModel({ modelPath, woodTexture, showForecaddiLogo = false, logoColor
       window.removeEventListener('pointermove', handlePointerMove)
       window.removeEventListener('pointerup', handlePointerUp)
     }
-  }, [isDragging, lastMouseX, gl])
+  }, [isDragging, lastMouseX, touchStartX, touchStartY, isRotating, gl])
 
   useEffect(() => {
     async function loadModel() {
@@ -172,11 +202,21 @@ function ObjModel({ modelPath, woodTexture, showForecaddiLogo = false, logoColor
           key={`logo-${logoColor}`}
         />
       )}
+      
+      {/* Custom Logo Overlay */}
+      {customLogoFile && (
+        <CustomLogoOverlay 
+          logoFile={customLogoFile}
+          woodTexture={woodMap}
+          logoColor={logoColor}
+          key={`custom-logo-${customLogoFile.name}-${logoColor}`}
+        />
+      )}
     </group>
   )
 }
 
-function DivotToolModel({ modelPath, woodTexture, showForecaddiLogo = false, logoColor = 'neutral' }: ModelProps) {
+function DivotToolModel({ modelPath, woodTexture, showForecaddiLogo = false, logoColor = 'neutral', customLogoFile = null }: ModelProps) {
   // Only try OBJ, no fallback
   if (modelPath.endsWith('.obj')) {
     return (
@@ -186,6 +226,7 @@ function DivotToolModel({ modelPath, woodTexture, showForecaddiLogo = false, log
           woodTexture={woodTexture} 
           showForecaddiLogo={showForecaddiLogo}
           logoColor={logoColor}
+          customLogoFile={customLogoFile}
         />
       </Suspense>
     )
@@ -209,7 +250,7 @@ function ForecaddiLogoOverlay({ logoColor = 'neutral', woodTexture }: { logoColo
   console.log("🎨 ForecaddiLogoOverlay received logoColor:", logoColor)
   
   return (
-    <mesh position={[-0.01, 1.1, 0.19]} scale={[1.5, -1.5, 1.5]}>
+    <mesh position={[-0.03, 1.1, 0.19]} scale={[1.5, -1.5, 1.5]}>
       <planeGeometry args={[1, 1]} />
       <shaderMaterial
         transparent={true}
@@ -252,15 +293,98 @@ function ForecaddiLogoOverlay({ logoColor = 'neutral', woodTexture }: { logoColo
   )
 }
 
+function CustomLogoOverlay({ logoFile, woodTexture, logoColor = 'neutral' }: { logoFile: File, woodTexture?: THREE.Texture, logoColor?: 'black' | 'white' | 'neutral' }) {
+  const [logoTexture, setLogoTexture] = useState<THREE.Texture | null>(null)
+  
+  useEffect(() => {
+    if (logoFile) {
+      const url = URL.createObjectURL(logoFile)
+      const textureLoader = new THREE.TextureLoader()
+      
+      textureLoader.load(
+        url,
+        (texture) => {
+          texture.wrapS = texture.wrapT = THREE.ClampToEdgeWrapping
+          texture.repeat.set(1, 1)
+          texture.colorSpace = THREE.SRGBColorSpace
+          texture.flipY = false
+          setLogoTexture(texture)
+        },
+        undefined,
+        (error) => {
+          console.error('Error loading custom logo texture:', error)
+          URL.revokeObjectURL(url)
+        }
+      )
+      
+      return () => {
+        URL.revokeObjectURL(url)
+      }
+    }
+  }, [logoFile])
+  
+  if (!logoTexture) return null
+  
+  console.log("🎨 CustomLogoOverlay loaded texture for:", logoFile.name)
+  
+  return (
+    <mesh position={[-0.03, 1.1, 0.19]} scale={[1.5, -1.5, 1.5]}>
+      <planeGeometry args={[1, 1]} />
+      <shaderMaterial
+        transparent={true}
+        opacity={0.8}
+        side={THREE.DoubleSide}
+        uniforms={{
+          map: { value: logoTexture },
+          woodTexture: { value: woodTexture },
+          invert: { value: logoColor === 'white' ? 1.0 : 0.0 },
+          neutral: { value: logoColor === 'neutral' ? 1.0 : 0.0 }
+        }}
+        vertexShader={`
+          varying vec2 vUv;
+          void main() {
+            vUv = uv;
+            gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+          }
+        `}
+        fragmentShader={`
+          uniform sampler2D map;
+          uniform sampler2D woodTexture;
+          uniform float invert;
+          uniform float neutral;
+          varying vec2 vUv;
+          void main() {
+            vec4 texColor = texture2D(map, vUv);
+            vec4 woodColor = texture2D(woodTexture, vUv);
+            
+            if (invert > 0.5) {
+              // White logo - invert the colors
+              gl_FragColor = vec4(1.0 - texColor.rgb, texColor.a);
+            } else if (neutral > 0.5) {
+              // Neutral - darken the wood texture for laser etching effect
+              gl_FragColor = vec4(woodColor.rgb * 0.7, texColor.a);
+            } else {
+              // Black logo - use original colors
+              gl_FragColor = texColor;
+            }
+          }
+        `}
+      />
+    </mesh>
+  )
+}
+
 interface ThreeDModelViewerProps {
   modelPath: string
   woodTexture: string
   showForecaddiLogo?: boolean
   logoColor?: 'black' | 'white' | 'neutral'
+  customLogoFile?: File | null
 }
 
-export default function ThreeDModelViewer({ modelPath, woodTexture, showForecaddiLogo = false, logoColor = 'neutral' }: ThreeDModelViewerProps) {
+export default function ThreeDModelViewer({ modelPath, woodTexture, showForecaddiLogo = false, logoColor = 'neutral', customLogoFile = null }: ThreeDModelViewerProps) {
   const [cursorStyle, setCursorStyle] = useState('cursor-grab')
+  const [isRotating, setIsRotating] = useState(false)
   
   console.log("🎨 ThreeDModelViewer received logoColor:", logoColor)
   
@@ -282,8 +406,42 @@ export default function ThreeDModelViewer({ modelPath, woodTexture, showForecadd
         onPointerDown={() => setCursorStyle('cursor-grabbing')}
         onPointerUp={() => setCursorStyle('cursor-grab')}
         onPointerLeave={() => setCursorStyle('cursor-grab')}
-        onTouchStart={(e) => e.preventDefault()}
-        onTouchMove={(e) => e.preventDefault()}
+        onTouchStart={(e) => {
+          // Only prevent default if we detect horizontal movement
+          const touch = e.touches[0]
+          if (touch) {
+            const startX = touch.clientX
+            const startY = touch.clientY
+            
+            const handleTouchMove = (moveEvent: Event) => {
+              const touchEvent = moveEvent as TouchEvent
+              const moveTouch = touchEvent.touches[0]
+              if (moveTouch) {
+                const deltaX = Math.abs(moveTouch.clientX - startX)
+                const deltaY = Math.abs(moveTouch.clientY - startY)
+                
+                if (deltaX > deltaY && deltaX > 10) {
+                  setIsRotating(true)
+                  touchEvent.preventDefault()
+                }
+              }
+            }
+            
+            const handleTouchEnd = () => {
+              setIsRotating(false)
+              document.removeEventListener('touchmove', handleTouchMove)
+              document.removeEventListener('touchend', handleTouchEnd)
+            }
+            
+            document.addEventListener('touchmove', handleTouchMove)
+            document.addEventListener('touchend', handleTouchEnd)
+          }
+        }}
+        onTouchMove={(e) => {
+          if (isRotating) {
+            e.preventDefault()
+          }
+        }}
       >
         <ambientLight intensity={0.3} />
         <directionalLight position={[10, 10, 5]} intensity={0.7} castShadow />
@@ -298,6 +456,7 @@ export default function ThreeDModelViewer({ modelPath, woodTexture, showForecadd
             woodTexture={woodTexture} 
             showForecaddiLogo={showForecaddiLogo}
             logoColor={logoColor}
+            customLogoFile={customLogoFile}
           />
         </Suspense>
         
