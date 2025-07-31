@@ -88,7 +88,6 @@ function AddToBagButtonInner({
 
   return (
     <DrawerDialogDemo
-      productId={productId}
       productName={productName}
       productPrice={productPrice}
       productImage={productImage}
