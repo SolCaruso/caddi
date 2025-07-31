@@ -12,6 +12,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import Link from "next/link";
 
 export const filterSections = [
   {
@@ -75,6 +76,16 @@ export default function ShopFilter({ onFilterChange, selectedFilters }: ShopFilt
               </AccordionItem>
             ))}
           </Accordion>
+
+          {/* Custom Divot Builder Button */}
+          <div className="mt-4">
+            <Link 
+              href="/build" 
+              className="flex items-center justify-center w-full px-4 py-3 text-sm font-medium text-caddi-blue border border-caddi-blue rounded-lg hover:bg-caddi-blue hover:text-white transition-all duration-200"
+            >
+              Custom Divot Builder
+            </Link>
+          </div>
         </div>
       </PopoverContent>
     </Popover>

@@ -8,6 +8,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import ShopHeader from "./ShopHeader";
 import { filterSections } from "./ShopFilter";
+import Link from "next/link";
 
 interface ShopSidebarProps {
   onFilterChange: (filterId: string, isChecked: boolean) => void;
@@ -44,6 +45,16 @@ export default function ShopSidebar({ onFilterChange, selectedFilters }: ShopSid
           </AccordionItem>
         ))}
       </Accordion>
+
+      {/* Custom Divot Builder Button */}
+      <div className="mt-6">
+        <Link 
+          href="/build" 
+          className="flex items-center justify-center w-full px-4 py-3 text-sm font-medium text-caddi-blue border border-caddi-blue rounded-full hover:bg-caddi-blue hover:text-white transition-all duration-200"
+        >
+          Custom Divot Builder
+        </Link>
+      </div>
     </div>
   );
 } 

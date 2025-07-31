@@ -13,7 +13,7 @@ export const navLinks = [
     dropdown: [
       {
         label: "Build Your Own",
-        href: "/",
+        href: "/build",
         description: "Craft your own premium hardwood divot tool by hand.",
         featured: true,
       },
