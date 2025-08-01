@@ -7,6 +7,7 @@ const slides = [
     key: "how",
     label: "How it Works",
     image: "/webp/how-it-works.webp",
+    imageLarge: "/webp/app-home-1.webp",
     heading: "GPS Precision Tracking.",
     subnav: ["How it Works", "Environmental", "Decision Maker", "Simplicity"],
     content: {
@@ -21,6 +22,7 @@ const slides = [
     key: "environmental",
     label: "Environmental",
     image: "/webp/environmental.webp",
+    imageLarge: "/webp/app-home-2.webp",
     heading: "Master Every Variable",
     subnav: ["How it Works", "Environmental", "Decision Maker", "Simplicity"],
     content: {
@@ -39,6 +41,7 @@ const slides = [
     key: "decision",
     label: "Decision Maker",
     image: "/webp/decision.webp",
+    imageLarge: "/webp/app-home-3.webp",
     heading: "Take the Guesswork Out",
     subnav: ["How it Works", "Environmental", "Decision Maker", "Simplicity"],
     content: {
@@ -58,6 +61,7 @@ const slides = [
     key: "simplicity",
     label: "Simplicity",
     image: "/webp/simplicity.webp",
+    imageLarge: "/webp/app-home-4.webp",
     heading: "One Swing at a Time",
     subnav: ["How it Works", "Environmental", "Decision Maker", "Simplicity"],
     content: {
@@ -78,7 +82,7 @@ const slides = [
 // Server Component - only handles layout and passes data
 export default function ForeCaddi() {
   return (
-    <section className="w-full flex justify-center flex-col pt-12 pb-30">
+    <section className="w-full flex justify-center flex-col pt-18 pb-30 2xl:pt-34 2xl:pb-64">
       <Container>
         <div className="mx-auto w-full">
           <h2 className="text-caddi-blue text-3xl font-proxima-nova-extra-condensed font-bold mb-8 uppercase">
@@ -86,7 +90,7 @@ export default function ForeCaddi() {
           </h2>
         </div>
 
-        <div className="w-full rounded-lg bg-caddi-light pt-6 pb-16 xs:pt-12 xs:pb-20 sm:pt-18 sm:pb-16 sm:px-8 lg:px-12 flex flex-col items-center mx-auto relative">
+        <div className="w-full rounded-2xl bg-caddi-light pt-6 pb-16 xs:pt-12 xs:pb-20 sm:pt-18 sm:pb-16 sm:px-8 lg:px-12 flex flex-col items-center mx-auto relative">
           {/* Pass only data to the content component */}
           <ForeCaddiContent slides={slides} />
         </div>

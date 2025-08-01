@@ -2,6 +2,8 @@
 
 import { useState, useRef } from "react"
 import Image from "next/image"
+import Link from "next/link"
+import { Button } from "@/components/ui/button"
 
 interface SlideContent {
   title: string
@@ -14,6 +16,7 @@ interface Slide {
   key: string
   label: string
   image: string
+  imageLarge: string
   heading: string
   subnav: string[]
   content: SlideContent
@@ -85,7 +88,7 @@ export default function ForeCaddiContent({ slides }: ForeCaddiContentProps) {
       {/* Mobile Layout */}
       <div className="w-full lg:hidden">
         {/* Mobile: Heading */}
-        <h2 className="text-caddi-blue px-4 xs:px-6 text-2xl xs:text-3xl sm:text-4xl font-semibold mb-6 sm:mb-10 transition-all duration-300 ease-in-out">
+        <h2 className="text-caddi-blue px-4 xs:px-6 text-2xl xs:text-3xl sm:text-4xl font-semibold mb-10 transition-all duration-300 ease-in-out">
           {slide.heading}
         </h2>
         
@@ -109,17 +112,28 @@ export default function ForeCaddiContent({ slides }: ForeCaddiContentProps) {
         {/* Mobile: Image */}
         <div className="flex justify-center items-center">
           <div 
-            className="relative w-[240px] h-[260px] xs:w-[400px] xs:h-[400px] sm:h-[460px] touch-pan-y transition-all duration-300 ease-in-out"
+            className="relative w-[240px] h-[260px] xs:w-[400px] xs:h-[400px] sm:h-[460px] sm:w-[500px] touch-pan-y transition-all duration-300 ease-in-out"
             onTouchStart={handleTouchStart}
             onTouchMove={handleTouchMove}
             onTouchEnd={handleTouchEnd}
           >
+            {/* Regular image for screens below 2200px */}
             <Image
               src={slide.image}
               alt={slide.label}
               fill
               sizes="(max-width: 768px) 100vw, 50vw"
-              className="object-contain transition-opacity duration-300 ease-in-out"
+              className="object-contain transition-opacity duration-300 ease-in-out min-[2200px]:hidden"
+              priority
+              draggable={false}
+            />
+            {/* Large image for 2200px+ screens */}
+            <Image
+              src={slide.imageLarge}
+              alt={slide.label}
+              fill
+              sizes="(max-width: 768px) 100vw, 50vw"
+              className="object-contain transition-opacity duration-300 ease-in-out hidden min-[2200px]:block"
               priority
               draggable={false}
             />
@@ -128,15 +142,24 @@ export default function ForeCaddiContent({ slides }: ForeCaddiContentProps) {
         
         {/* Mobile: Content */}
         <div className="px-4 xs:px-6 transition-all duration-300 ease-in-out">
-          <h3 className="text-base sm:text-lg font-semibold mb-2 text-caddi-blue transition-all duration-300 ease-in-out">{slide.content.title}</h3>
-          <p className="text-black/50 mb-3 sm:mb-4 text-sm sm:text-base font-light transition-all duration-300 ease-in-out">{slide.content.description}</p>
-          <ul className="list-disc pl-4 sm:pl-5 space-y-1 font-medium text-black/50 text-left text-sm sm:text-base transition-all duration-300 ease-in-out">
+          <h3 className="text-base sm:text-lg font-semibold mb-6 text-caddi-blue transition-all duration-300 ease-in-out">{slide.content.title}</h3>
+          <p className="text-black/50 mb-4 text-sm sm:text-base font-light transition-all duration-300 ease-in-out">{slide.content.description}</p>
+          <ul className="list-disc pl-4 sm:pl-5 space-y-2 font-medium text-black/50 text-left text-sm sm:text-base transition-all duration-300 ease-in-out">
             {slide.content.details.map((item) => (
               <li key={item} className="font-medium text-black/50">
                 {item}
               </li>
             ))}
           </ul>
+          
+          {/* Learn More Button */}
+          <div className="mt-12 2sm:mt-16">
+            <Button asChild className="bg-[#F5F5F7] text-lg border border-caddi-blue text-caddi-black font-medium py-7 px-38 rounded-full hover:bg-caddi-blue hover:text-white transition-all duration-100 ease-in-out cursor-pointer w-full mb-6 2sm:mb-12">
+              <Link href="/forecaddi">
+                Learn More
+              </Link>
+            </Button>
+          </div>
         </div>
         
         {/* Mobile: Pagination Dots */}
@@ -156,10 +179,10 @@ export default function ForeCaddiContent({ slides }: ForeCaddiContentProps) {
       </div>
 
       {/* Desktop Layout */}
-      <div className="hidden lg:flex w-full gap-10 items-start relative">
+      <div className="hidden lg:flex w-full gap-10 items-start relative pb-20 3xl:py-18">
         {/* Left: Text & Selector */}
-        <div className="flex-1 flex flex-col justify-center xl:pl-8 max-w-xl">
-          <h2 className="text-caddi-blue text-4xl xl:text-5xl font-semibold mb-10">{slide.heading}</h2>
+        <div className="flex-1 flex flex-col justify-center xl:pl-8 max-w-xl 3xl:max-w-3xl">
+          <h2 className="text-caddi-blue text-4xl xl:text-5xl 3xl:text-6xl font-semibold mb-10 lg:mb-12 3xl:mb-16">{slide.heading}</h2>
           
           {/* Selector Nav */}
           <div className="flex gap-1 xl:gap-2 mb-10 xl:mb-12 bg-caddi-dark rounded-full p-2 xl:p-2 w-fit">
@@ -179,30 +202,50 @@ export default function ForeCaddiContent({ slides }: ForeCaddiContentProps) {
           </div>
           
           {/* Content */}
-          <div className="mt-2">
-            <h3 className="text-lg font-semibold mb-2 text-caddi-blue">{slide.content.title}</h3>
-            <p className="text-black/50 mb-4 text-base font-light">{slide.content.description}</p>
-            <ul className="list-disc pl-5 space-y-1 font-medium text-black/50">
+          <div className="mt-2 lg:mt-4 3xl:mt-10">
+            <h3 className="text-lg 3xl:text-3xl font-semibold mb-2 lg:mb-4 3xl:mb-10 text-caddi-blue">{slide.content.title}</h3>
+            <p className="text-black/50 mb-4 lg:mb-6 3xl:mb-10 text-base lg:text-lg 3xl:text-xl font-light 3xl:max-w-xl">{slide.content.description}</p>
+            <ul className="list-disc pl-5 space-y-1 lg:space-y-3 3xl:space-y-5 font-medium text-black/50">
               {slide.content.details.map((item) => (
-                <li key={item} className="font-medium text-black/50">
+                <li key={item} className="font-medium text-black/50 3xl:text-xl">
                   {item}
                 </li>
               ))}
             </ul>
+            
+            {/* Learn More Button */}
+            <div className="mt-22 3xl:mt-26">
+              <Button asChild className="bg-[#F5F5F7] text-lg border border-caddi-blue text-caddi-black font-medium py-7 px-38 rounded-full hover:bg-caddi-blue hover:text-white transition-all duration-100 ease-in-out cursor-pointer w-full max-w-md 3xl:text-xl 3xl:py-8 3xl:px-72">
+                <Link href="/forecaddi">
+                  Learn More
+                </Link>
+              </Button>
+            </div>
           </div>
         </div>
         
         {/* Right: Image */}
-        <div className="flex-1 flex justify-center items-center">
-          <div className="relative w-[340px] h-[480px] md:w-[400px] md:h-[560px] lg:w-[440px] lg:h-[400px] xl:w-[680px] xl:h-[640px]">
+        <div className="flex-1 flex justify-center items-center lg:justify-end 3xl:pr-10">
+          <div className="relative w-[340px] h-[480px] md:w-[400px] md:h-[560px] lg:w-[440px] lg:h-[600px] xl:w-[680px] xl:h-[640px] 3xl:w-[1200px] 3xl:h-[800px]">
+            {/* Regular image for screens below 2200px */}
             <Image
               src={slide.image}
               alt={slide.label}
               fill
               sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 680px"
-              className="object-contain"
-              priority
+              className="object-contain min-[2200px]:hidden"
               draggable={false}
+              priority
+            />
+            {/* Large image for 2200px+ screens */}
+            <Image
+              src={slide.imageLarge}
+              alt={slide.label}
+              fill
+              sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 680px"
+              className="object-contain hidden min-[2200px]:block"
+              draggable={false}
+              priority
             />
           </div>
         </div>
