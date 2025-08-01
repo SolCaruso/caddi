@@ -4,11 +4,14 @@ import Accordion from "@/components/pages/forecaddi/Accordion"
 import Customize from "@/components/pages/forecaddi/Customize"
 import Explore from "@/components/pages/forecaddi/Explore"
 import ScrollHandler from "@/components/pages/forecaddi/ScrollHandler"
+import { Suspense } from "react"
 
 export default function Forecaddi() {
     return (
         <main className="flex-grow">
-            <ScrollHandler />
+            <Suspense fallback={null}>
+                <ScrollHandler />
+            </Suspense>
             <Carousel />
             <Explore />
             <Info />
