@@ -70,13 +70,13 @@ export default function CarouselComponent() {
   }
 
   return (
-    <section className="w-full pt-22 pb-42 ">
+    <section className="w-full pt-12 pb-32 pt-3xl:22 3xl:pb-42 ">
       <Container>
         <div className="mx-auto w-full">
           <h2 className="text-caddi-blue text-4xl font-semibold mb-6 text-center">
             Personalized Shot Guidance
           </h2>
-          <p className="text-black/50 text-center mb-12 max-w-2xl mx-auto">
+          <p className="text-black/50 text-center mb-0 3xl:mb-12 max-w-2xl mx-auto">
             Your personal golf caddie, offering real-time club and shot recommendations based on GPS, wind, slope, and lie—so you can play smarter and more confidently.
           </p>
         </div>
@@ -91,11 +91,11 @@ export default function CarouselComponent() {
               ref={emblaRef}
               className="overflow-x-hidden w-full h-[800px] max-w-8xl"
             >
-            <div className="flex ml-[400px]">
+            <div className="flex ml-[320px] 3xl:ml-[400px]">
               {extendedItems.map((item, index) => (
-                <div key={`${item.alt}-${index}`} className="min-w-0 shrink-0 grow-0 basis-[400px] flex items-center justify-center h-[800px]">
+                <div key={`${item.alt}-${index}`} className="min-w-0 shrink-0 grow-0 basis-[320px] 3xl:basis-[400px] flex items-center justify-center h-[800px]">
                   <div className="px-[1px]">
-                    <div className={`relative w-[370px] h-[590px] transition-all cursor-grab active:cursor-grabbing duration-300 ${getSlideOpacity(index, current)}`}>
+                    <div className={`relative w-[270px] h-[490px] 3xl:w-[370px] 3xl:h-[590px] transition-all cursor-grab active:cursor-grabbing duration-300 ${getSlideOpacity(index, current)}`}>
                       {item.type === "video" ? (
                         <video
                           autoPlay
@@ -145,7 +145,7 @@ export default function CarouselComponent() {
           </div>
           
           {/* Desktop: Pagination Dots */}
-          <div className="hidden lg:flex absolute -bottom-6 left-1/2 transform -translate-x-1/2 justify-center items-center gap-2">
+          <div className="hidden lg:flex absolute bottom-6 3xl:-bottom-6 left-1/2 transform -translate-x-1/2 justify-center items-center gap-2">
             {carouselItems.map((_, idx) => (
               <button
                 key={idx}

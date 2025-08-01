@@ -3,7 +3,7 @@ import Image from "next/image"
 
 export default function Customize() {
     return (
-        <section className="w-full pt-16 pb-48">
+        <section className="w-full pt-0 pb-32 3xl:pt-16 3xl:pb-48">
             <Container>
                 <div className="max-w-6xl mx-auto">
                     <div className="text-center mb-22">
