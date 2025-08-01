@@ -5,6 +5,7 @@ import DownloadButton from "./DownloadButton";
 import CartButton from "./Client/CartButton";
 import MobileNavClient from "./Client/MobileNavClient";
 import { Container } from "@/components/ui/container";
+import ScrollAwareNav from "./Client/ScrollAwareNav";
 
 // Nav Links
 export const navLinks = [
@@ -77,7 +78,7 @@ export const navLinks = [
 
 export default function Navigation() {
   return (
-    <nav className="w-full py-4 md:py-2 relative z-10 bg-[#FCFCFC]">
+    <ScrollAwareNav>
       <Container>
         <div className="flex items-center justify-between">
           {/* Desktop Layout */}
@@ -103,7 +104,7 @@ export default function Navigation() {
           <div className="flex md:hidden items-center w-full">
             {/* Hamburger (left) */}
             <div className="flex items-center">
-              <MobileNavClient navLinks={navLinks} />
+              <MobileNavClient />
             </div>
             {/* Logo (center) */}
             <div className="absolute left-1/2 transform -translate-x-1/2">
@@ -116,6 +117,6 @@ export default function Navigation() {
           </div>
         </div>
       </Container>
-    </nav>
+    </ScrollAwareNav>
   );
 } 
