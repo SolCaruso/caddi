@@ -143,7 +143,7 @@ export default function ForeCaddiContent({ slides }: ForeCaddiContentProps) {
       {/* Desktop Layout */}
       <div className="hidden lg:flex w-full max-w-6xl gap-10 items-start relative justify-between">
         {/* Left: Text & Selector */}
-        <div className="flex-1 flex flex-col justify-center pt-10">
+        <div className="flex-1 flex flex-col justify-center pt-20">
           <h2 className="text-caddi-blue text-4xl xl:text-5xl font-semibold mb-10">{slide.heading}</h2>
           
           {/* Selector Nav */}

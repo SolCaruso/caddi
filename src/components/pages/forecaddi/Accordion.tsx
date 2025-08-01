@@ -79,7 +79,7 @@ const accordionData: Array<{
 ]
 
 export default function Accordion() {
-    const [activeImage, setActiveImage] = useState("/webp/app-3.webp")
+    const [activeImage, setActiveImage] = useState("/webp/app-3.webp") // Default to lie-adjustment image
 
     const handleAccordionChange = (value: string) => {
         const selectedItem = accordionData.find(item => item.value === value)
@@ -150,7 +150,7 @@ export default function Accordion() {
                             
                             {/* Accordion */}
                             <div className="">
-                                <AccordionRoot type="single" collapsible className="w-full" onValueChange={handleAccordionChange}>
+                                <AccordionRoot type="single" collapsible className="w-full" defaultValue="lie-adjustment" onValueChange={handleAccordionChange}>
                                     {accordionData.map((item) => (
                                         <AccordionItem key={item.value} value={item.value} className="border-b border-gray-200">
                                             <AccordionTriggerLarge className="text-left text-caddi-blue font-semibold py-6 hover:no-underline text-xl">
