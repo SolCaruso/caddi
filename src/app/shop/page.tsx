@@ -20,7 +20,7 @@ export default function ShopPage() {
 
   return (
     <CartProvider>
-      <main className="flex-1 bg-white flex flex-col">
+      <main className="flex-1  flex flex-col">
         <Container className="flex-1 3xl:!max-w-8xl">
 
           {/* Main Content Area */}

@@ -89,7 +89,7 @@ export default function Accordion() {
     }
 
     return (
-        <section className="w-full flex justify-center flex-col pt-12 pb-30 bg-white">
+        <section className="w-full flex justify-center flex-col pt-12 pb-30 ">
             <Container>
                 <div className="mx-auto w-full max-w-7xl">
                     <h2 className="text-caddi-blue text-4xl font-semibold mb-12">
@@ -158,7 +158,8 @@ export default function Accordion() {
                                             </AccordionTriggerLarge>
                                             <AccordionContent className="text-black/50">
                                             <p className="mb-8 text-lg max-w-lg">{item.content}</p>
-                                                                                        {item.details && (                                                                                                                   <ul className="grid grid-cols-2 gap-x-8">
+                                                {item.details && (                                                                       
+                                                    <ul className="grid grid-cols-2 gap-x-8">
                                                     {item.details.map((detail, index) => (
                                                         <li key={index} className="text-base mb-4">
                                                             {typeof detail === 'string' ? (

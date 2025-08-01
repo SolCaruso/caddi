@@ -5,7 +5,7 @@ export default function Instagram() {
 
 
   return (
-    <section className="w-full py-12 bg-white">
+    <section className="w-full py-12 ">
       <Container>
         <div className="mx-auto w-full">
           <h2 className="text-caddi-blue text-3xl font-proxima-nova-extra-condensed font-bold mb-8 uppercase">

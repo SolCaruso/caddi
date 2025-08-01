@@ -77,7 +77,7 @@ export const navLinks = [
 
 export default function Navigation() {
   return (
-    <nav className="w-full py-4 md:py-2 relative z-10 bg-white">
+    <nav className="w-full py-4 md:py-2 relative z-10 bg-[#FCFCFC]">
       <Container>
         <div className="flex items-center justify-between">
           {/* Desktop Layout */}

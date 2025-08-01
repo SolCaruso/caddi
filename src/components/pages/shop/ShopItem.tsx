@@ -40,7 +40,7 @@ export default function ShopItem({ productId }: ShopItemProps) {
   // If product not found, show error or redirect
   if (!product) {
     return (
-      <main className="flex-1 bg-white flex flex-col">
+      <main className="flex-1 flex flex-col">
         <Container className="flex-1 3xl:!max-w-8xl">
           <div className="flex flex-col justify-center h-full">
             <h1 className="text-2xl font-bold text-caddi-blue mb-4">Product Not Found</h1>
@@ -71,7 +71,7 @@ export default function ShopItem({ productId }: ShopItemProps) {
   const mainImageSrc = normalizeImageUrl(firstImage?.path || "/placeholder.svg?height=600&width=600")
 
   return (
-    <main className="bg-white">
+    <main>
               <Container className="mx-auto px-4 3xl:!max-w-8xl">
         {/* Main Product Section */}
         <div className="pt-12 lg:pt-32 pb-23 lg:pb-44">

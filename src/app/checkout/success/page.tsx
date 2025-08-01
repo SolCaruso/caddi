@@ -3,7 +3,7 @@ import { Container } from "@/components/ui/container"
 
 export default function CheckoutSuccessPage() {
   return (
-    <main className="bg-white min-h-screen flex items-center justify-center">
+    <main className=" min-h-screen flex items-center justify-center">
       <Container className="text-center 3xl:!max-w-8xl">
         <div className="max-w-md mx-auto">
           {/* Success Icon */}

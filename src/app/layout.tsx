@@ -15,12 +15,12 @@ export default function RootLayout({
 }>) {
 
   return (
-    <html lang="en" className='h-full mx-auto'>
+    <html lang="en" className='h-full mx-auto '>
       <head>
         <link rel="stylesheet" href="https://use.typekit.net/eaa4cih.css" />
         <link rel="preload" as="image" href="@/assets/webp/zolas.webp" type="image/webp" />
       </head>
-      <body className="font-proxima-nova antialiased h-full mx-auto flex flex-col">
+      <body className="font-proxima-nova antialiased h-full mx-auto flex flex-col bg-[#FCFCFC]">
         <Navigation />
         {children}
         <Footer />

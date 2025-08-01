@@ -3,7 +3,7 @@ import Image from "next/image"
 
 export default function Info() {
     return (
-        <section className="w-full py-32 bg-white">
+        <section className="w-full py-32 ">
             <Container>
                 <div className="max-w-6xl mx-auto">
                     <div className="text-center mb-12">

@@ -78,7 +78,7 @@ const slides = [
 // Server Component - only handles layout and passes data
 export default function ForeCaddi() {
   return (
-    <section className="w-full flex justify-center flex-col pt-12 pb-30 bg-white">
+    <section className="w-full flex justify-center flex-col pt-12 pb-30">
       <Container>
         <div className="mx-auto w-full">
           <h2 className="text-caddi-blue text-3xl font-proxima-nova-extra-condensed font-bold mb-8 uppercase">

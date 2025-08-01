@@ -63,7 +63,7 @@ export default function CarouselComponent() {
   }
 
   return (
-    <section className="w-full pt-22 pb-42 bg-white">
+    <section className="w-full pt-22 pb-42 ">
       <Container>
         <div className="mx-auto w-full">
           <h2 className="text-caddi-blue text-4xl font-semibold mb-6 text-center">
