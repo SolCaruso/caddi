@@ -66,7 +66,7 @@ export default function CarouselComponent() {
     <section className="w-full pt-22 pb-42 bg-white">
       <Container>
         <div className="mx-auto w-full">
-          <h2 className="text-caddi-blue text-3xl font-proxima-nova-extra-condensed font-bold mb-8 uppercase text-center">
+          <h2 className="text-caddi-blue text-4xl font-semibold mb-6 text-center">
             Personalized Shot Guidance
           </h2>
           <p className="text-black/50 text-center mb-12 max-w-2xl mx-auto">
@@ -84,11 +84,11 @@ export default function CarouselComponent() {
               ref={emblaRef}
               className="overflow-x-hidden w-full h-[800px] max-w-8xl"
             >
-            <div className="flex ml-[380px]">
+            <div className="flex ml-[400px]">
               {extendedImages.map((image, index) => (
                 <div key={`${image.alt}-${index}`} className="min-w-0 shrink-0 grow-0 basis-[400px] flex items-center justify-center h-[800px]">
                   <div className="px-[1px]">
-                    <div className={`relative w-[370px] h-[590px] transition-all duration-300 ${getSlideOpacity(index, current)}`}>
+                    <div className={`relative w-[370px] h-[590px] transition-all cursor-grab active:cursor-grabbing duration-300 ${getSlideOpacity(index, current)}`}>
                       <Image
                         src={image.src}
                         alt={image.alt}
@@ -103,6 +103,36 @@ export default function CarouselComponent() {
               ))}
               </div>
             </div>
+          </div>
+          
+          {/* Mobile: Pagination Dots */}
+          <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex lg:hidden justify-center items-center gap-2">
+            {carouselImages.map((_, idx) => (
+              <button
+                key={idx}
+                className={`w-[9.25px] h-[9.25px] rounded-full transition-all duration-200 ${
+                  ((current - 2 + carouselImages.length) % carouselImages.length) === idx 
+                    ? "bg-[#D9D9D9] opacity-96" 
+                    : "bg-[#D9D9D9] opacity-24"
+                }`}
+                onClick={() => emblaApi?.scrollTo(idx + 2)}
+              />
+            ))}
+          </div>
+          
+          {/* Desktop: Pagination Dots */}
+          <div className="hidden lg:flex absolute -bottom-6 left-1/2 transform -translate-x-1/2 justify-center items-center gap-2">
+            {carouselImages.map((_, idx) => (
+              <button
+                key={idx}
+                className={`w-[11.25px] h-[11.25px] rounded-full transition-all duration-200 ${
+                  ((current - 2 + carouselImages.length) % carouselImages.length) === idx 
+                    ? "bg-[#D9D9D9] opacity-96" 
+                    : "bg-[#D9D9D9] opacity-24"
+                }`}
+                onClick={() => emblaApi?.scrollTo(idx + 2)}
+              />
+            ))}
           </div>
         </div>
       </Container>

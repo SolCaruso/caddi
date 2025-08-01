@@ -1,5 +1,5 @@
 import Carousel from "@/components/pages/forecaddi/Carousel"
-import Info from "@/components/pages/forecaddi/Info"
+import Info from "@/components/pages/forecaddi/Clubs"
 import Accordion from "@/components/pages/forecaddi/Accordion"
 import Customize from "@/components/pages/forecaddi/Customize"
 import Explore from "@/components/pages/forecaddi/Explore"

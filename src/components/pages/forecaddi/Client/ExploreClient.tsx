@@ -137,27 +137,13 @@ export default function ForeCaddiContent({ slides }: ForeCaddiContentProps) {
             ))}
           </ul>
         </div>
-        
-        {/* Mobile: Pagination Dots */}
-        <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex justify-center items-center gap-2">
-          {slides.map((_, idx) => (
-            <button
-              key={idx}
-              className={`w-[9.25px] h-[9.25px] rounded-full transition-all duration-200 ${
-                activeIdx === idx 
-                  ? "bg-[#D9D9D9] opacity-96" 
-                  : "bg-[#D9D9D9] opacity-24"
-              }`}
-              onClick={() => setActiveIdx(idx)}
-            />
-          ))}
-        </div>
+
       </div>
 
       {/* Desktop Layout */}
-      <div className="hidden lg:flex w-full gap-10 items-start relative">
+      <div className="hidden lg:flex w-full max-w-6xl gap-10 items-start relative justify-between">
         {/* Left: Text & Selector */}
-        <div className="flex-1 flex flex-col justify-center xl:pl-8 max-w-xl">
+        <div className="flex-1 flex flex-col justify-center pt-10">
           <h2 className="text-caddi-blue text-4xl xl:text-5xl font-semibold mb-10">{slide.heading}</h2>
           
           {/* Selector Nav */}
@@ -179,9 +165,9 @@ export default function ForeCaddiContent({ slides }: ForeCaddiContentProps) {
           
           {/* Content */}
           <div className="mt-2">
-            <h3 className="text-lg font-semibold mb-2 text-caddi-blue">{slide.content.title}</h3>
-            <p className="text-black/50 mb-4 text-base font-light">{slide.content.description}</p>
-            <ul className="list-disc pl-5 space-y-1 font-medium text-black/50">
+            <h3 className="text-xl font-semibold mb-7 text-caddi-blue">{slide.content.title}</h3>
+            <p className="text-black/50 mb-5 text-lg font-light">{slide.content.description}</p>
+            <ul className="list-disc pl-10 space-y-2.5 font-medium text-black/50 text-lg">
               {slide.content.details.map((item) => (
                 <li key={item} className="font-medium text-black/50">
                   {item}
@@ -192,8 +178,7 @@ export default function ForeCaddiContent({ slides }: ForeCaddiContentProps) {
         </div>
         
         {/* Right: Image */}
-        <div className="flex-1 flex justify-center items-center">
-          <div className="relative w-[340px] h-[480px] md:w-[400px] md:h-[560px] lg:w-[440px] lg:h-[400px] xl:w-[680px] xl:h-[640px]">
+          <div className="relative w-[260px] h-[560px]">
             <Image
               src={slide.image}
               alt={slide.label}
@@ -203,22 +188,6 @@ export default function ForeCaddiContent({ slides }: ForeCaddiContentProps) {
               draggable={false}
             />
           </div>
-        </div>
-      </div>
-      
-      {/* Desktop: Pagination Dots */}
-      <div className="hidden lg:flex absolute bottom-10 left-1/2 transform -translate-x-1/2 justify-center items-center gap-2">
-        {slides.map((_, idx) => (
-          <button
-            key={idx}
-            className={`w-[11.25px] h-[11.25px] rounded-full transition-all duration-200 ${
-              activeIdx === idx 
-                ? "bg-[#D9D9D9] opacity-96" 
-                : "bg-[#D9D9D9] opacity-24"
-            }`}
-            onClick={() => setActiveIdx(idx)}
-          />
-        ))}
       </div>
     </>
   )
