@@ -164,6 +164,7 @@ export default function VerticalCardsContent({ cardData }: VerticalCardsContentP
                   src={card.bg || "/placeholder.svg"}
                   alt="Divot tool background"
                   fill
+                  sizes="(max-width: 768px) 100vw, 50vw"
                   className="object-cover object-center scale-105 select-none pointer-events-none"
                   priority={idx < 2}
                   draggable={false}
@@ -237,7 +238,7 @@ export default function VerticalCardsContent({ cardData }: VerticalCardsContentP
         <CarouselItem
           aria-hidden="true"
           tabIndex={-1}
-          className="pointer-events-none flex-shrink-0 basis-0 sm:basis-0 md:basis-0 basis-[calc((100vw-96rem)/2+0.0625rem)] lg:basis-[calc((100vw-96rem)/2+2.875rem)] 3xl:basis-[calc((100vw-150rem)/2)]"
+          className="pointer-events-none flex-shrink-0 sm:basis-0 md:basis-0 basis-[calc((100vw-96rem)/2+0.0625rem)] lg:basis-[calc((100vw-96rem)/2+2.875rem)] 3xl:basis-[calc((100vw-150rem)/2)]"
         />
       </CarouselContent>
       

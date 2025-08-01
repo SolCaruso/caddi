@@ -17,8 +17,13 @@ export default function RootLayout({
   return (
     <html lang="en" className='h-full mx-auto '>
       <head>
+        {/* Preconnect to font origins for faster loading */}
+        <link rel="preconnect" href="https://use.typekit.net" />
+        <link rel="preconnect" href="https://p.typekit.net" crossOrigin="" />
+        
+        {/* Preload font stylesheet for faster loading */}
+        <link rel="preload" as="style" href="https://use.typekit.net/eaa4cih.css" />
         <link rel="stylesheet" href="https://use.typekit.net/eaa4cih.css" />
-        <link rel="preload" as="image" href="@/assets/webp/zolas.webp" type="image/webp" />
       </head>
       <body className="font-proxima-nova antialiased h-full mx-auto flex flex-col bg-[#FCFCFC]">
         <Navigation />

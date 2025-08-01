@@ -1,3 +1,5 @@
+"use client"
+
 import Image from "next/image"
 import Link from "next/link"
 import { Product } from "@/lib/data"
@@ -10,6 +12,13 @@ interface RelatedProductsProps {
 
 export default function RelatedProducts({ relatedProducts }: RelatedProductsProps) {
   const categories = getAllCategories()
+  
+  const handleProductClick = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    })
+  }
   
   if (relatedProducts.length === 0) {
     return null
@@ -25,7 +34,7 @@ export default function RelatedProducts({ relatedProducts }: RelatedProductsProp
           const productVariants = getProductVariants(relatedProduct.id)
           
           return (
-            <Link key={relatedProduct.id} href={`/shop/${relatedProduct.id}`} className="group">
+            <Link key={relatedProduct.id} href={`/shop/${relatedProduct.id}`} className="group" onClick={handleProductClick}>
               <div className="relative aspect-square mb-4 bg-[#D9D9D9]/30 overflow-hidden rounded-lg">
                 <Image
                   src={normalizeImageUrl(firstRelatedImage?.path || "/placeholder.svg?height=400&width=400")}
@@ -33,6 +42,7 @@ export default function RelatedProducts({ relatedProducts }: RelatedProductsProp
                   fill
                   className="object-cover"
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 25vw"
+
                   draggable={false}
                 />
               </div>
@@ -71,7 +81,7 @@ export default function RelatedProducts({ relatedProducts }: RelatedProductsProp
         {/* Show third product only on large screens */}
         {relatedProducts.length > 2 && (
           <div className="hidden lg:block">
-            <Link href={`/shop/${relatedProducts[2].id}`} className="group">
+            <Link href={`/shop/${relatedProducts[2].id}`} className="group" onClick={handleProductClick}>
               <div className="relative aspect-square mb-4 bg-[#D9D9D9]/30 overflow-hidden rounded-lg">
                 <Image
                   src={normalizeImageUrl(getProductImages(relatedProducts[2].id)[0]?.path || "/placeholder.svg?height=400&width=400")}
@@ -79,6 +89,7 @@ export default function RelatedProducts({ relatedProducts }: RelatedProductsProp
                   fill
                   className="object-cover"
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 25vw"
+
                   draggable={false}
                 />
               </div>

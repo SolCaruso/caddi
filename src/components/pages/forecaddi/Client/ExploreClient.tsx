@@ -158,6 +158,7 @@ export default function ForeCaddiContent({ slides }: ForeCaddiContentProps) {
                 loop={!slide.video.playOnce}
                 muted
                 playsInline
+                preload="metadata"
               >
                 <source src={slide.video.webm} type="video/webm" />
                 <source src={slide.video.mp4} type="video/mp4" />
@@ -168,6 +169,7 @@ export default function ForeCaddiContent({ slides }: ForeCaddiContentProps) {
                 src={slide.image}
                 alt={slide.label}
                 fill
+                sizes="(max-width: 768px) 100vw, 50vw"
                 className="object-contain transition-opacity duration-300 ease-in-out"
                 priority
                 draggable={false}
@@ -240,6 +242,7 @@ export default function ForeCaddiContent({ slides }: ForeCaddiContentProps) {
                 loop={!slide.video.playOnce}
                 muted
                 playsInline
+                preload="metadata"
               >
                 <source src={slide.video.webm} type="video/webm" />
                 <source src={slide.video.mp4} type="video/mp4" />
@@ -250,6 +253,7 @@ export default function ForeCaddiContent({ slides }: ForeCaddiContentProps) {
                 src={slide.image}
                 alt={slide.label}
                 fill
+                sizes="(max-width: 768px) 100vw, 50vw"
                 className="object-contain"
                 priority
                 draggable={false}

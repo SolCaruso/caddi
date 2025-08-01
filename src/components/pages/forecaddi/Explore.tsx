@@ -8,8 +8,8 @@ const slides = [
     label: "Getting Started",
     image: "/webp/app-3.webp",
     video: {
-      webm: "/webm/Iphone-getting-started.webm",
-      mp4: "/mp4/Iphone-getting-started.mp4"
+      webm: "/webm/Iphone-download.webm",
+      mp4: "/mp4/Iphone-download.mp4"
     },
     heading: "Explore The App.",
     subnav: ["Getting Started", "Main Navigation"],

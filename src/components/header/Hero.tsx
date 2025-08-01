@@ -12,6 +12,7 @@ export default function Hero() {
                 placeholder="blur"
                 alt="Hero background"
                 fill
+                priority
                 className="absolute inset-0 w-full h-full object-cover"
                 style={{ objectPosition: "center center" }}
                 sizes="100vw"

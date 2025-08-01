@@ -187,6 +187,7 @@ export default function Accordion() {
                                 src={activeImage}
                                 alt="Forecaddie Caddie"
                                 fill
+                                sizes="300px"
                                 className="object-contain transition-all duration-300 ease-in-out"
                                 priority
                                 draggable={false}

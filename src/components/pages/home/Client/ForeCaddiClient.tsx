@@ -118,6 +118,7 @@ export default function ForeCaddiContent({ slides }: ForeCaddiContentProps) {
               src={slide.image}
               alt={slide.label}
               fill
+              sizes="(max-width: 768px) 100vw, 50vw"
               className="object-contain transition-opacity duration-300 ease-in-out"
               priority
               draggable={false}
@@ -198,6 +199,7 @@ export default function ForeCaddiContent({ slides }: ForeCaddiContentProps) {
               src={slide.image}
               alt={slide.label}
               fill
+              sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 680px"
               className="object-contain"
               priority
               draggable={false}

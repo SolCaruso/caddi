@@ -22,6 +22,7 @@ export default function Info() {
                                     src="/webp/app-clubs-1.webp" 
                                     alt="My Clubs" 
                                     fill
+                                    sizes="250px"
                                     className="object-contain"
                                 />
                             </div>
@@ -30,6 +31,7 @@ export default function Info() {
                                     src="/webp/app-clubs-2.webp" 
                                     alt="7 Iron" 
                                     fill
+                                    sizes="250px"
                                     className="object-contain"
                                 />
                             </div>

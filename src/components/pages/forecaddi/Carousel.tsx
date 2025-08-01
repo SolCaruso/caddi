@@ -5,22 +5,29 @@ import Image from "next/image"
 import useEmblaCarousel from "embla-carousel-react"
 import { useEffect, useState } from "react"
 
-const carouselImages = [
-  {
-    src: "/webp/app-distance.webp",
-    alt: "Lie Selection"
-  },
-  {
-    src: "/webp/app-clubs-1.webp",
-    alt: "Distance Calculator"
-  },
+const carouselItems = [
   {
     src: "/webp/app-results.webp",
-    alt: "GPS Map View"
+    alt: "Lie Selection",
+    type: "image"
+  },
+  {
+    src: "/webp/app-distance.webp",
+    alt: "Distance Calculator",
+    type: "image"
+  },
+  {
+    video: {
+      webm: "/webm/Iphone-hero.webm",
+      mp4: "/mp4/Iphone-hero.mp4"
+    },
+    alt: "GPS Map View",
+    type: "video"
   },
   {
     src: "/webp/app-wind-2.webp",
-    alt: "Shot Recommendation"
+    alt: "Shot Recommendation",
+    type: "image"
   }
 ]
 
@@ -47,10 +54,10 @@ export default function CarouselComponent() {
   }, [emblaApi]);
 
   // Create extended array for infinite effect
-  const extendedImages = [...carouselImages, ...carouselImages, ...carouselImages]
+  const extendedItems = [...carouselItems, ...carouselItems, ...carouselItems]
 
   const getSlideOpacity = (index: number, currentIndex: number) => {
-    const totalSlides = extendedImages.length;
+    const totalSlides = extendedItems.length;
     const adjustedCurrent = currentIndex % totalSlides;
     const adjustedIndex = index % totalSlides;
     const prevIndex = (adjustedCurrent - 1 + totalSlides) % totalSlides;
@@ -85,18 +92,35 @@ export default function CarouselComponent() {
               className="overflow-x-hidden w-full h-[800px] max-w-8xl"
             >
             <div className="flex ml-[400px]">
-              {extendedImages.map((image, index) => (
-                <div key={`${image.alt}-${index}`} className="min-w-0 shrink-0 grow-0 basis-[400px] flex items-center justify-center h-[800px]">
+              {extendedItems.map((item, index) => (
+                <div key={`${item.alt}-${index}`} className="min-w-0 shrink-0 grow-0 basis-[400px] flex items-center justify-center h-[800px]">
                   <div className="px-[1px]">
                     <div className={`relative w-[370px] h-[590px] transition-all cursor-grab active:cursor-grabbing duration-300 ${getSlideOpacity(index, current)}`}>
-                      <Image
-                        src={image.src}
-                        alt={image.alt}
-                        fill
-                        className="object-contain"
-                        priority={Math.abs(index - current) <= 2}
-                        draggable={false}
-                      />
+                      {item.type === "video" ? (
+                        <video
+                          autoPlay
+                          loop
+                          muted
+                          playsInline
+                          preload={Math.abs(index - current) <= 2 ? "auto" : "metadata"} // Preload full video for nearby slides, metadata only for distant ones
+                          className="absolute inset-0 w-full h-full object-contain"
+                          draggable={false}
+                        >
+                          <source src={item.video?.webm} type="video/webm" />
+                          <source src={item.video?.mp4} type="video/mp4" />
+                          Your browser does not support the video tag.
+                        </video>
+                      ) : (
+                        <Image
+                          src={item.src!}
+                          alt={item.alt}
+                          fill
+                          sizes="370px"
+                          className="object-contain"
+                          priority={Math.abs(index - current) <= 2}
+                          draggable={false}
+                        />
+                      )}
                     </div>
                   </div>
                 </div>
@@ -107,11 +131,11 @@ export default function CarouselComponent() {
           
           {/* Mobile: Pagination Dots */}
           <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex lg:hidden justify-center items-center gap-2">
-            {carouselImages.map((_, idx) => (
+            {carouselItems.map((_, idx) => (
               <button
                 key={idx}
                 className={`w-[9.25px] h-[9.25px] rounded-full transition-all duration-200 ${
-                  ((current - 2 + carouselImages.length) % carouselImages.length) === idx 
+                  ((current - 2 + carouselItems.length) % carouselItems.length) === idx 
                     ? "bg-[#D9D9D9] opacity-96" 
                     : "bg-[#D9D9D9] opacity-24"
                 }`}
@@ -122,11 +146,11 @@ export default function CarouselComponent() {
           
           {/* Desktop: Pagination Dots */}
           <div className="hidden lg:flex absolute -bottom-6 left-1/2 transform -translate-x-1/2 justify-center items-center gap-2">
-            {carouselImages.map((_, idx) => (
+            {carouselItems.map((_, idx) => (
               <button
                 key={idx}
                 className={`w-[11.25px] h-[11.25px] rounded-full transition-all duration-200 ${
-                  ((current - 2 + carouselImages.length) % carouselImages.length) === idx 
+                  ((current - 2 + carouselItems.length) % carouselItems.length) === idx 
                     ? "bg-[#D9D9D9] opacity-96" 
                     : "bg-[#D9D9D9] opacity-24"
                 }`}

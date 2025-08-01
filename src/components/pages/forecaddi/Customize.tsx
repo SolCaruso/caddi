@@ -35,6 +35,7 @@ export default function Customize() {
                                     src="/webp/app-settings-1.webp" 
                                     alt="Settings Light Mode" 
                                     fill
+                                    sizes="200px"
                                     className="object-contain"
                                 />
                             </div>
@@ -43,6 +44,7 @@ export default function Customize() {
                                     src="/webp/app-settings-2.webp" 
                                     alt="Settings Dark Mode" 
                                     fill
+                                    sizes="200px"
                                     className="object-contain"
                                 />
                             </div>

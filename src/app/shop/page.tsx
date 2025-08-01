@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Container } from "@/components/ui/container";
 import ShopSidebar from "@/components/pages/shop/ShopSidebar";
 import ProductGrid from "@/components/pages/shop/ShopGrid";
+import ImagePreloader from "@/components/pages/shop/ImagePreloader";
 import { CartProvider } from "@/lib/cart";
 
 export default function ShopPage() {
@@ -20,6 +21,7 @@ export default function ShopPage() {
 
   return (
     <CartProvider>
+      <ImagePreloader />
       <main className="flex-1  flex flex-col">
         <Container className="flex-1 3xl:!max-w-8xl">
 

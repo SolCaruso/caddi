@@ -113,6 +113,7 @@ export default function ShopItem({ productId }: ShopItemProps) {
                   fill
                   className="object-cover"
                   sizes="(max-width: 768px) 100vw, 50vw"
+                  priority
                   draggable={false}
                 />
               </div>
@@ -163,6 +164,7 @@ export default function ShopItem({ productId }: ShopItemProps) {
                   fill
                   className="object-cover"
                   sizes="(max-width: 768px) 100vw, 70vw"
+                  priority
                   draggable={false}
                 />
               </div>

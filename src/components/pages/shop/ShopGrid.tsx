@@ -1,3 +1,5 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 import { useMemo, useState, useEffect } from "react";
@@ -26,6 +28,13 @@ export default function ShopGrid({ onFilterChange, selectedFilters }: ShopGridPr
   const [currentPage, setCurrentPage] = useState(1);
   const [shouldScrollToTop, setShouldScrollToTop] = useState(false);
   const productsPerPage = 9;
+
+  const handleProductClick = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  };
 
   // Filter products based on selected filters
   const filteredProducts = useMemo(() => {
@@ -94,7 +103,7 @@ export default function ShopGrid({ onFilterChange, selectedFilters }: ShopGridPr
 
       {/* Product Grid */}
       <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-x-3 gap-y-12 lg:gap-x-4 lg:gap-y-16">
-        {currentProducts.map((product) => {
+        {currentProducts.map((product, index) => {
           // Get images and variants for this product
           const productImages = getProductImages(product.id)
           const productVariants = getProductVariants(product.id)
@@ -132,7 +141,7 @@ export default function ShopGrid({ onFilterChange, selectedFilters }: ShopGridPr
           }
           
           return (
-            <Link key={product.id} href={`/shop/${product.id}`} className="group cursor-pointer">
+            <Link key={product.id} href={`/shop/${product.id}`} className="group cursor-pointer" onClick={handleProductClick}>
               <div className="relative aspect-square mb-3 bg-[#D9D9D9]/30 rounded-md overflow-hidden">
                 <Image
                   src={normalizeImageUrl(firstImage?.path || "/webp/birdeye.webp")}
@@ -141,6 +150,7 @@ export default function ShopGrid({ onFilterChange, selectedFilters }: ShopGridPr
                   className="object-cover"
                   draggable={false}
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  priority={index < 9}
                 />
               </div>
               <div className="space-y-1">

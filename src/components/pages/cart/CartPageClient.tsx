@@ -159,6 +159,7 @@ export default function CartPageClient() {
                       src={normalizeImageUrl(item.image)}
                       alt={item.name}
                       fill
+                      sizes="112px"
                       className="object-cover rounded"
                       draggable={false}
                     />
