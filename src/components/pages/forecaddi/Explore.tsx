@@ -7,6 +7,10 @@ const slides = [
     key: "getting-started",
     label: "Getting Started",
     image: "/webp/app-3.webp",
+    video: {
+      webm: "/webm/Iphone-getting-started.webm",
+      mp4: "/mp4/Iphone-getting-started.mp4"
+    },
     heading: "Explore The App.",
     subnav: ["Getting Started", "Main Navigation"],
     content: {
@@ -21,6 +25,11 @@ const slides = [
     key: "main-navigation",
     label: "Main Navigation",
     image: "/webp/app-3.webp",
+    video: {
+      webm: "/webm/Iphone-navigation.webm",
+      mp4: "/mp4/Iphone-navigation.mp4",
+      playOnce: true
+    },
     heading: "Explore The App.",
     subnav: ["Getting Started", "Main Navigation"],
     content: {
@@ -39,7 +48,7 @@ const slides = [
 // Server Component - only handles layout and passes data
 export default function ForeCaddi() {
   return (
-    <section className="w-full flex justify-center flex-col py-8 bg-caddi-light">
+    <section id="explore-the-app" className="w-full flex justify-center flex-col py-8 bg-caddi-light">
       <Container>
         <div className="w-full rounded-lg bg-caddi-light flex flex-col items-center mx-auto relative">
           {/* Pass only data to the content component */}

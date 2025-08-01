@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useRef } from "react"
+import { useState, useRef, useEffect } from "react"
 import Image from "next/image"
 
 interface SlideContent {
@@ -10,10 +10,17 @@ interface SlideContent {
   detailsBold: number[]
 }
 
+interface VideoSources {
+  webm: string
+  mp4: string
+  playOnce?: boolean
+}
+
 interface Slide {
   key: string
   label: string
   image: string
+  video?: VideoSources
   heading: string
   subnav: string[]
   content: SlideContent
@@ -27,10 +34,37 @@ export default function ForeCaddiContent({ slides }: ForeCaddiContentProps) {
   const [activeIdx, setActiveIdx] = useState(0)
   const slide = slides[activeIdx]
   
+  // Video playback state
+  const [videoKey, setVideoKey] = useState<string>('')
+  const mobileVideoRef = useRef<HTMLVideoElement>(null)
+  const desktopVideoRef = useRef<HTMLVideoElement>(null)
+  
   // Touch/swipe handling
   const touchStartX = useRef<number | null>(null)
   const touchStartY = useRef<number | null>(null)
   const [isSwiping, setIsSwiping] = useState(false)
+
+  // Handle video playback when slide changes
+  useEffect(() => {
+    setVideoKey(`${slide.key}-${activeIdx}`) // Force re-render of video elements
+    
+    if (slide.video?.playOnce) {
+      // Small delay to ensure video elements are rendered
+      setTimeout(() => {
+        const mobileVideo = document.querySelector(`[data-video="${slide.key}-mobile"]`) as HTMLVideoElement
+        const desktopVideo = document.querySelector(`[data-video="${slide.key}-desktop"]`) as HTMLVideoElement
+        
+        if (mobileVideo) {
+          mobileVideo.currentTime = 0 // Reset to beginning
+          mobileVideo.play()
+        }
+        if (desktopVideo) {
+          desktopVideo.currentTime = 0 // Reset to beginning
+          desktopVideo.play()
+        }
+      }, 100)
+    }
+  }, [activeIdx, slide.key, slide.video?.playOnce])
 
   const handleTouchStart = (e: React.TouchEvent) => {
     touchStartX.current = e.touches[0].clientX
@@ -106,7 +140,7 @@ export default function ForeCaddiContent({ slides }: ForeCaddiContentProps) {
           ))}
         </div>
         
-        {/* Mobile: Image */}
+        {/* Mobile: Image/Video */}
         <div className="flex justify-center items-center">
           <div 
             className="relative w-[240px] h-[260px] xs:w-[400px] xs:h-[400px] sm:h-[460px] touch-pan-y transition-all duration-300 ease-in-out"
@@ -114,14 +148,31 @@ export default function ForeCaddiContent({ slides }: ForeCaddiContentProps) {
             onTouchMove={handleTouchMove}
             onTouchEnd={handleTouchEnd}
           >
-            <Image
-              src={slide.image}
-              alt={slide.label}
-              fill
-              className="object-contain transition-opacity duration-300 ease-in-out"
-              priority
-              draggable={false}
-            />
+            {slide.video ? (
+              <video
+                key={`${slide.key}-mobile-${videoKey}`}
+                ref={mobileVideoRef}
+                data-video={`${slide.key}-mobile`}
+                className="w-full h-full object-contain transition-opacity duration-300 ease-in-out"
+                autoPlay={!slide.video.playOnce}
+                loop={!slide.video.playOnce}
+                muted
+                playsInline
+              >
+                <source src={slide.video.webm} type="video/webm" />
+                <source src={slide.video.mp4} type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+            ) : (
+              <Image
+                src={slide.image}
+                alt={slide.label}
+                fill
+                className="object-contain transition-opacity duration-300 ease-in-out"
+                priority
+                draggable={false}
+              />
+            )}
           </div>
         </div>
         
@@ -177,16 +228,33 @@ export default function ForeCaddiContent({ slides }: ForeCaddiContentProps) {
           </div>
         </div>
         
-        {/* Right: Image */}
+        {/* Right: Image/Video */}
           <div className="relative w-[260px] h-[560px]">
-            <Image
-              src={slide.image}
-              alt={slide.label}
-              fill
-              className="object-contain"
-              priority
-              draggable={false}
-            />
+            {slide.video ? (
+              <video
+                key={`${slide.key}-desktop-${videoKey}`}
+                ref={desktopVideoRef}
+                data-video={`${slide.key}-desktop`}
+                className="w-full h-full object-contain"
+                autoPlay={!slide.video.playOnce}
+                loop={!slide.video.playOnce}
+                muted
+                playsInline
+              >
+                <source src={slide.video.webm} type="video/webm" />
+                <source src={slide.video.mp4} type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+            ) : (
+              <Image
+                src={slide.image}
+                alt={slide.label}
+                fill
+                className="object-contain"
+                priority
+                draggable={false}
+              />
+            )}
           </div>
       </div>
     </>

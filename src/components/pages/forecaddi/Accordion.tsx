@@ -28,7 +28,7 @@ const accordionData: Array<{
     value: "setting-distance",
     title: "Setting Your Distance",
     content: "There are two ways to input your distance to get accurate recommendations:",
-    image: "/webp/app-3.webp",
+    image: "/webp/app-distance.webp",
     details: [
       { bold: "Manual Entry:", text: " Use number pad for rangefinder/GPS distances" },
       { bold: "GPS Pin Drop:", text: " Tap 'Pick on Map' and drop pin on target" },
@@ -42,21 +42,21 @@ const accordionData: Array<{
     value: "lie-adjustment",
     title: "Lie Adjustment",
     content: "Forecaddie assumes you're on a tee box or fairway unless you say otherwise. Choose the lie type that best describes your current position.",
-    image: "/webp/app-3.webp",
+    image: "/webp/app-lie-2.webp",
     details: ["Light Rough", "Rough", "Heavy Rough", "Bunker", "Fescue", "Pine Straw"]
   },
   {
     value: "slope-adjustment",
     title: "Slope Adjustment",
     content: "Adjust the angle of the ground at your address position to account for slope impact on your shot:",
-    image: "/webp/app-3.webp",
+    image: "/webp/app-slope-2.webp",
     details: ["Tap arrows for up/down slope adjustments", "Tap arrows for left/right slope adjustments", "Mix directions (e.g., 2 up and 1 right)", "Central cylinder shows slope direction visually"]
   },
   {
     value: "wind-adjustment",
     title: "Wind Adjustment",
     content: "Forecaddie assumes no wind unless specified. Use descriptive levels (1-7) to set wind direction and strength:",
-    image: "/webp/app-3.webp",
+    image: "/webp/app-wind-2.webp",
     details: [
       { bold: "1", text: " Minimal" },
       { bold: "2", text: " Light" },
@@ -73,7 +73,7 @@ const accordionData: Array<{
     value: "recommendations",
     title: "Get Your Recommendations",
     content: "Once all inputs are set, tap 'Enter' to confirm and get your personalized club recommendations:",
-    image: "/webp/app-3.webp",
+    image: "/webp/app-results.webp",
     details: ["Tap 'Enter' to confirm inputs", "Get three club recommendations", "See swing notes for each club", "Adjusted distance calculations included"]
   }
 ]

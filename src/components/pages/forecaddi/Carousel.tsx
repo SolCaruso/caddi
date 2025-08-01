@@ -7,19 +7,19 @@ import { useEffect, useState } from "react"
 
 const carouselImages = [
   {
-    src: "/webp/app-1.webp",
+    src: "/webp/app-distance.webp",
     alt: "Lie Selection"
   },
   {
-    src: "/webp/app-2.webp",
+    src: "/webp/app-clubs-1.webp",
     alt: "Distance Calculator"
   },
   {
-    src: "/webp/app-1.webp",
+    src: "/webp/app-results.webp",
     alt: "GPS Map View"
   },
   {
-    src: "/webp/app-2.webp",
+    src: "/webp/app-wind-2.webp",
     alt: "Shot Recommendation"
   }
 ]

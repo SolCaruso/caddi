@@ -19,7 +19,7 @@ export default function Info() {
                         <div className="flex justify-center space-x-4">
                             <div className="relative w-[250px] h-[500px]">
                                 <Image 
-                                    src="/webp/app-3.webp" 
+                                    src="/webp/app-clubs-1.webp" 
                                     alt="My Clubs" 
                                     fill
                                     className="object-contain"
@@ -27,7 +27,7 @@ export default function Info() {
                             </div>
                             <div className="relative w-[250px] h-[500px]">
                                 <Image 
-                                    src="/webp/app-3.webp" 
+                                    src="/webp/app-clubs-2.webp" 
                                     alt="7 Iron" 
                                     fill
                                     className="object-contain"

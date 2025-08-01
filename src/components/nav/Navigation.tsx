@@ -44,7 +44,7 @@ export const navLinks = [
       },
       {
         label: "App Instructions",
-        href: "/forecaddi",
+        href: "/forecaddi?scrollTo=explore-the-app",
         description: "Quick start guide and tips to get the most out of the app.",
       },
     ],

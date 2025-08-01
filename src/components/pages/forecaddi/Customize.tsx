@@ -32,7 +32,7 @@ export default function Customize() {
                         <div className="flex justify-center space-x-4">
                             <div className="relative w-[200px] h-[400px]">
                                 <Image 
-                                    src="/webp/app-3.webp" 
+                                    src="/webp/app-settings-1.webp" 
                                     alt="Settings Light Mode" 
                                     fill
                                     className="object-contain"
@@ -40,7 +40,7 @@ export default function Customize() {
                             </div>
                             <div className="relative w-[200px] h-[400px]">
                                 <Image 
-                                    src="/webp/app-3.webp" 
+                                    src="/webp/app-settings-2.webp" 
                                     alt="Settings Dark Mode" 
                                     fill
                                     className="object-contain"
