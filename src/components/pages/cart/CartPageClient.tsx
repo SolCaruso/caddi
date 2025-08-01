@@ -1,16 +1,13 @@
 "use client"
 
 import { useCart } from "@/lib/cart"
-import { loadStripe } from "@stripe/stripe-js"
+import { getStripe } from "@/lib/stripe"
 import Image from "next/image"
 import Link from "next/link"
 import { useState, useEffect } from "react"
 import { getAllProducts, getProductById } from "@/lib/data"
 import { normalizeImageUrl } from "@/lib/utils"
 import RelatedProducts from "@/components/pages/shop/RelatedProducts"
-
-// Initialize Stripe
-const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!)
 
 export default function CartPageClient() {
   const { state, removeItem, updateQuantity, getTotalPrice } = useCart()
@@ -46,7 +43,7 @@ export default function CartPageClient() {
       }
       
       // Redirect to Stripe Checkout
-      const stripe = await stripePromise
+      const stripe = await getStripe()
       if (stripe) {
         const { error } = await stripe.redirectToCheckout({
           sessionId: data.sessionId,

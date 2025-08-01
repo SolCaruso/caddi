@@ -3,7 +3,7 @@
 import * as React from "react"
 import Image from "next/image"
 import Link from "next/link"
-import { loadStripe } from "@stripe/stripe-js"
+import { getStripe } from "@/lib/stripe"
 import { useCart } from "@/lib/cart"
 import { CheckCircle, X } from "lucide-react"
 import { useMediaQuery } from "@/hooks/use-media-query"
@@ -51,9 +51,6 @@ export function DrawerDialogDemo({
   const isDesktop = useMediaQuery("(min-width: 768px)")
   const { state } = useCart()
 
-  // Initialize Stripe
-  const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!)
-
   const handleButtonClick = () => {
     onButtonClick?.() // Call the callback first (adds to cart)
     setOpen(true) // Then open the notification
@@ -93,7 +90,7 @@ export function DrawerDialogDemo({
       const { sessionId } = await response.json()
       
       // Redirect to Stripe Checkout
-      const stripe = await stripePromise
+      const stripe = await getStripe()
       if (stripe) {
         const { error } = await stripe.redirectToCheckout({
           sessionId,
