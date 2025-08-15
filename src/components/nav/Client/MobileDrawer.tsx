@@ -22,8 +22,8 @@ export default function MobileDrawer({ open, onOpenChange }: NavDrawerProps) {
     { label: "Home", href: "/" },
     { label: "Shop", href: "/shop" },
     { label: "App", href: "/forecaddi" },
-    { label: "Contact", href: "/" },
-    { label: "Info", href: "/" },
+    { label: "Contact", href: "/contact" },
+    { label: "About", href: "/about" },
   ];
 
   return (

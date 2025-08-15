@@ -7,6 +7,7 @@ import MobileNavClient from "./Client/MobileNavClient";
 import { Container } from "@/components/ui/container";
 import ScrollAwareNav from "./Client/ScrollAwareNav";
 
+
 // Nav Links
 export const navLinks = [
   {
@@ -50,29 +51,13 @@ export const navLinks = [
       },
     ],
   },
-  {
-    label: "Contact",
-    href: "/",
+    {
+    label: "About",
+    href: "/about",
   },
   {
-    label: "Info",
-    dropdown: [
-      {
-        label: "About",
-        href: "/about",
-        icon: "contact",
-      },
-      {
-        label: "Terms of Service",
-        href: "#",
-        icon: "terms",
-      },
-      {
-        label: "Cookies Settings",
-        href: "#",
-        icon: "cookies",
-      },
-    ],
+    label: "Contact",
+    href: "/contact",
   },
 ];
 

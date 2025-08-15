@@ -61,12 +61,11 @@ const social = [
 
                 {/* Mobile Navigation */}
                 <div className='font-semibold flex gap-y-1 flex-wrap max-w-md justify-center xl:hidden'>
-                  <Link href='' className='px-4.5 py-1.5 hover:bg-caddi-dark/50 hover:text-caddi-brown rounded-lg transition-all duration-100 ease-in-out-quad'>Shop</Link>
-                  <Link href='' className='px-4.5 py-1.5 hover:bg-caddi-dark/50 hover:text-caddi-brown rounded-lg transition-all duration-100 ease-in-out-quad'>Download App</Link>
-                  <Link href='' className='px-4.5 py-1.5 hover:bg-caddi-dark/50 hover:text-caddi-brown rounded-lg transition-all duration-100 ease-in-out-quad'>App Instructions</Link>
-                  <Link href='' className='px-4.5 py-1.5 hover:bg-caddi-dark/50 hover:text-caddi-brown rounded-lg transition-all duration-100 ease-in-out-quad'>Contact</Link>
-                  <Link href='' className='px-4.5 py-1.5 hover:bg-caddi-dark/50 hover:text-caddi-brown rounded-lg transition-all duration-100 ease-in-out-quad'>About</Link>
-                  <Link href='' className='px-4.5 py-1.5 hover:bg-caddi-dark/50 hover:text-caddi-brown rounded-lg transition-all duration-100 ease-in-out-quad'>Divot Tools</Link>
+                  <Link href='/shop' className='px-4.5 py-1.5 hover:bg-caddi-dark/50 hover:text-caddi-brown rounded-lg transition-all duration-100 ease-in-out-quad'>Shop</Link>
+                  <Link href='/forecaddi' className='px-4.5 py-1.5 hover:bg-caddi-dark/50 hover:text-caddi-brown rounded-lg transition-all duration-100 ease-in-out-quad'>Download App</Link>
+                  <Link href='/forecaddi?scrollTo=explore-the-app' className='px-4.5 py-1.5 hover:bg-caddi-dark/50 hover:text-caddi-brown rounded-lg transition-all duration-100 ease-in-out-quad'>App Instructions</Link>
+                  <Link href='/contact' className='px-4.5 py-1.5 hover:bg-caddi-dark/50 hover:text-caddi-brown rounded-lg transition-all duration-100 ease-in-out-quad'>Contact</Link>
+                  <Link href='/about' className='px-4.5 py-1.5 hover:bg-caddi-dark/50 hover:text-caddi-brown rounded-lg transition-all duration-100 ease-in-out-quad'>About</Link>
                 </div>
 
 
@@ -117,26 +116,36 @@ const social = [
                 </div>
 
                 <div className="mt-10 md:mt-0">
-                    <h3 className="text-sm/6 font-semibold text-gray-900">{navLinks[3].label}</h3>
+                    <h3 className="text-sm/6 font-semibold text-gray-900">Info</h3>
                     <ul role="list" className="mt-2 space-y-2">
-                      {navLinks.map((item) => {
-                          if (item.label === `${navLinks[3].label}`) {
-                            return item.dropdown?.map((dropdownItem) => (
-                              <li key={dropdownItem.label}>
-                                <Link href={dropdownItem.href} className="text-sm/6 text-gray-600 hover:text-gray-900">
-                                  {dropdownItem.label}
-                                </Link>
-                              </li>
-                            ));
-                          } return null;
-                        })}
+                      <li>
+                        <Link href="/about" className="text-sm/6 text-gray-600 hover:text-gray-900">
+                          About
+                        </Link>
+                      </li>
+                      <li>
+                        <Link href="/contact" className="text-sm/6 text-gray-600 hover:text-gray-900">
+                          Contact
+                        </Link>
+                      </li>
                     </ul>
                 </div>
               </div>
 
             </div>
-            <div className="xl:mt-16 xl:pt-9 xl:border-t xl:border-gray-900/10 my-12 xl:mb-0 text-center xl:text-left ">
-              <p className="text-xs/6 xl:text-sm/6 text-gray-600">&copy; {new Date().getFullYear()} Caddi AI, Inc. All rights reserved.</p>
+            <div className="xl:mt-16 xl:pt-9 xl:border-t xl:border-gray-900/10 my-12 xl:mb-0 text-center xl:text-left">
+              <div className="flex flex-col xl:flex-row justify-between items-center gap-4">
+                <p className="text-xs/6 xl:text-sm/6 text-gray-600">&copy; {new Date().getFullYear()} Caddi AI, Inc. All rights reserved.</p>
+                <div className="flex flex-wrap justify-center xl:justify-end gap-4 text-xs/6 xl:text-sm/6 text-gray-600">
+                  <Link href="/privacy-policy" className="hover:text-gray-900">Privacy Policy</Link>
+                  <span className="hidden xl:inline">|</span>
+                  <Link href="/terms-and-conditions" className="hover:text-gray-900">Terms of Use</Link>
+                  <span className="hidden xl:inline">|</span>
+                  <Link href="/sales-and-refunds" className="hover:text-gray-900">Sales and Refunds</Link>
+                  <span className="hidden xl:inline">|</span>
+                  <Link href="/cookie-policy" className="hover:text-gray-900">Cookie Policy</Link>
+                </div>
+              </div>
             </div>
           </Container>
         </div>

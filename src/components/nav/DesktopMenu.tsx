@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Handshake, MessageCircleQuestionMark, CookieIcon } from "lucide-react";
+import { Handshake, MessageCircleQuestionMark, CookieIcon, Lock } from "lucide-react";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -13,6 +13,7 @@ import {
 const iconMap = {
   contact: <MessageCircleQuestionMark className="mr-1" />,
   terms: <Handshake className="mr-1" />,
+  privacy: <Lock className="mr-1" />,
   cookies: <CookieIcon className="mr-1" />,
 };
 
