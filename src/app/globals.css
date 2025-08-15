@@ -177,3 +177,270 @@ body {
 .font-proxima-nova-extra-condensed {
   font-family: var(--font-family-proxima-nova-extra-condensed);
 }
+
+/* Embla Carousel Styles */
+.embla {
+  max-width: 80rem;
+  margin: auto;
+  --slide-height: 24rem;
+  --slide-spacing: 1.5rem;
+  --slide-size: 35%;
+}
+.embla__viewport {
+  overflow: hidden;
+}
+.embla__container {
+  display: flex;
+  touch-action: pan-y pinch-zoom;
+  margin-left: calc(var(--slide-spacing) * -1);
+}
+.embla__slide {
+  transform: translate3d(0, 0, 0);
+  flex: 0 0 var(--slide-size);
+  min-width: 0;
+  padding-left: var(--slide-spacing);
+}
+.embla__slide__number {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-radius: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: var(--slide-height);
+  user-select: none;
+  overflow: hidden;
+  background: white;
+}
+.embla__controls {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  justify-content: space-between;
+  gap: 1.2rem;
+  margin-top: 1.8rem;
+}
+.embla__buttons {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.6rem;
+  align-items: center;
+}
+.embla__button {
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0.5);
+  -webkit-appearance: none;
+  appearance: none;
+  background-color: white;
+  touch-action: manipulation;
+  display: inline-flex;
+  text-decoration: none;
+  cursor: pointer;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  width: 3.6rem;
+  height: 3.6rem;
+  z-index: 1;
+  border-radius: 50%;
+  color: var(--foreground);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.embla__button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+.embla__button:disabled {
+  color: var(--muted-foreground);
+}
+.embla__button__svg {
+  width: 35%;
+  height: 35%;
+}
+.embla__play {
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0.5);
+  -webkit-appearance: none;
+  appearance: none;
+  background-color: var(--caddi-blue);
+  touch-action: manipulation;
+  display: inline-flex;
+  text-decoration: none;
+  cursor: pointer;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  border-radius: 1.8rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  justify-self: flex-end;
+  color: white;
+  font-weight: 700;
+  font-size: 1.4rem;
+  padding: 0 2.4rem;
+  min-width: 8.4rem;
+  transition: all 0.2s ease;
+}
+
+.embla__play:hover {
+  background-color: #1a2a3a;
+  transform: translateY(-1px);
+}
+.embla__progress {
+  border-radius: 1.8rem;
+  box-shadow: inset 0 0 0 0.2rem var(--border);
+  background-color: var(--background);
+  position: relative;
+  height: 0.6rem;
+  justify-self: flex-end;
+  align-self: center;
+  width: 13rem;
+  max-width: 90%;
+  overflow: hidden;
+}
+.embla__progress__bar {
+  background-color: var(--foreground);
+  position: absolute;
+  width: 100%;
+  top: 0;
+  bottom: 0;
+  left: -100%;
+}
+.embla__controls {
+  grid-template-columns: auto 1fr auto;
+}
+.embla__progress {
+  justify-self: center;
+  transition: opacity 0.3s ease-in-out;
+  width: 8rem;
+}
+.embla__progress--hidden {
+  opacity: 0;
+}
+.embla__progress__bar {
+  animation-name: autoplay-progress;
+  animation-timing-function: linear;
+  animation-iteration-count: 1;
+}
+.embla__progress--hidden .embla__progress__bar {
+  animation-play-state: paused;
+}
+@keyframes autoplay-progress {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(100%, 0, 0);
+  }
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .embla {
+    --slide-height: 20rem;
+    --slide-spacing: 1rem;
+    --slide-size: 50%;
+  }
+}
+
+@media (max-width: 480px) {
+  .embla {
+    --slide-height: 18rem;
+    --slide-spacing: 0.75rem;
+    --slide-size: 70%;
+  }
+}
+
+/* Continuous Carousel - TRUE continuous scrolling */
+.continuous-carousel {
+  width: 100vw;
+  margin-left: calc(-50vw + 50%);
+  overflow: hidden;
+  position: relative;
+  height: 32rem;
+}
+
+.continuous-carousel__track {
+  display: flex;
+  width: fit-content;
+  animation: scroll-left linear infinite;
+  gap: 0.75rem;
+  max-width: none;
+}
+
+.continuous-carousel__slide {
+  flex: 0 0 auto;
+  height: 32rem;
+  overflow: hidden;
+  background: white;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+
+.continuous-carousel__slide--wide {
+  width: 30rem;
+}
+
+.continuous-carousel__slide--extra-wide {
+  width: 40rem;
+}
+
+.continuous-carousel__slide--vertical {
+  width: 18rem;
+}
+
+@keyframes scroll-left {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-33.333%);
+  }
+}
+
+/* Responsive styles for continuous carousel */
+@media (max-width: 768px) {
+  .continuous-carousel {
+    height: 26rem;
+  }
+  
+  .continuous-carousel__slide {
+    height: 26rem;
+  }
+  
+  .continuous-carousel__slide--wide {
+    width: 20rem;
+  }
+  
+  .continuous-carousel__slide--vertical {
+    width: 16rem;
+  }
+  
+  .continuous-carousel__track {
+    gap: 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .continuous-carousel {
+    height: 24rem;
+  }
+  
+  .continuous-carousel__slide {
+    height: 24rem;
+  }
+  
+  .continuous-carousel__slide--wide {
+    width: 18rem;
+  }
+  
+  .continuous-carousel__slide--vertical {
+    width: 14rem;
+  }
+  
+  .continuous-carousel__track {
+    gap: 0.5rem;
+  }
+}

@@ -37,7 +37,7 @@ export default function HeroCards() {
                             <p className='text-lg font-semibold mb-2'>Custom Golf Course Materials & Trophies</p>
                             <h2 className='text-4xl 3xl:text-5xl font-family-proxima-nova-extra-condensed font-extrabold mb-8 uppercase'>Crafted for the Course</h2>
                             <div>
-                                <Link href='/' className='bg-white hover:bg-caddi-brown hover:text-white transition-all duration-200 ease-in-out-quad text-black px-8 py-2 rounded-full font-semibold cursor-pointer'>
+                                <Link href='/custom-work' className='bg-white hover:bg-caddi-brown hover:text-white transition-all duration-200 ease-in-out-quad text-black px-8 py-2 rounded-full font-semibold cursor-pointer'>
                                     Learn More
                                 </Link>
                             </div>

@@ -27,7 +27,7 @@ export default function RootLayout({
         <link rel="preload" as="style" href="https://use.typekit.net/eaa4cih.css" />
         <link rel="stylesheet" href="https://use.typekit.net/eaa4cih.css" />
       </head>
-      <body className="font-proxima-nova antialiased h-full mx-auto flex flex-col bg-[#FCFCFC] pt-[76px] md:pt-[68px]">
+      <body className="font-proxima-nova antialiased h-full mx-auto flex flex-col bg-[#FCFCFC] pt-[76px] md:pt-[68px] overflow-x-hidden">
         <Navigation />
         {children}
         <Toaster position="bottom-right" />

@@ -266,7 +266,7 @@ export default function ContactPage() {
                 rows={4}
                 value={formData.message}
                 onChange={handleInputChange}
-                className={`block w-full rounded-md bg-white px-3.5 py-2 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-caddi-brown ${errors.message ? 'outline-red-500 focus:outline-red-500' : ''}`}
+                className={`block w-full rounded-md bg-white px-3.5 py-2 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-caddi-brown ${errors.message ? 'outline-red-500 focus:outline-red-500' : ''}`}
               />
               {errors.message && (
                 <p className="mt-1 text-sm text-red-600">{errors.message}</p>
@@ -275,7 +275,7 @@ export default function ContactPage() {
           </div>
           <div className="flex gap-x-4 sm:col-span-2">
             <div className="flex h-6 items-center">
-              <div className="group relative inline-flex w-8 shrink-0 rounded-full bg-gray-200 p-px outline-offset-2 outline-caddi-brown ring-1 ring-inset ring-gray-900/5 transition-colors duration-200 ease-in-out has-[:checked]:bg-caddi-brown has-[:focus-visible]:outline has-[:focus-visible]:outline-2">
+              <div className="group relative inline-flex w-8 shrink-0 rounded-full bg-gray-200 p-px outline-offset-2 outline-caddi-brown ring-1 ring-inset ring-gray-900/5 transition-colors duration-200 ease-in-out has-[:checked]:bg-caddi-brown  has-[:focus-visible]:outline-2">
                 <span className="size-4 rounded-full bg-white shadow-sm ring-1 ring-gray-900/5 transition-transform duration-200 ease-in-out group-has-[:checked]:translate-x-3.5" />
                 <input
                   id="agree-to-policies"
