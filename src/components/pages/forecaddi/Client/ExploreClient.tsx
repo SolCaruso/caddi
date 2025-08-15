@@ -36,13 +36,7 @@ export default function ForeCaddiContent({ slides }: ForeCaddiContentProps) {
   
   // Video playback state
   const [videoKey, setVideoKey] = useState<string>('')
-  const mobileVideoRef = useRef<HTMLVideoElement>(null)
   const desktopVideoRef = useRef<HTMLVideoElement>(null)
-  
-  // Touch/swipe handling
-  const touchStartX = useRef<number | null>(null)
-  const touchStartY = useRef<number | null>(null)
-  const [isSwiping, setIsSwiping] = useState(false)
 
   // Handle video playback when slide changes
   useEffect(() => {
@@ -66,53 +60,7 @@ export default function ForeCaddiContent({ slides }: ForeCaddiContentProps) {
     }
   }, [activeIdx, slide.key, slide.video?.playOnce])
 
-  const handleTouchStart = (e: React.TouchEvent) => {
-    touchStartX.current = e.touches[0].clientX
-    touchStartY.current = e.touches[0].clientY
-    setIsSwiping(false)
-  }
 
-  const handleTouchMove = (e: React.TouchEvent) => {
-    if (!touchStartX.current || !touchStartY.current) return
-    
-    const touchCurrentX = e.touches[0].clientX
-    const touchCurrentY = e.touches[0].clientY
-    const diffX = Math.abs(touchCurrentX - touchStartX.current)
-    const diffY = Math.abs(touchCurrentY - touchStartY.current)
-    
-    // Only consider it a horizontal swipe if horizontal movement is greater than vertical
-    if (diffX > diffY && diffX > 10) {
-      setIsSwiping(true)
-      e.preventDefault() // Prevent scrolling
-    }
-  }
-
-  const handleTouchEnd = (e: React.TouchEvent) => {
-    if (!touchStartX.current || !isSwiping) {
-      touchStartX.current = null
-      touchStartY.current = null
-      setIsSwiping(false)
-      return
-    }
-
-    const touchEndX = e.changedTouches[0].clientX
-    const diffX = touchStartX.current - touchEndX
-    const minSwipeDistance = 50
-
-    if (Math.abs(diffX) > minSwipeDistance) {
-      if (diffX > 0 && activeIdx < slides.length - 1) {
-        // Swipe left - go to next slide
-        setActiveIdx(activeIdx + 1)
-      } else if (diffX < 0 && activeIdx > 0) {
-        // Swipe right - go to previous slide
-        setActiveIdx(activeIdx - 1)
-      }
-    }
-
-    touchStartX.current = null
-    touchStartY.current = null
-    setIsSwiping(false)
-  }
 
   return (
     <>

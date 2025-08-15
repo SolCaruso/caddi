@@ -1,3 +1,5 @@
+import Image from "next/image"
+
 export default function AboutPage() {
   const stats = [
     { label: 'Passion fuels my creativity', value: 'Drive' },
@@ -35,9 +37,11 @@ export default function AboutPage() {
 
         {/* Image section - Mobile first */}
         <div className="md:hidden xl:mx-auto xl:max-w-7xl xl:px-8 pt-18">
-        <img
+          <Image
             alt="Simon, founder of Caddi AI"
             src="/jpg/zolas-59.jpg"
+            width={800}
+            height={600}
             className="aspect-[9/4] w-full object-cover outline-1 -outline-offset-1 outline-black/5"
           />
         </div>
@@ -48,10 +52,10 @@ export default function AboutPage() {
             <div className="grid max-w-xl grid-cols-1 gap-8 text-base/7 text-gray-600 lg:max-w-none lg:grid-cols-2">
               <div>
                 <p>
-                  I'm Simon, the founder of Caddi AI and the creative mind behind its flagship product, Forecaddie—a fresh take on golf GPS apps. Born out of pure passion and creativity, this project has quickly become my life's work. Everything you see here has been imagined, designed, and built by me, and I'm just getting started.
+                  I&apos;m Simon, the founder of Caddi AI and the creative mind behind its flagship product, Forecaddie—a fresh take on golf GPS apps. Born out of pure passion and creativity, this project has quickly become my life&apos;s work. Everything you see here has been imagined, designed, and built by me, and I&apos;m just getting started.
                 </p>
                 <p className="mt-8">
-                  My journey began in April 2024, in my parents' basement in Ottawa, Canada, with nothing but a vision and determination. Currently, Caddi AI operates as a one-man army, and to fund the app's ongoing development, I personally create all apparel and divot tools to order. The incredible support I've received along the way fuels my passion, and I'm deeply grateful to everyone who's become part of this adventure.
+                  My journey began in April 2024, in my parents&apos; basement in Ottawa, Canada, with nothing but a vision and determination. Currently, Caddi AI operates as a one-man army, and to fund the app&apos;s ongoing development, I personally create all apparel and divot tools to order. The incredible support I&apos;ve received along the way fuels my passion, and I&apos;m deeply grateful to everyone who&apos;s become part of this adventure.
                 </p>
               </div>
               <div>
@@ -59,7 +63,7 @@ export default function AboutPage() {
                   It all started with a simple challenge: golf is notoriously hard, with constantly changing conditions like lie, slope, and wind making every shot a unique puzzle. Remembering all the intricate rules and adapting to shifting variables was a constant struggle. Determined to solve this problem, I taught myself to code, built a prototype, and launched Forecaddie within a year.
                 </p>
                 <p className="mt-8">
-                  My mission remains straightforward: I aim to simplify the complexities of golf, freeing golfers' minds and giving them the confidence to swing better and enjoy the game more—just like having a real golf caddie at your side.
+                  My mission remains straightforward: I aim to simplify the complexities of golf, freeing golfers&apos; minds and giving them the confidence to swing better and enjoy the game more—just like having a real golf caddie at your side.
                 </p>
               </div>
             </div>
@@ -76,9 +80,11 @@ export default function AboutPage() {
 
         {/* Image section - Desktop */}
         <div className="hidden md:block mt-32 sm:mt-40 xl:mx-auto xl:max-w-7xl xl:px-8">
-          <img
+          <Image
             alt="Simon, founder of Caddi AI"
             src="/jpg/zolas-59.jpg"
+            width={800}
+            height={600}
             className="aspect-[9/4] w-full object-cover outline-1 -outline-offset-1 outline-black/5 xl:rounded-3xl"
           />
         </div>
