@@ -21,6 +21,7 @@ export default function MobileDrawer({ open, onOpenChange }: NavDrawerProps) {
   const mobileNavLinks = [
     { label: "Home", href: "/" },
     { label: "Shop", href: "/shop" },
+    { label: "Custom Work", href: "/custom-work" },
     { label: "App", href: "/forecaddi" },
     { label: "Contact", href: "/contact" },
     { label: "About", href: "/about" },

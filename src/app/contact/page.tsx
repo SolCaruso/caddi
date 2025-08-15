@@ -3,6 +3,7 @@
 import { ChevronDown } from 'lucide-react'
 import { useState } from 'react'
 import { toast } from 'sonner'
+import Link from 'next/link'
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -137,7 +138,7 @@ export default function ContactPage() {
 
         {/* Header */}
       <div className="mx-auto max-w-2xl text-center">
-        <h2 className="text-balance text-4xl font-semibold tracking-tight text-gray-900 sm:text-5xl">Contact us</h2>
+        <h2 className="text-balance text-4xl font-semibold tracking-tight text-caddi-blue sm:text-5xl">Contact us</h2>
         <p className="mt-2 text-lg/8 text-gray-600">Have questions about our golf tools or need support? We&apos;d love to hear from you.</p>
       </div>
 
@@ -288,9 +289,9 @@ export default function ContactPage() {
             </div>
             <label htmlFor="agree-to-policies" className="text-sm/6 text-gray-600">
               By selecting this, you agree to our{' '}
-              <a href="/privacy-policy" className="whitespace-nowrap font-semibold text-caddi-brown hover:underline">
+              <Link href="/privacy-policy" className="whitespace-nowrap font-semibold text-caddi-brown hover:underline">
                 privacy policy
-              </a>
+              </Link>
               .
             </label>
           </div>

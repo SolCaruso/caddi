@@ -31,7 +31,7 @@ export const navLinks = [
       },
       {
         label: "Custom Work",
-        href: "/",
+        href: "/custom-work",
         description: "Unique, one-off pieces and personalized creations made to order.",
       },
     ],

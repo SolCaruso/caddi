@@ -80,7 +80,7 @@ async function sendEmailViaAPI(formData: {
         subject: `New Contact Form Submission from ${formData.firstName} ${formData.lastName}`,
         from: {
           name: 'Caddi Contact Form',
-          email: 'carmen@zolas.ca'
+          email: 'info@caddiai.com'
         },
         to: [
           {

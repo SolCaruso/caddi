@@ -1,4 +1,5 @@
 import { Metadata } from 'next'
+import Link from 'next/link'
 
 export const metadata: Metadata = {
   title: 'Terms of Use - CaDDi AI',
@@ -257,7 +258,7 @@ export default function TermsAndConditionsPage() {
             <section>
               <h2 className="text-2xl font-semibold text-gray-900 mb-4">Contact Us</h2>
               <p className="text-gray-700 leading-relaxed mb-4">
-                If you have any questions about these Terms and Conditions, please contact us at <a href="mailto:info@caddiai.com" className="text-caddi-brown hover:underline">info@caddiai.com</a> or visit our <a href="/contact" className="text-caddi-brown hover:underline">contact page</a>.
+                If you have any questions about these Terms and Conditions, please contact us at <a href="mailto:info@caddiai.com" className="text-caddi-brown hover:underline">info@caddiai.com</a> or visit our <Link href="/contact" className="text-caddi-brown hover:underline">contact page</Link>.
               </p>
             </section>
           </div>
