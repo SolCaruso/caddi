@@ -11,7 +11,7 @@ const slides = [
       webm: "/webm/Iphone-download.webm",
       mp4: "/mp4/Iphone-download.mp4"
     },
-    heading: "Explore The App.",
+    heading: "Explore the app.",
     subnav: ["Getting Started", "Main Navigation"],
     content: {
       title: "Step 1: Launch the App",
@@ -30,7 +30,7 @@ const slides = [
       mp4: "/mp4/Iphone-navigation.mp4",
       playOnce: true
     },
-    heading: "Explore The App.",
+    heading: "Explore the app.",
     subnav: ["Getting Started", "Main Navigation"],
     content: {
       title: "Step 2: Main Navigation",

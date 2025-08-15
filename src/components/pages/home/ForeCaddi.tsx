@@ -90,7 +90,7 @@ export default function ForeCaddi() {
           </h2>
         </div>
 
-        <div className="w-full rounded-2xl bg-caddi-light pt-6 pb-16 xs:pt-12 xs:pb-20 sm:pt-18 sm:pb-16 sm:px-8 lg:px-12 flex flex-col items-center mx-auto relative">
+        <div className="w-full rounded-2xl bg-caddi-light pt-6 pb-16 xs:pt-12 xs:pb-20 sm:pt-18 sm:pb-2 sm:px-8 lg:px-12 flex flex-col items-center mx-auto relative">
           {/* Pass only data to the content component */}
           <ForeCaddiContent slides={slides} />
         </div>

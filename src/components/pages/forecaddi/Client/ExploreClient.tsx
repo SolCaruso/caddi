@@ -116,95 +116,18 @@ export default function ForeCaddiContent({ slides }: ForeCaddiContentProps) {
 
   return (
     <>
-      {/* Mobile Layout */}
-      <div className="w-full lg:hidden">
-        {/* Mobile: Heading */}
-        <h2 className="text-caddi-blue px-4 xs:px-6 text-2xl xs:text-3xl sm:text-4xl font-semibold mb-6 sm:mb-10 transition-all duration-300 ease-in-out">
-          {slide.heading}
-        </h2>
-        
-        {/* Mobile: Selector Nav */}
-        <div className="flex xs:gap-1 bg-caddi-dark rounded-full p-1 2sm:p-2 w-fit mx-auto 2sm:mx-6 overflow-x-auto">
-          {slide.subnav.map((label, idx) => (
-            <button
-              key={label}
-              className={`rounded-full px-2 2xs:px-2.5 xs:px-3 2sm:px-3.5 md:px-4 py-1.5 xs:py-1.5 2sm:py-1.75 md:py-2 font-semibold transition-all text-nowrap cursor-pointer text-[9.76px] xs:text-[11px] 2sm:text-sm md:text-base ${
-                activeIdx === idx 
-                  ? "bg-caddi-blue text-white" 
-                  : "text-caddi-blue"
-              }`}
-              onClick={() => setActiveIdx(idx)}
-            >
-              {label}
-            </button>
-          ))}
-        </div>
-        
-        {/* Mobile: Image/Video */}
-        <div className="flex justify-center items-center">
-          <div 
-            className="relative w-[240px] h-[260px] xs:w-[400px] xs:h-[400px] sm:h-[460px] touch-pan-y transition-all duration-300 ease-in-out"
-            onTouchStart={handleTouchStart}
-            onTouchMove={handleTouchMove}
-            onTouchEnd={handleTouchEnd}
-          >
-            {slide.video ? (
-              <video
-                key={`${slide.key}-mobile-${videoKey}`}
-                ref={mobileVideoRef}
-                data-video={`${slide.key}-mobile`}
-                className="w-full h-full object-contain transition-opacity duration-300 ease-in-out"
-                autoPlay={!slide.video.playOnce}
-                loop={!slide.video.playOnce}
-                muted
-                playsInline
-                preload="metadata"
-              >
-                <source src={slide.video.webm} type="video/webm" />
-                <source src={slide.video.mp4} type="video/mp4" />
-                Your browser does not support the video tag.
-              </video>
-            ) : (
-              <Image
-                src={slide.image}
-                alt={slide.label}
-                fill
-                sizes="(max-width: 768px) 100vw, 50vw"
-                className="object-contain transition-opacity duration-300 ease-in-out"
-                priority
-                draggable={false}
-              />
-            )}
-          </div>
-        </div>
-        
-        {/* Mobile: Content */}
-        <div className="px-4 xs:px-6 transition-all duration-300 ease-in-out">
-          <h3 className="text-base sm:text-lg font-semibold mb-2 text-caddi-blue transition-all duration-300 ease-in-out">{slide.content.title}</h3>
-          <p className="text-black/50 mb-3 sm:mb-4 text-sm sm:text-base font-light transition-all duration-300 ease-in-out">{slide.content.description}</p>
-          <ul className="list-disc pl-4 sm:pl-5 space-y-1 font-medium text-black/50 text-left text-sm sm:text-base transition-all duration-300 ease-in-out">
-            {slide.content.details.map((item) => (
-              <li key={item} className="font-medium text-black/50">
-                {item}
-              </li>
-            ))}
-          </ul>
-        </div>
-
-      </div>
-
       {/* Desktop Layout */}
-      <div className="hidden lg:flex w-full max-w-6xl gap-10 items-start relative justify-between">
+      <div className="flex w-full max-w-6xl gap-10 items-start relative justify-between px-6 sm:px-12 md:px-0">
         {/* Left: Text & Selector */}
-        <div className="flex-1 flex flex-col justify-center pt-20">
-          <h2 className="text-caddi-blue text-4xl xl:text-5xl font-semibold mb-10">{slide.heading}</h2>
+        <div className="flex-1 flex flex-col justify-center pt-4 sm:pt-10 lg:pt-20 md:pl-10 lg:pl-0">
+          <h2 className="text-caddi-blue sm:text-5xl text-3xl font-semibold md:mb-10 mb-6">{slide.heading}</h2>
           
           {/* Selector Nav */}
-          <div className="flex gap-1 xl:gap-2 mb-10 xl:mb-12 bg-caddi-dark rounded-full p-2 xl:p-2 w-fit">
+          <div className="flex gap-1 md:mb-12 mb-8 bg-caddi-dark rounded-full p-2 w-fit">
             {slide.subnav.map((label, idx) => (
               <button
                 key={label}
-                className={`rounded-full px-4 xl:px-5 py-2 xl:py-2 font-semibold transition-all text-nowrap cursor-pointer text-sm xl:text-base ${
+                className={`rounded-full px-5 py-2 font-semibold transition-all text-nowrap cursor-pointer text-sm xl:text-base ${
                   activeIdx === idx 
                     ? "bg-caddi-blue text-white" 
                     : "text-caddi-blue"
@@ -217,10 +140,10 @@ export default function ForeCaddiContent({ slides }: ForeCaddiContentProps) {
           </div>
           
           {/* Content */}
-          <div className="mt-2">
-            <h3 className="text-xl font-semibold mb-7 text-caddi-blue">{slide.content.title}</h3>
-            <p className="text-black/50 mb-5 text-lg font-light">{slide.content.description}</p>
-            <ul className="list-disc pl-10 space-y-2.5 font-medium text-black/50 text-lg">
+          <div className="md:mt-2 pb-6 md:pb-0">
+            <h3 className="md:text-xl text-lg font-semibold mb-7 text-caddi-blue">{slide.content.title}</h3>
+            <p className="text-black/50 mb-5 md:text-lg text-base font-light">{slide.content.description}</p>
+            <ul className="list-disc md:pl-10 pl-6 space-y-2.5 font-medium text-black/50 md:text-lg text-base">
               {slide.content.details.map((item) => (
                 <li key={item} className="font-medium text-black/50">
                   {item}
@@ -231,7 +154,7 @@ export default function ForeCaddiContent({ slides }: ForeCaddiContentProps) {
         </div>
         
         {/* Right: Image/Video */}
-          <div className="relative w-[260px] h-[560px]">
+          <div className="hidden md:block relative w-[260px] h-[560px]">
             {slide.video ? (
               <video
                 key={`${slide.key}-desktop-${videoKey}`}

@@ -70,32 +70,32 @@ export default function CarouselComponent() {
   }
 
   return (
-    <section className="w-full pt-12 pb-32 pt-3xl:22 3xl:pb-42 ">
+    <section className="w-full pt-16 sm:pt-22 pb-24 sm:pb-32 3xl:pt-26 3xl:pb-42 ">
       <Container>
         <div className="mx-auto w-full">
-          <h2 className="text-caddi-blue text-4xl font-semibold mb-6 text-center">
+          <h2 className="text-caddi-blue sm:text-4xl text-2xl font-semibold mb-6 text-center">
             Personalized Shot Guidance
           </h2>
-          <p className="text-black/50 text-center mb-0 3xl:mb-12 max-w-2xl mx-auto">
+          <p className="text-black/50 text-center mb-6 sm:mb-0 3xl:mb-12 max-w-2xl mx-auto">
             Your personal golf caddie, offering real-time club and shot recommendations based on GPS, wind, slope, and lie—so you can play smarter and more confidently.
           </p>
         </div>
 
         <div className="w-full max-w-8xl mx-auto relative">
           {/* Gradient overlays */}
-          <div className="absolute left-0 top-0 w-32 h-full bg-gradient-to-r from-[#FCFCFC] to-transparent z-10 pointer-events-none" />
-          <div className="absolute right-0 top-0 w-32 h-full bg-gradient-to-l from-[#FCFCFC] to-transparent z-10 pointer-events-none" />
+          <div className="absolute left-0 top-0 w-16 sm:w-32 h-full bg-gradient-to-r from-[#FCFCFC] to-transparent z-10 pointer-events-none" />
+          <div className="absolute right-0 top-0 w-16 sm:w-32 h-full bg-gradient-to-l from-[#FCFCFC] to-transparent z-10 pointer-events-none" />
           
           <div className="flex justify-center">
             <div
               ref={emblaRef}
-              className="overflow-x-hidden w-full h-[800px] max-w-8xl"
+              className="overflow-x-hidden w-full h-[400px] sm:h-[800px] max-w-8xl"
             >
-            <div className="flex ml-[320px] 3xl:ml-[400px]">
+            <div className="flex ml-[160px] sm:ml-[320px] 3xl:ml-[400px]">
               {extendedItems.map((item, index) => (
-                <div key={`${item.alt}-${index}`} className="min-w-0 shrink-0 grow-0 basis-[320px] 3xl:basis-[400px] flex items-center justify-center h-[800px]">
+                <div key={`${item.alt}-${index}`} className="min-w-0 shrink-0 grow-0 basis-[160px] sm:basis-[320px] 3xl:basis-[400px] flex items-center justify-center h-[400px] sm:h-[800px]">
                   <div className="px-[1px]">
-                    <div className={`relative w-[270px] h-[490px] 3xl:w-[370px] 3xl:h-[590px] transition-all cursor-grab active:cursor-grabbing duration-300 ${getSlideOpacity(index, current)}`}>
+                    <div className={`relative w-[135px] h-[245px] sm:w-[270px] sm:h-[490px] 3xl:w-[370px] 3xl:h-[590px] transition-all cursor-grab active:cursor-grabbing duration-300 ${getSlideOpacity(index, current)}`}>
                       {item.type === "video" ? (
                         <video
                           autoPlay
@@ -130,7 +130,7 @@ export default function CarouselComponent() {
           </div>
           
           {/* Mobile: Pagination Dots */}
-          <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex lg:hidden justify-center items-center gap-2">
+          <div className="absolute sm:bottom-6 left-1/2 transform -translate-x-1/2 flex lg:hidden justify-center items-center gap-2">
             {carouselItems.map((_, idx) => (
               <button
                 key={idx}

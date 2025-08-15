@@ -59,7 +59,7 @@ export const navLinks = [
     dropdown: [
       {
         label: "About",
-        href: "#",
+        href: "/about",
         icon: "contact",
       },
       {

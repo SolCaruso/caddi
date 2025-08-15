@@ -5,6 +5,7 @@ import {
   Accordion as AccordionRoot,
   AccordionContent,
   AccordionItem,
+  AccordionTrigger,
   AccordionTriggerLarge,
 } from "@/components/ui/accordion"
 import Image from "next/image"
@@ -33,9 +34,9 @@ const accordionData: Array<{
       { bold: "Manual Entry:", text: " Use number pad for rangefinder/GPS distances" },
       { bold: "GPS Pin Drop:", text: " Tap 'Pick on Map' and drop pin on target" },
       { bold: "Face your target:", text: " map aligns to your direction" },
-      { bold: "", text: "Zoom and tap target location" },
-      { bold: "", text: "Adjust GPS location if slightly off" },
-      { bold: "", text: "Tap 'Enter' to submit distance" }
+      { bold: "Zoom and tap:", text: " target location" },
+      { bold: "Adjust GPS location:", text: " if slightly off" },
+      { bold: "Tap 'Enter':", text: " to submit distance" }
     ]
   },
   {
@@ -89,59 +90,97 @@ export default function Accordion() {
     }
 
     return (
-        <section className="w-full flex justify-center flex-col pt-12 pb-30 ">
+        <section className="w-full flex justify-center flex-col pt-12 pb-30 md:px-12 px-6">
             <Container>
                 <div className="mx-auto w-full max-w-7xl">
-                    <h2 className="text-caddi-blue text-4xl font-semibold mb-12">
-                        Meet Your Caddie.
+                    <h2 className="text-caddi-blue md:text-5xl text-3xl font-semibold md:mb-12 mb-8">
+                        Meet your caddie.
                     </h2>
                 </div>
 
-                <div className="w-full rounded-2xl bg-caddi-light py-10 flex flex-col items-center mx-auto relative max-w-7xl">
+                <div className="w-full rounded-2xl bg-caddi-light sm:py-10 pt-6 flex flex-col items-center mx-auto relative max-w-7xl md:px-8 px-6">
                     {/* Mobile Layout */}
-                    {/* <div className="w-full lg:hidden"> */}
-                        {/* Mobile: Heading */}
-                        {/* <h2 className="text-caddi-blue px-4 xs:px-6 text-2xl xs:text-3xl sm:text-4xl font-semibold mb-6 sm:mb-10 transition-all duration-300 ease-in-out">
-                            Meet Your Caddie.
-                        </h2> */}
-                        
+                    <div className="w-full lg:hidden px-1">
                         {/* Mobile: Accordion */}
-                        {/* <div className="px-4 xs:px-6 mb-8">
+                        <div className="mb-8">
                             <AccordionRoot type="single" collapsible className="w-full" onValueChange={handleAccordionChange}>
                                 {accordionData.map((item) => (
                                     <AccordionItem key={item.value} value={item.value} className="border-b border-gray-200">
-                                        <AccordionTrigger className="text-left text-caddi-blue font-semibold py-4 hover:no-underline">
+                                        <AccordionTrigger className="text-left text-caddi-blue font-semibold py-6 sm:py-7 hover:no-underline text-xl  sm:text-2xl [&>svg]:size-6">
                                             {item.title}
                                         </AccordionTrigger>
                                         <AccordionContent className="text-black/50">
-                                            <p className="mb-3">{item.content}</p>
-                                                                                            {item.details && (
-                                                    <ul className="grid grid-cols-2 gap-x-8 gap-y-1">
-                                                        {item.details.map((detail, index) => (
-                                                            <li key={index} className="text-sm">• {detail}</li>
-                                                        ))}
-                                                    </ul>
-                                                )}
+                                            <div className="md:flex md:gap-4 md:items-start">
+                                                <div className="flex-1">
+                                                    {/* Mobile: Only paragraph format */}
+                                                    <div className="md:hidden">
+                                                        <p className="text-base leading-relaxed mb-6">
+                                                            {item.details && item.details.map((detail, index) => {
+                                                                if (typeof detail === 'string') {
+                                                                    return detail + (index < item.details.length - 1 ? ' ' : '');
+                                                                } else {
+                                                                    return detail.bold + detail.text + (index < item.details.length - 1 ? ' ' : '');
+                                                                }
+                                                            })}
+                                                        </p>
+                                                    </div>
+                                                    
+                                                    {/* Desktop: Content + Bullet format */}
+                                                    <div className="hidden md:block">
+                                                        <p className="mb-8 text-lg max-w-md">{item.content}</p>
+                                                        {item.details && (
+                                                            <ul className="space-y-3 pl-4">
+                                                                {item.details.map((detail, index) => (
+                                                                    <li key={index} className="text-base">
+                                                                        {typeof detail === 'string' ? (
+                                                                            <>• {detail}</>
+                                                                        ) : (
+                                                                            <>
+                                                                                <span className="font-semibold text-black/60">{detail.bold}</span>
+                                                                                {detail.text}
+                                                                            </>
+                                                                        )}
+                                                                    </li>
+                                                                ))}
+                                                            </ul>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                                
+                                                {/* Mobile: Image below text */}
+                                                <div className="flex justify-center mt-6 md:hidden">
+                                                    <div className="relative w-[120px] h-[258px]">
+                                                        <Image
+                                                            src={item.image}
+                                                            alt={item.title}
+                                                            fill
+                                                            sizes="120px"
+                                                            className="object-contain"
+                                                            priority
+                                                            draggable={false}
+                                                        />
+                                                    </div>
+                                                </div>
+                                                
+                                                {/* Desktop: Image on right */}
+                                                <div className="relative w-[160px] h-[340px] flex-shrink-0 hidden md:block">
+                                                    <Image
+                                                        src={item.image}
+                                                        alt={item.title}
+                                                        fill
+                                                        sizes="160px"
+                                                        className="object-contain"
+                                                        priority
+                                                        draggable={false}
+                                                    />
+                                                </div>
+                                            </div>
                                         </AccordionContent>
                                     </AccordionItem>
                                 ))}
                             </AccordionRoot>
-                        </div> */}
-                        
-                        {/* Mobile: Image */}
-                        {/* <div className="flex justify-center items-center">
-                            <div className="relative w-[260px] h-[460px] transition-all duration-300 ease-in-out">
-                                <Image
-                                    src={activeImage}
-                                    alt="Forecaddie Caddie"
-                                    fill
-                                    className="object-contain transition-opacity duration-300 ease-in-out"
-                                    priority
-                                    draggable={false}
-                                />
-                            </div>
                         </div>
-                    </div> */}
+                    </div>
 
                     {/* Desktop Layout */}
                     <div className="hidden lg:flex w-full gap-10 items-start max-w-6xl justify-between">
@@ -149,31 +188,31 @@ export default function Accordion() {
                         <div className="flex-1 flex flex-col max-w-xl">
                             
                             {/* Accordion */}
-                            <div className="">
+                            <div className="px-8">
                                 <AccordionRoot type="single" collapsible className="w-full" defaultValue="lie-adjustment" onValueChange={handleAccordionChange}>
                                     {accordionData.map((item) => (
                                         <AccordionItem key={item.value} value={item.value} className="border-b border-gray-200">
-                                            <AccordionTriggerLarge className="text-left text-caddi-blue font-semibold py-6 hover:no-underline text-xl">
+                                            <AccordionTriggerLarge className="text-left text-caddi-blue font-semibold py-8 hover:no-underline text-2xl">
                                                 {item.title}
                                             </AccordionTriggerLarge>
                                             <AccordionContent className="text-black/50">
-                                            <p className="mb-8 text-lg max-w-lg">{item.content}</p>
-                                                {item.details && (                                                                       
+                                                <p className="mb-8 text-lg max-w-lg">{item.content}</p>
+                                                {item.details && (
                                                     <ul className="grid grid-cols-2 gap-x-8">
-                                                    {item.details.map((detail, index) => (
-                                                        <li key={index} className="text-base mb-4">
-                                                            {typeof detail === 'string' ? (
-                                                                <>• {detail}</>
-                                                            ) : (
-                                                                <>
-                                                                    <span className="font-semibold text-black/60">{detail.bold}</span>
-                                                                    {detail.text}
-                                                                </>
-                                                            )}
-                                                        </li>
-                                                    ))}
-                                                </ul>
-                                            )}
+                                                        {item.details.map((detail, index) => (
+                                                            <li key={index} className="text-base mb-4">
+                                                                {typeof detail === 'string' ? (
+                                                                    <>• {detail}</>
+                                                                ) : (
+                                                                    <>
+                                                                        <span className="font-semibold text-black/60">{detail.bold}</span>
+                                                                        {detail.text}
+                                                                    </>
+                                                                )}
+                                                            </li>
+                                                        ))}
+                                                    </ul>
+                                                )}
                                             </AccordionContent>
                                         </AccordionItem>
                                     ))}
@@ -182,7 +221,7 @@ export default function Accordion() {
                         </div>
                         
                         {/* Right: Image */}
-                        <div className="relative w-[300px] h-[640px]">
+                        <div className="relative w-[300px] h-[640px] xl:mr-22 mt-6">
                             <Image
                                 src={activeImage}
                                 alt="Forecaddie Caddie"
