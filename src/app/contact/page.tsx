@@ -2,6 +2,7 @@
 
 import { ChevronDown } from 'lucide-react'
 import { useState } from 'react'
+import { toast } from 'sonner'
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -14,7 +15,6 @@ export default function ContactPage() {
   })
   const [errors, setErrors] = useState<{[key: string]: string}>({})
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle')
 
   const validateForm = () => {
     const newErrors: {[key: string]: string} = {}
@@ -68,14 +68,32 @@ export default function ContactPage() {
     }
 
     setIsSubmitting(true)
-    setSubmitStatus('idle')
 
     try {
-      // Here you would typically send the form data to your backend
-      // For now, we'll simulate a successful submission
-      await new Promise(resolve => setTimeout(resolve, 1000))
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      })
+
+      if (!response.ok) {
+        const errorData = await response.json()
+        throw new Error(errorData.error || 'Failed to send message')
+      }
       
-      setSubmitStatus('success')
+      toast.success('Message sent successfully!', {
+        style: {
+          backgroundColor: '#ffffff', 
+          color: '#1e40af',
+          border: '1px solid #e5e7eb',
+          padding: '18px 12px',
+          alignItems: 'center'
+        },
+        className: '!text-caddi-blue [&>svg]:!text-caddi-brown'
+      })
+      
       setFormData({
         firstName: '',
         lastName: '',
@@ -84,8 +102,17 @@ export default function ContactPage() {
         phoneNumber: '',
         message: ''
       })
-    } catch (error) {
-      setSubmitStatus('error')
+    } catch {
+      console.error('Error sending message')
+      toast.error('Error sending message', {
+        style: {
+          backgroundColor: '#ffffff', 
+          color: '#dc2626', 
+          border: '1px solid #e5e7eb',
+          padding: '18px 12px',
+          alignItems: 'center'
+        }
+      })
     } finally {
       setIsSubmitting(false)
     }
@@ -111,38 +138,8 @@ export default function ContactPage() {
         {/* Header */}
       <div className="mx-auto max-w-2xl text-center">
         <h2 className="text-balance text-4xl font-semibold tracking-tight text-gray-900 sm:text-5xl">Contact us</h2>
-        <p className="mt-2 text-lg/8 text-gray-600">Have questions about our golf tools or need support? We'd love to hear from you.</p>
+        <p className="mt-2 text-lg/8 text-gray-600">Have questions about our golf tools or need support? We&apos;d love to hear from you.</p>
       </div>
-
-      {submitStatus === 'success' && (
-        <div className="mx-auto mt-8 max-w-xl">
-          <div className="rounded-md bg-green-50 p-4">
-            <div className="flex">
-              <div className="ml-3">
-                <h3 className="text-sm font-medium text-green-800">Message sent successfully!</h3>
-                <div className="mt-2 text-sm text-green-700">
-                  <p>Thank you for contacting us. We'll get back to you soon.</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {submitStatus === 'error' && (
-        <div className="mx-auto mt-8 max-w-xl">
-          <div className="rounded-md bg-red-50 p-4">
-            <div className="flex">
-              <div className="ml-3">
-                <h3 className="text-sm font-medium text-red-800">Error sending message</h3>
-                <div className="mt-2 text-sm text-red-700">
-                  <p>There was an error sending your message. Please try again.</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
 
       <form onSubmit={handleSubmit} className="mx-auto mt-16 max-w-xl sm:mt-20">
         <div className="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2">
