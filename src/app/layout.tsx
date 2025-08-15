@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 import Navigation from "@/components/nav/Navigation";
 import Footer from "@/components/footer/Footer";
+import { Toaster } from '@/components/ui/sonner'
+import { CookieConsent } from '@/components/ui/cookie-consent'
 
 export const metadata: Metadata = {
   title: "Caddi AI Inc.",
@@ -28,6 +30,8 @@ export default function RootLayout({
       <body className="font-proxima-nova antialiased h-full mx-auto flex flex-col bg-[#FCFCFC] pt-[76px] md:pt-[68px]">
         <Navigation />
         {children}
+        <Toaster position="bottom-right" />
+        <CookieConsent />
         <Footer />
       </body>
     </html>
