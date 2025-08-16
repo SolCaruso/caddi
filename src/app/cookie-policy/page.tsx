@@ -16,7 +16,7 @@ export default function CookiePolicyPage() {
           <div className="space-y-8">
             <section>
               <p className="text-gray-700 leading-relaxed mb-4">
-                This Cookie Policy explains how cookies and similar technologies are used in Guild Saga games, websites and related services.
+                This Cookie Policy explains how cookies and similar technologies are used in CaDDi AI Inc, websites and related services.
               </p>
               <p className="text-gray-700 leading-relaxed mb-4">
                 This policy should be read alongside our Privacy Policy, which explains how we collect, use and protect your personal data.
@@ -80,7 +80,7 @@ export default function CookiePolicyPage() {
             <section>
               <h2 className="text-2xl font-semibold text-gray-900 mb-4">Impact of Disabling Cookies</h2>
               <p className="text-gray-700 leading-relaxed mb-4">
-                Please note that disabling certain cookies may affect the functionality of our website and games. Essential cookies cannot be disabled without impacting core functionality, while disabling other types may limit personalization and analytics capabilities.
+                Please note that disabling certain cookies may affect the functionality of our website and apps. Essential cookies cannot be disabled without impacting core functionality, while disabling other types may limit personalization and analytics capabilities.
               </p>
             </section>
 
