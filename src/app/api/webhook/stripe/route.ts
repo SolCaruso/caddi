@@ -88,7 +88,17 @@ function generateCustomerEmail(session: Stripe.Checkout.Session) {
       }
     }
     shipping_cost?: {
-      shipping_address?: any
+      shipping_address?: {
+        name?: string
+        address?: {
+          line1?: string
+          line2?: string | null
+          city?: string
+          state?: string
+          postal_code?: string
+          country?: string
+        }
+      }
     }
   }
   
@@ -289,7 +299,17 @@ function generateOwnerEmail(session: Stripe.Checkout.Session) {
       }
     }
     shipping_cost?: {
-      shipping_address?: any
+      shipping_address?: {
+        name?: string
+        address?: {
+          line1?: string
+          line2?: string | null
+          city?: string
+          state?: string
+          postal_code?: string
+          country?: string
+        }
+      }
     }
   }
   
@@ -500,8 +520,8 @@ export async function POST(request: NextRequest) {
         
         // Debug: Log the entire session object to see what shipping data is available
         console.log('Full session object keys:', Object.keys(session))
-        console.log('Session shipping_details:', JSON.stringify((session as any).shipping_details, null, 2))
-        console.log('Session shipping_cost:', JSON.stringify((session as any).shipping_cost, null, 2))
+        console.log('Session shipping_details:', JSON.stringify((session as Stripe.Checkout.Session & { shipping_details?: unknown }).shipping_details, null, 2))
+        console.log('Session shipping_cost:', JSON.stringify((session as Stripe.Checkout.Session & { shipping_cost?: unknown }).shipping_cost, null, 2))
         console.log('Session customer_details:', JSON.stringify(session.customer_details, null, 2))
         
         // Send customer confirmation email
