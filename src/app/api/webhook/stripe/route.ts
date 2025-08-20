@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
 import Stripe from 'stripe'
-import crypto from 'crypto'
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2025-06-30.basil',
@@ -84,6 +83,10 @@ function generateCustomerEmail(session: Stripe.Checkout.Session) {
     }
   }) || []
 
+  // Handle shipping details safely
+  const shippingDetails = session as any
+  const hasShippingDetails = shippingDetails.shipping_details && shippingDetails.shipping_details.address
+
   const htmlContent = `
     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #f8fafc; padding: 20px;">
       <div style="background-color: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
@@ -116,15 +119,15 @@ function generateCustomerEmail(session: Stripe.Checkout.Session) {
         
         <div style="background-color: #f8fafc; padding: 20px; border-radius: 8px; margin: 20px 0;">
           <h3 style="color: #374151; margin-top: 0;">Shipping Information</h3>
-          ${session.shipping_details ? `
-            <p><strong>Name:</strong> ${session.shipping_details.name}</p>
+          ${hasShippingDetails ? `
+            <p><strong>Name:</strong> ${shippingDetails.shipping_details.name}</p>
             <p><strong>Address:</strong></p>
-            <p style="margin: 5px 0;">${session.shipping_details.address?.line1 || ''}</p>
-            ${session.shipping_details.address?.line2 ? `<p style="margin: 5px 0;">${session.shipping_details.address.line2}</p>` : ''}
+            <p style="margin: 5px 0;">${shippingDetails.shipping_details.address?.line1 || ''}</p>
+            ${shippingDetails.shipping_details.address?.line2 ? `<p style="margin: 5px 0;">${shippingDetails.shipping_details.address.line2}</p>` : ''}
             <p style="margin: 5px 0;">
-              ${session.shipping_details.address?.city || ''}, ${session.shipping_details.address?.state || ''} ${session.shipping_details.address?.postal_code || ''}
+              ${shippingDetails.shipping_details.address?.city || ''}, ${shippingDetails.shipping_details.address?.state || ''} ${shippingDetails.shipping_details.address?.postal_code || ''}
             </p>
-            <p style="margin: 5px 0;">${session.shipping_details.address?.country || ''}</p>
+            <p style="margin: 5px 0;">${shippingDetails.shipping_details.address?.country || ''}</p>
           ` : '<p>Shipping details not provided</p>'}
         </div>
         
@@ -157,11 +160,11 @@ Items Ordered:
 ${items.map(item => `- ${item.name} (Qty: ${item.quantity}) - ${currency} ${item.price}`).join('\n')}
 
 Shipping Information:
-${session.shipping_details ? `
-Name: ${session.shipping_details.name}
-Address: ${session.shipping_details.address?.line1 || ''}
-${session.shipping_details.address?.line2 ? session.shipping_details.address.line2 + '\n' : ''}${session.shipping_details.address?.city || ''}, ${session.shipping_details.address?.state || ''} ${session.shipping_details.address?.postal_code || ''}
-${session.shipping_details.address?.country || ''}
+${hasShippingDetails ? `
+Name: ${shippingDetails.shipping_details.name}
+Address: ${shippingDetails.shipping_details.address?.line1 || ''}
+${shippingDetails.shipping_details.address?.line2 ? shippingDetails.shipping_details.address.line2 + '\n' : ''}${shippingDetails.shipping_details.address?.city || ''}, ${shippingDetails.shipping_details.address?.state || ''} ${shippingDetails.shipping_details.address?.postal_code || ''}
+${shippingDetails.shipping_details.address?.country || ''}
 ` : 'Shipping details not provided'}
 
 We'll send you a shipping confirmation email once your order ships.
@@ -190,6 +193,10 @@ function generateOwnerEmail(session: Stripe.Checkout.Session) {
       price: item.amount_total ? (item.amount_total / 100).toFixed(2) : '0.00'
     }
   }) || []
+
+  // Handle shipping details safely
+  const shippingDetails = session as any
+  const hasShippingDetails = shippingDetails.shipping_details && shippingDetails.shipping_details.address
 
   const htmlContent = `
     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #f8fafc; padding: 20px;">
@@ -225,15 +232,15 @@ function generateOwnerEmail(session: Stripe.Checkout.Session) {
         
         <div style="background-color: #f8fafc; padding: 20px; border-radius: 8px; margin: 20px 0;">
           <h3 style="color: #374151; margin-top: 0;">Shipping Information</h3>
-          ${session.shipping_details ? `
-            <p><strong>Name:</strong> ${session.shipping_details.name}</p>
+          ${hasShippingDetails ? `
+            <p><strong>Name:</strong> ${shippingDetails.shipping_details.name}</p>
             <p><strong>Address:</strong></p>
-            <p style="margin: 5px 0;">${session.shipping_details.address?.line1 || ''}</p>
-            ${session.shipping_details.address?.line2 ? `<p style="margin: 5px 0;">${session.shipping_details.address.line2}</p>` : ''}
+            <p style="margin: 5px 0;">${shippingDetails.shipping_details.address?.line1 || ''}</p>
+            ${shippingDetails.shipping_details.address?.line2 ? `<p style="margin: 5px 0;">${shippingDetails.shipping_details.address.line2}</p>` : ''}
             <p style="margin: 5px 0;">
-              ${session.shipping_details.address?.city || ''}, ${session.shipping_details.address?.state || ''} ${session.shipping_details.address?.postal_code || ''}
+              ${shippingDetails.shipping_details.address?.city || ''}, ${shippingDetails.shipping_details.address?.state || ''} ${shippingDetails.shipping_details.address?.postal_code || ''}
             </p>
-            <p style="margin: 5px 0;">${session.shipping_details.address?.country || ''}</p>
+            <p style="margin: 5px 0;">${shippingDetails.shipping_details.address?.country || ''}</p>
           ` : '<p>Shipping details not provided</p>'}
         </div>
         
@@ -258,11 +265,11 @@ Items Ordered:
 ${items.map(item => `- ${item.name} (Qty: ${item.quantity}) - ${currency} ${item.price}`).join('\n')}
 
 Shipping Information:
-${session.shipping_details ? `
-Name: ${session.shipping_details.name}
-Address: ${session.shipping_details.address?.line1 || ''}
-${session.shipping_details.address?.line2 ? session.shipping_details.address.line2 + '\n' : ''}${session.shipping_details.address?.city || ''}, ${session.shipping_details.address?.state || ''} ${session.shipping_details.address?.postal_code || ''}
-${session.shipping_details.address?.country || ''}
+${hasShippingDetails ? `
+Name: ${shippingDetails.shipping_details.name}
+Address: ${shippingDetails.shipping_details.address?.line1 || ''}
+${shippingDetails.shipping_details.address?.line2 ? shippingDetails.shipping_details.address.line2 + '\n' : ''}${shippingDetails.shipping_details.address?.city || ''}, ${shippingDetails.shipping_details.address?.state || ''} ${shippingDetails.shipping_details.address?.postal_code || ''}
+${shippingDetails.shipping_details.address?.country || ''}
 ` : 'Shipping details not provided'}
 
 Please process this order and update the customer on shipping status.
