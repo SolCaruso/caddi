@@ -74,7 +74,19 @@ function generateCustomerEmail(session: Stripe.Checkout.Session) {
   }) || []
 
   // Handle shipping details safely - access shipping_details with proper typing
-  const shippingInfo = (session as any).shipping_details
+  const shippingInfo = (session as Stripe.Checkout.Session & {
+    shipping_details?: {
+      name?: string
+      address?: {
+        line1?: string
+        line2?: string | null
+        city?: string
+        state?: string
+        postal_code?: string
+        country?: string
+      }
+    }
+  }).shipping_details
   const hasShippingDetails = shippingInfo && shippingInfo.address
   
   console.log('Customer email - Shipping details:', JSON.stringify(shippingInfo, null, 2))
@@ -234,7 +246,19 @@ function generateOwnerEmail(session: Stripe.Checkout.Session) {
   }) || []
 
   // Handle shipping details safely - access shipping_details with proper typing
-  const shippingInfo = (session as any).shipping_details
+  const shippingInfo = (session as Stripe.Checkout.Session & {
+    shipping_details?: {
+      name?: string
+      address?: {
+        line1?: string
+        line2?: string | null
+        city?: string
+        state?: string
+        postal_code?: string
+        country?: string
+      }
+    }
+  }).shipping_details
   const hasShippingDetails = shippingInfo && shippingInfo.address
   
   console.log('Owner email - Shipping details:', JSON.stringify(shippingInfo, null, 2))

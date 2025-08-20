@@ -1,8 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { Resend } from 'resend'
 
+const resend = new Resend(process.env.RESEND_API_KEY!)
 
-// SendPulse REST API approach
-async function sendEmailViaAPI(formData: {
+// Resend email function for contact form submissions
+async function sendContactEmail(formData: {
   firstName: string
   lastName: string
   company?: string
@@ -10,94 +12,131 @@ async function sendEmailViaAPI(formData: {
   phoneNumber?: string
   message: string
 }) {
-  // First, get access token using User ID and Secret
-  const tokenResponse = await fetch('https://api.sendpulse.com/oauth/access_token', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      grant_type: 'client_credentials',
-      client_id: process.env.SENDPULSE_USER_ID,
-      client_secret: process.env.SENDPULSE_API_KEY,
-    }),
+  console.log('Sending contact form email via Resend:', {
+    name: `${formData.firstName} ${formData.lastName}`,
+    email: formData.email,
+    hasCompany: !!formData.company,
+    hasPhone: !!formData.phoneNumber
   })
 
-  if (!tokenResponse.ok) {
-    throw new Error('Failed to authenticate with SendPulse')
-  }
+  const htmlContent = `
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>New Contact Form Submission</title>
+    </head>
+    <body style="margin: 0; padding: 0; background-color: #f8fafc; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+      <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+        
+        <!-- Header -->
+        <div style="background: linear-gradient(135deg, #2F415B 0%, #1a2332 100%); padding: 40px 30px; text-align: center;">
+          <h1 style="color: #ffffff; margin: 0; font-size: 28px; font-weight: 600; letter-spacing: -0.5px;">
+            New Contact Form Submission
+          </h1>
+          <p style="color: #e2e8f0; margin: 15px 0 0 0; font-size: 16px; opacity: 0.9;">
+            From ${formData.firstName} ${formData.lastName}
+          </p>
+        </div>
 
-  const tokenData = await tokenResponse.json()
-  const accessToken = tokenData.access_token
-
-  // Now send email using the access token
-  const response = await fetch('https://api.sendpulse.com/smtp/emails', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${accessToken}`,
-    },
-    body: JSON.stringify({
-      email: {
-        html: `
-          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-            <h2 style="color: #1e40af;">New Contact Form Submission</h2>
+        <!-- Content -->
+        <div style="padding: 40px 30px;">
+          
+          <!-- Contact Information -->
+          <div style="background-color: #f8fafc; border-radius: 8px; padding: 25px; margin-bottom: 30px; border-left: 4px solid #2F415B;">
+            <h2 style="color: #1f2937; margin: 0 0 20px 0; font-size: 20px; font-weight: 600;">Contact Information</h2>
             
-            <div style="background-color: #f8fafc; padding: 20px; border-radius: 8px; margin: 20px 0;">
-              <h3 style="color: #374151; margin-top: 0;">Contact Information</h3>
-              
-              <p><strong>Name:</strong> ${formData.firstName} ${formData.lastName}</p>
-              <p><strong>Email:</strong> <a href="mailto:${formData.email}">${formData.email}</a></p>
-              ${formData.company ? `<p><strong>Company:</strong> ${formData.company}</p>` : ''}
-              ${formData.phoneNumber ? `<p><strong>Phone:</strong> ${formData.phoneNumber}</p>` : ''}
+            <div style="margin-bottom: 15px;">
+              <span style="color: #6b7280; font-size: 14px; text-transform: uppercase; letter-spacing: 0.5px;">Name</span>
+              <p style="color: #1f2937; font-weight: 600; margin: 5px 0 0 0; font-size: 16px;">${formData.firstName} ${formData.lastName}</p>
             </div>
             
-            <div style="background-color: #f8fafc; padding: 20px; border-radius: 8px; margin: 20px 0;">
-              <h3 style="color: #374151; margin-top: 0;">Message</h3>
-              <p style="white-space: pre-wrap; line-height: 1.6;">${formData.message}</p>
+            <div style="margin-bottom: 15px;">
+              <span style="color: #6b7280; font-size: 14px; text-transform: uppercase; letter-spacing: 0.5px;">Email</span>
+              <p style="margin: 5px 0 0 0;">
+                <a href="mailto:${formData.email}" style="color: #2F415B; text-decoration: none; font-size: 16px;">${formData.email}</a>
+              </p>
             </div>
             
-            <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e5e7eb; font-size: 12px; color: #6b7280;">
-              <p>This message was sent from the Caddi contact form.</p>
-              <p>Submitted on: ${new Date().toLocaleString()}</p>
+            ${formData.company ? `
+              <div style="margin-bottom: 15px;">
+                <span style="color: #6b7280; font-size: 14px; text-transform: uppercase; letter-spacing: 0.5px;">Company</span>
+                <p style="color: #1f2937; margin: 5px 0 0 0; font-size: 16px;">${formData.company}</p>
+              </div>
+            ` : ''}
+            
+            ${formData.phoneNumber ? `
+              <div style="margin-bottom: 15px;">
+                <span style="color: #6b7280; font-size: 14px; text-transform: uppercase; letter-spacing: 0.5px;">Phone</span>
+                <p style="color: #1f2937; margin: 5px 0 0 0; font-size: 16px;">
+                  <a href="tel:${formData.phoneNumber}" style="color: #2F415B; text-decoration: none;">${formData.phoneNumber}</a>
+                </p>
+              </div>
+            ` : ''}
+          </div>
+
+          <!-- Message -->
+          <div style="background-color: #f8fafc; border-radius: 8px; padding: 25px; margin-bottom: 30px;">
+            <h2 style="color: #1f2937; margin: 0 0 20px 0; font-size: 20px; font-weight: 600;">Message</h2>
+            <div style="background-color: #ffffff; padding: 20px; border-radius: 6px; border: 1px solid #e5e7eb;">
+              <p style="color: #374151; line-height: 1.7; margin: 0; white-space: pre-wrap; font-size: 15px;">${formData.message}</p>
             </div>
           </div>
-        `,
-        text: `
-          New Contact Form Submission
-          
-          Contact Information:
-          Name: ${formData.firstName} ${formData.lastName}
-          Email: ${formData.email}
-          ${formData.company ? `Company: ${formData.company}` : ''}
-          ${formData.phoneNumber ? `Phone: ${formData.phoneNumber}` : ''}
-          
-          Message:
-          ${formData.message}
-          
-          Submitted on: ${new Date().toLocaleString()}
-        `,
-        subject: `New Contact Form Submission from ${formData.firstName} ${formData.lastName}`,
-        from: {
-          name: 'Caddi Contact Form',
-          email: 'info@caddiai.com'
-        },
-        to: [
-          {
-            name: 'Caddi Support',
-            email: 'info@caddiai.com'
-          }
-        ]
-      }
+
+          <!-- Footer -->
+          <div style="text-align: center; padding: 20px 0; border-top: 1px solid #e5e7eb;">
+            <p style="color: #6b7280; margin: 0; font-size: 14px;">
+              This message was sent from the Caddi contact form on ${new Date().toLocaleDateString('en-US', { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+              })}
+            </p>
+          </div>
+        </div>
+      </div>
+    </body>
+    </html>
+  `
+
+  const textContent = `
+New Contact Form Submission
+
+Contact Information:
+Name: ${formData.firstName} ${formData.lastName}
+Email: ${formData.email}
+${formData.company ? `Company: ${formData.company}` : ''}
+${formData.phoneNumber ? `Phone: ${formData.phoneNumber}` : ''}
+
+Message:
+${formData.message}
+
+Submitted on: ${new Date().toLocaleString()}
+  `
+
+  try {
+    const result = await resend.emails.send({
+      from: `Caddi Contact Form <${process.env.FROM_EMAIL || 'noreply@caddiai.com'}>`,
+      to: [process.env.CONTACT_EMAIL || 'info@caddiai.com'],
+      subject: `New Contact Form Submission from ${formData.firstName} ${formData.lastName}`,
+      html: htmlContent,
+      text: textContent,
+      replyTo: formData.email, // Allow direct replies to the customer
     })
-  })
 
-  if (!response.ok) {
-    const errorData = await response.json()
-    throw new Error(`API Error: ${errorData.message || 'Failed to send email'}`)
+    console.log('Contact form email sent successfully:', {
+      emailId: result.data?.id,
+      to: process.env.CONTACT_EMAIL || 'info@caddiai.com'
+    })
+    
+    return result
+  } catch (error) {
+    console.error('Resend API Error:', error)
+    throw new Error(`Resend API Error: ${error instanceof Error ? error.message : 'Failed to send email'}`)
   }
-
-  return response.json()
 }
 
 export async function POST(request: NextRequest) {
@@ -114,32 +153,28 @@ export async function POST(request: NextRequest) {
     }
 
     // Check if environment variables are set
-    if (!process.env.SENDPULSE_USER_ID || !process.env.SENDPULSE_API_KEY) {
-      console.error('Missing SendPulse environment variables')
+    if (!process.env.RESEND_API_KEY) {
+      console.error('Missing RESEND_API_KEY environment variable')
       return NextResponse.json(
         { error: 'Email service not configured. Please contact support.' },
         { status: 500 }
       )
     }
 
-
-
-    
-
-    // Use SendPulse REST API (more reliable than SMTP)
-    await sendEmailViaAPI({ firstName, lastName, company, email, phoneNumber, message })
+    // Send contact form email via Resend
+    await sendContactEmail({ firstName, lastName, company, email, phoneNumber, message })
 
     return NextResponse.json(
       { message: 'Email sent successfully' },
       { status: 200 }
     )
   } catch (error) {
-    console.error('Error sending email:', error)
+    console.error('Error sending contact form email:', error)
     
     // Provide more specific error messages
     let errorMessage = 'Failed to send email'
     if (error instanceof Error) {
-      if (error.message.includes('Invalid login')) {
+      if (error.message.includes('Invalid API key')) {
         errorMessage = 'Email service authentication failed. Please check configuration.'
       } else if (error.message.includes('ECONNREFUSED')) {
         errorMessage = 'Unable to connect to email service.'
