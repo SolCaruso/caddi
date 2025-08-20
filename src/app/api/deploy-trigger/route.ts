@@ -46,7 +46,7 @@ export async function POST(request: NextRequest) {
 
     // Parse the webhook payload to get information about the change
     const payload = await request.json()
-    const { table, type, record } = payload
+    const { table, type } = payload
     
     console.log(`Database change detected: ${type} on ${table}`)
     pendingChanges++
