@@ -251,7 +251,7 @@ export default function CartPageClient() {
 
                     {/* Quantity Controls - Styled like shop button */}
                     <div className="mt-3">
-                      <div className="inline-flex items-center border border-gray-300 rounded-full px-3 py-1 bg-white">
+                      <div className="inline-flex items-center border border-gray-300 rounded-full px-3 py-1 bg-[#FDFCFC]">
                         {item.quantity === 1 ? (
                           // Show garbage icon when quantity is 1
                           <button
@@ -342,7 +342,7 @@ export default function CartPageClient() {
               <button
                 onClick={handleCheckout}
                 disabled={isLoading}
-                className="w-full bg-white text-lg border border-caddi-blue text-caddi-black font-medium py-4 px-6 rounded-full hover:bg-caddi-blue hover:text-white transition-all duration-100 ease-in-out cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed mt-6"
+                className="w-full bg-[#F6F5F6] text-lg border border-caddi-blue text-caddi-black font-medium py-4 px-6 rounded-full hover:bg-caddi-blue hover:text-white transition-all duration-100 ease-in-out cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed mt-6"
               >
                 {isLoading ? 'Processing...' : 'Checkout'}
               </button>

@@ -353,6 +353,36 @@ body {
   }
 }
 
+/* Drawer fixes - prevent aria-hidden issues */
+[data-vaul-drawer] {
+  touch-action: none;
+}
+
+/* Prevent viewport height changes */
+html {
+  height: 100%;
+  overflow-x: hidden;
+}
+
+/* Target the specific main content area to prevent hiding */
+#main-content[aria-hidden="true"] {
+  display: block !important;
+  visibility: visible !important;
+}
+
+/* Ensure navigation stays visible when marked as hidden */
+nav[aria-hidden="true"] {
+  display: block !important;
+  visibility: visible !important;
+  position: fixed !important;
+}
+
+/* Ensure drawer portal is never hidden */
+#drawer-portal[aria-hidden="true"] {
+  display: block !important;
+  visibility: visible !important;
+}
+
 /* Continuous Carousel - TRUE continuous scrolling */
 .continuous-carousel {
   width: 100vw;

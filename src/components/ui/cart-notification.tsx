@@ -5,7 +5,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { getStripe } from "@/lib/stripe"
 import { useCart } from "@/lib/cart"
-import { CheckCircle, X } from "lucide-react"
+import { CheckCircle, X, Plus, Minus, Trash2 } from "lucide-react"
 import { useMediaQuery } from "@/hooks/use-media-query"
 import { Button } from "@/components/ui/button"
 import {
@@ -49,7 +49,10 @@ export function DrawerDialogDemo({
   const [open, setOpen] = React.useState(false)
   const [isLoading, setIsLoading] = React.useState(false)
   const isDesktop = useMediaQuery("(min-width: 768px)")
-  const { state } = useCart()
+  const { state, removeItem, updateQuantity } = useCart()
+
+  // Find the recently added item (assuming it's the last item in the cart)
+  const recentItem = state.items.length > 0 ? state.items[state.items.length - 1] : null
 
   const handleButtonClick = () => {
     onButtonClick?.() // Call the callback first (adds to cart)
@@ -58,6 +61,19 @@ export function DrawerDialogDemo({
     // Smooth scroll to top only for desktop (dialog), not mobile (drawer)
     if (isDesktop) {
       window.scrollTo({ top: 0, behavior: 'smooth' })
+    }
+  }
+
+  const handleQuantityChange = (newQuantity: number) => {
+    if (recentItem && newQuantity > 0) {
+      updateQuantity(recentItem.id, recentItem.variantId, newQuantity)
+    }
+  }
+
+  const handleRemoveItem = () => {
+    if (recentItem) {
+      removeItem(recentItem.id, recentItem.variantId)
+      setOpen(false) // Close notification when item is removed
     }
   }
 
@@ -112,7 +128,7 @@ export function DrawerDialogDemo({
           <Button 
             disabled={disabled} 
             onClick={handleButtonClick}
-            className="bg-white text-lg border border-caddi-blue text-caddi-black font-medium py-8 px-38 rounded-full hover:bg-caddi-blue hover:text-white transition-all duration-100 ease-in-out cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed w-full"
+            className="bg-[#FDFCFC] text-lg border border-caddi-blue text-caddi-black font-medium py-8 px-38 rounded-full hover:bg-caddi-blue hover:text-white transition-all duration-100 ease-in-out cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed w-full"
           >
             {children}
           </Button>
@@ -120,7 +136,7 @@ export function DrawerDialogDemo({
         <DialogContent 
           showCloseButton={false}
           overlayClassName="z-[5]"
-          className="w-80 max-w-none p-0 pt-6 border-0 shadow-lg bg-white rounded-b-xl overflow-hidden animate-in slide-in-from-top-2 fade-in-0 z-[60]"
+          className="w-80 max-w-none p-0 pt-6 border-0 shadow-lg bg-[#FDFCFC] rounded-b-xl overflow-hidden animate-in slide-in-from-top-2 fade-in-0 z-[60]"
         >
           <DialogHeader className="sr-only">
             <DialogTitle>Added to Bag</DialogTitle>
@@ -143,7 +159,7 @@ export function DrawerDialogDemo({
           </div>
 
           {/* Product info */}
-          <div className="flex gap-3 px-4 pt-2 pb-5">
+          <div className="flex gap-3 px-4 pt-2 pb-4">
             <div className="w-20 h-20 bg-gray-100 rounded-sm overflow-hidden flex-shrink-0">
               <Image
                 src={productImage}
@@ -170,6 +186,46 @@ export function DrawerDialogDemo({
               <p className="text-sm font-medium text-gray-900 mt-1">
                 ${productPrice}
               </p>
+              
+              {/* Quantity controls */}
+              {recentItem && (
+                <div className="mt-3">
+                  <div className="inline-flex items-center border border-gray-300 rounded-full px-3 py-1 bg-[#FDFCFC]">
+                    {recentItem.quantity === 1 ? (
+                      // Show trash icon when quantity is 1
+                      <button
+                        onClick={handleRemoveItem}
+                        className="text-gray-500 hover:text-caddi-brown cursor-pointer transition-colors"
+                        aria-label="Remove item"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </button>
+                    ) : (
+                      // Show minus button when quantity > 1
+                      <button
+                        onClick={() => handleQuantityChange(recentItem.quantity - 1)}
+                        className="text-gray-500 hover:text-caddi-brown cursor-pointer transition-colors"
+                        aria-label="Decrease quantity"
+                      >
+                        <Minus className="h-4 w-4" />
+                      </button>
+                    )}
+                    
+                    <span className="text-sm font-medium text-gray-900 mx-3">
+                      {recentItem.quantity}
+                    </span>
+                    
+                    {/* Always show plus button */}
+                    <button
+                      onClick={() => handleQuantityChange(recentItem.quantity + 1)}
+                      className="text-gray-500 hover:text-caddi-brown transition-colors cursor-pointer"
+                      aria-label="Increase quantity"
+                    >
+                      <Plus className="h-4 w-4" />
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
 
@@ -201,7 +257,7 @@ export function DrawerDialogDemo({
         <Button 
           disabled={disabled} 
           onClick={handleButtonClick}
-          className="bg-white text-lg border border-caddi-blue text-caddi-black font-medium py-8 px-38 rounded-full hover:bg-caddi-blue hover:text-white transition-all duration-100 ease-in-out cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed w-full"
+          className="bg-[#FDFCFC] text-lg border border-caddi-blue text-caddi-black font-medium py-8 px-38 rounded-full hover:bg-caddi-blue hover:text-white transition-all duration-100 ease-in-out cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed w-full"
         >
           {children}
         </Button>
@@ -216,12 +272,12 @@ export function DrawerDialogDemo({
         
         {/* Product info */}
         <div className="flex gap-3 px-4 pb-4">
-          <div className="w-16 h-16 bg-gray-100 rounded-md overflow-hidden flex-shrink-0">
+          <div className="w-20 h-20 bg-gray-100 rounded-md overflow-hidden flex-shrink-0">
             <Image
               src={productImage}
               alt={productName}
-              width={64}
-              height={64}
+              width={80}
+              height={80}
               className="w-full h-full object-cover"
             />
           </div>
@@ -242,6 +298,46 @@ export function DrawerDialogDemo({
             <p className="text-sm font-medium text-gray-900 mt-1">
               ${productPrice}
             </p>
+            
+            {/* Quantity controls */}
+            {recentItem && (
+              <div className="mt-3">
+                <div className="inline-flex items-center border border-gray-300 rounded-full px-3 py-1 bg-[#FDFCFC]">
+                  {recentItem.quantity === 1 ? (
+                    // Show trash icon when quantity is 1
+                    <button
+                      onClick={handleRemoveItem}
+                      className="text-gray-500 hover:text-caddi-brown cursor-pointer transition-colors"
+                      aria-label="Remove item"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </button>
+                  ) : (
+                    // Show minus button when quantity > 1
+                    <button
+                      onClick={() => handleQuantityChange(recentItem.quantity - 1)}
+                      className="text-gray-500 hover:text-caddi-brown cursor-pointer transition-colors"
+                      aria-label="Decrease quantity"
+                    >
+                      <Minus className="h-4 w-4" />
+                    </button>
+                  )}
+                  
+                  <span className="text-sm font-medium text-gray-900 mx-3">
+                    {recentItem.quantity}
+                  </span>
+                  
+                  {/* Always show plus button */}
+                  <button
+                    onClick={() => handleQuantityChange(recentItem.quantity + 1)}
+                    className="text-gray-500 hover:text-caddi-brown transition-colors cursor-pointer"
+                    aria-label="Increase quantity"
+                  >
+                    <Plus className="h-4 w-4" />
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         </div>
 

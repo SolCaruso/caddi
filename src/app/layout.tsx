@@ -27,12 +27,15 @@ export default function RootLayout({
         <link rel="preload" as="style" href="https://use.typekit.net/eaa4cih.css" />
         <link rel="stylesheet" href="https://use.typekit.net/eaa4cih.css" />
       </head>
-      <body className="font-proxima-nova antialiased h-full mx-auto flex flex-col bg-[#FCFCFC] pt-[76px] md:pt-[68px] overflow-x-hidden">
+      <body className="font-proxima-nova antialiased h-full mx-auto flex flex-col bg-[#FCFCFC] overflow-x-hidden">
         <Navigation />
-        {children}
+        <div className="pt-[76px] md:pt-[68px] flex-1 flex flex-col" id="main-content">
+          {children}
+        </div>
         <Toaster position="bottom-right" />
         <CookieConsent />
         <Footer />
+        <div id="drawer-portal"></div>
       </body>
     </html>
   );

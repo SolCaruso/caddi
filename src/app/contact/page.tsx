@@ -120,7 +120,7 @@ export default function ContactPage() {
   }
 
   return (
-    <div className="isolate  px-6 py-24 sm:py-32 lg:px-8">
+    <main className="flex-1 isolate px-6 py-24 sm:py-32 lg:px-8">
 
         {/* Background */}
         <div
@@ -156,7 +156,7 @@ export default function ContactPage() {
                 autoComplete="given-name"
                 value={formData.firstName}
                 onChange={handleInputChange}
-                className={`block w-full rounded-md bg-white px-3.5 py-2 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-caddi-brown ${errors.firstName ? 'outline-red-500 focus:outline-red-500' : ''}`}
+                className={`block w-full rounded-md bg-[#FDFCFC] px-3.5 py-2 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-caddi-brown ${errors.firstName ? 'outline-red-500 focus:outline-red-500' : ''}`}
               />
               {errors.firstName && (
                 <p className="mt-1 text-sm text-red-600">{errors.firstName}</p>
@@ -175,7 +175,7 @@ export default function ContactPage() {
                 autoComplete="family-name"
                 value={formData.lastName}
                 onChange={handleInputChange}
-                className={`block w-full rounded-md bg-white px-3.5 py-2 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-caddi-brown ${errors.lastName ? 'outline-red-500 focus:outline-red-500' : ''}`}
+                className={`block w-full rounded-md bg-[#FDFCFC] px-3.5 py-2 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-caddi-brown ${errors.lastName ? 'outline-red-500 focus:outline-red-500' : ''}`}
               />
               {errors.lastName && (
                 <p className="mt-1 text-sm text-red-600">{errors.lastName}</p>
@@ -194,7 +194,7 @@ export default function ContactPage() {
                 autoComplete="organization"
                 value={formData.company}
                 onChange={handleInputChange}
-                className="block w-full rounded-md bg-white px-3.5 py-2 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-caddi-brown"
+                className="block w-full rounded-md bg-[#FDFCFC] px-3.5 py-2 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-caddi-brown"
               />
             </div>
           </div>
@@ -203,7 +203,7 @@ export default function ContactPage() {
               Phone number
             </label>
             <div className="mt-2.5">
-              <div className={`flex rounded-md bg-white outline-1 -outline-offset-1 outline-gray-300 has-[input:focus-within]:outline-2 has-[input:focus-within]:-outline-offset-2 has-[input:focus-within]:outline-caddi-brown ${errors.phoneNumber ? 'outline-red-500 has-[input:focus-within]:outline-red-500' : ''}`}>
+              <div className={`flex rounded-md bg-[#FDFCFC] outline-1 -outline-offset-1 outline-gray-300 has-[input:focus-within]:outline-2 has-[input:focus-within]:-outline-offset-2 has-[input:focus-within]:outline-caddi-brown ${errors.phoneNumber ? 'outline-red-500 has-[input:focus-within]:outline-red-500' : ''}`}>
                 <div className="grid shrink-0 grid-cols-1 focus-within:relative">
                   <select
                     id="country"
@@ -248,7 +248,7 @@ export default function ContactPage() {
                 autoComplete="email"
                 value={formData.email}
                 onChange={handleInputChange}
-                className={`block w-full rounded-md bg-white px-3.5 py-2 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-caddi-brown ${errors.email ? 'outline-red-500 focus:outline-red-500' : ''}`}
+                className={`block w-full rounded-md bg-[#FDFCFC] px-3.5 py-2 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-caddi-brown ${errors.email ? 'outline-red-500 focus:outline-red-500' : ''}`}
               />
               {errors.email && (
                 <p className="mt-1 text-sm text-red-600">{errors.email}</p>
@@ -266,7 +266,7 @@ export default function ContactPage() {
                 rows={4}
                 value={formData.message}
                 onChange={handleInputChange}
-                className={`block w-full rounded-md bg-white px-3.5 py-2 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-caddi-brown ${errors.message ? 'outline-red-500 focus:outline-red-500' : ''}`}
+                className={`block w-full rounded-md bg-[#FDFCFC] px-3.5 py-2 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-caddi-brown ${errors.message ? 'outline-red-500 focus:outline-red-500' : ''}`}
               />
               {errors.message && (
                 <p className="mt-1 text-sm text-red-600">{errors.message}</p>
@@ -276,7 +276,7 @@ export default function ContactPage() {
           <div className="flex gap-x-4 sm:col-span-2">
             <div className="flex h-6 items-center">
               <div className="group relative inline-flex w-8 shrink-0 rounded-full bg-gray-200 p-px outline-offset-2 outline-caddi-brown ring-1 ring-inset ring-gray-900/5 transition-colors duration-200 ease-in-out has-[:checked]:bg-caddi-brown  has-[:focus-visible]:outline-2">
-                <span className="size-4 rounded-full bg-white shadow-sm ring-1 ring-gray-900/5 transition-transform duration-200 ease-in-out group-has-[:checked]:translate-x-3.5" />
+                <span className="size-4 rounded-full bg-[#FDFCFC] shadow-sm ring-1 ring-gray-900/5 transition-transform duration-200 ease-in-out group-has-[:checked]:translate-x-3.5" />
                 <input
                   id="agree-to-policies"
                   name="agree-to-policies"
@@ -306,6 +306,6 @@ export default function ContactPage() {
           </button>
         </div>
       </form>
-    </div>
+    </main>
   )
 }
