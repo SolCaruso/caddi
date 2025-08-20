@@ -90,6 +90,8 @@ export default function CartPageClient() {
   const estimatedTax = subtotal * taxRate
   
   // Determine shipping cost based on cart contents
+  // Note: This is a simplified calculation for display purposes
+  // Actual shipping cost will be determined by Stripe based on shipping address
   let shippingCost = 0
   const hasClothing = state.items.some(item => {
     const product = getProductById(item.id)
@@ -100,12 +102,14 @@ export default function CartPageClient() {
     return product && product.category_id === 3 // Divot Tool
   })
   
+  // For display purposes, we'll show Canadian rates
+  // International rates will be calculated by Stripe based on shipping address
   if (subtotal >= 100) {
-    shippingCost = 0 // Free shipping for orders over $100
+    shippingCost = 0 // Free shipping for orders over $100 (Canada)
   } else if (hasClothing) {
-    shippingCost = 9.99 // $9.99 if clothing is included
+    shippingCost = 9.99 // $9.99 if clothing is included (Canada)
   } else if (hasDivotTools) {
-    shippingCost = 4.99 // $4.99 for divot tools only
+    shippingCost = 4.99 // $4.99 for divot tools only (Canada)
   }
   
   const total = subtotal + shippingCost + estimatedTax
@@ -299,8 +303,8 @@ export default function CartPageClient() {
             <div className="mt-8 p-4 bg-[#D9D9D9]/20 rounded-lg">
               <p className="text-sm text-gray-600">
                 {shippingCost === 0 
-                  ? "Free shipping on orders over $100" 
-                  : `Shipping: $${shippingCost.toFixed(2)} - Arrives by Thu, Jun 26`
+                  ? "Free shipping on orders over $100 (Canada) / $200 (International)" 
+                  : `Shipping: $${shippingCost.toFixed(2)} (Canada) - International rates available at checkout`
                 }
               </p>
             </div>

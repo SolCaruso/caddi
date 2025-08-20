@@ -6,6 +6,24 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2025-06-30.basil',
 })
 
+// Helper function to calculate international shipping cost
+function getInternationalShippingCost(subtotal: number, hasClothing: boolean, hasDivotTools: boolean): number {
+  if (subtotal >= 200) {
+    return 0 // Free shipping for orders over $200 (International)
+  } else if (hasClothing) {
+    return 14.99 // $14.99 if clothing is included (International)
+  } else if (hasDivotTools) {
+    return 9.99 // $9.99 for divot tools only (International)
+  }
+  return 0
+}
+
+// Helper function to get international shipping display name
+function getInternationalShippingDisplayName(subtotal: number, hasClothing: boolean, hasDivotTools: boolean): string {
+  const cost = getInternationalShippingCost(subtotal, hasClothing, hasDivotTools)
+  return cost === 0 ? 'Free shipping (International)' : `Shipping - $${cost.toFixed(2)} (International)`
+}
+
 interface CartItem {
   id: number
   name: string
@@ -98,9 +116,10 @@ export async function POST(request: NextRequest) {
       success_url: `${process.env.NEXT_PUBLIC_BASE_URL}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${process.env.NEXT_PUBLIC_BASE_URL}/shop`,
       shipping_address_collection: {
-        allowed_countries: ['CA'], // Canada only for now
+        allowed_countries: ['CA', 'US'], // Canada and US for now, can expand
       },
       shipping_options: [
+        // Canadian shipping rates
         {
           shipping_rate_data: {
             type: 'fixed_amount',
@@ -108,7 +127,7 @@ export async function POST(request: NextRequest) {
               amount: Math.round(shippingCost * 100), // Convert to cents
               currency: 'cad',
             },
-            display_name: shippingCost === 0 ? 'Free shipping' : `Shipping - $${shippingCost.toFixed(2)}`,
+            display_name: shippingCost === 0 ? 'Free shipping (Canada)' : `Shipping - $${shippingCost.toFixed(2)} (Canada)`,
             delivery_estimate: {
               minimum: {
                 unit: 'business_day',
@@ -118,6 +137,35 @@ export async function POST(request: NextRequest) {
                 unit: 'business_day',
                 value: 7,
               },
+            },
+            tax_behavior: 'exclusive',
+            metadata: {
+              country: 'CA',
+            },
+          },
+        },
+        // International shipping rates
+        {
+          shipping_rate_data: {
+            type: 'fixed_amount',
+            fixed_amount: {
+              amount: Math.round(getInternationalShippingCost(subtotal, hasClothing, hasDivotTools) * 100), // Convert to cents
+              currency: 'cad',
+            },
+            display_name: getInternationalShippingDisplayName(subtotal, hasClothing, hasDivotTools),
+            delivery_estimate: {
+              minimum: {
+                unit: 'business_day',
+                value: 7,
+              },
+              maximum: {
+                unit: 'business_day',
+                value: 14,
+              },
+            },
+            tax_behavior: 'exclusive',
+            metadata: {
+              country: 'INT',
             },
           },
         },
