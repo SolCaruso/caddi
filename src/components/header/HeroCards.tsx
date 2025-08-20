@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import img8 from "@/assets/webp/zolas-8.webp";
-import img36 from "@/assets/webp/zolas-36.webp";
+import img36 from "@/assets/webp/zolas-6.webp";
 
 export default function HeroCards() {
     return (
