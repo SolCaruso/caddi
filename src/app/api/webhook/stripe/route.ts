@@ -48,7 +48,8 @@ async function sendOrderEmail(
     console.log('Resend email sent successfully:', {
       to: toEmail,
       subject,
-      emailId: result.data?.id
+      emailId: result.data?.id,
+      fullResult: JSON.stringify(result, null, 2)
     })
     
     return result
@@ -457,20 +458,36 @@ export async function POST(request: NextRequest) {
           }
         }
 
+        // Add a small delay to avoid rate limiting (Resend allows 2 requests per second)
+        await new Promise(resolve => setTimeout(resolve, 1000))
+
         // Send owner notification email
         try {
+          console.log('Starting owner notification process...')
           const ownerEmail = generateOwnerEmail(session)
+          console.log('Owner email generated successfully')
+          
           const orderNumber = generateOrderNumber(session.id)
-          await sendOrderEmail(
-            process.env.CONTACT_EMAIL || 'info@caddiai.com',
+          console.log('Order number generated:', orderNumber)
+          
+          const ownerEmailAddress = process.env.CONTACT_EMAIL || 'info@caddiai.com'
+          console.log('Sending owner notification to:', ownerEmailAddress)
+          console.log('Owner email HTML length:', ownerEmail.htmlContent.length)
+          console.log('Owner email text length:', ownerEmail.textContent.length)
+          
+          const result = await sendOrderEmail(
+            ownerEmailAddress,
             'Caddi Team',
             `New Order Received - ${orderNumber}`,
             ownerEmail.htmlContent,
             ownerEmail.textContent
           )
-          console.log('Owner notification email sent successfully')
+          console.log('Owner notification email sent successfully to:', ownerEmailAddress)
+          console.log('Resend result:', result)
         } catch (error) {
-          console.error('Failed to send owner notification email:', error)
+          console.error('Failed to send owner notification email - FULL ERROR:', error)
+          console.error('Error stack:', error instanceof Error ? error.stack : 'No stack trace')
+          console.error('Owner email address was:', process.env.CONTACT_EMAIL || 'info@caddiai.com')
         }
         
         break
