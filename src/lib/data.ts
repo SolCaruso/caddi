@@ -38,7 +38,7 @@ export interface ProductVariant {
   price: number | null
   stock: number | null
   created_at: string
-  "Item Description (for database)"?: string
+  "Item Description (for database)"?: string | null
   colors?: {
     name: string
   }
@@ -52,7 +52,7 @@ export interface Image {
   product_id: number
   path: string
   created_at: string
-  "Item Description (for database)"?: string
+  "Item Description (for database)"?: string | null
   "variant_ids (using the image)"?: number[] | null
 }
 
