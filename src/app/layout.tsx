@@ -17,7 +17,7 @@ export default function RootLayout({
 }>) {
 
   return (
-    <html lang="en" className='h-full mx-auto '>
+    <html lang="en" className='h-full'>
       <head>
         {/* Preconnect to font origins for faster loading */}
         <link rel="preconnect" href="https://use.typekit.net" />
@@ -27,7 +27,7 @@ export default function RootLayout({
         <link rel="preload" as="style" href="https://use.typekit.net/eaa4cih.css" />
         <link rel="stylesheet" href="https://use.typekit.net/eaa4cih.css" />
       </head>
-      <body className="font-proxima-nova antialiased h-full mx-auto flex flex-col bg-[#FCFCFC] overflow-x-hidden">
+      <body className="font-proxima-nova antialiased min-h-screen flex flex-col bg-[#FCFCFC] overflow-x-hidden">
         <Navigation />
         <div className="pt-[76px] md:pt-[68px] flex-1 flex flex-col" id="main-content">
           {children}

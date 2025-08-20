@@ -385,8 +385,7 @@ nav[aria-hidden="true"] {
 
 /* Continuous Carousel - TRUE continuous scrolling */
 .continuous-carousel {
-  width: 100vw;
-  margin-left: calc(-50vw + 50%);
+  width: 100%;
   overflow: hidden;
   position: relative;
   height: 32rem;
