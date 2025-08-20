@@ -5,6 +5,18 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2025-06-30.basil',
 })
 
+// Generate a shorter, more readable order number
+function generateOrderNumber(sessionId: string): string {
+  // Take the last 8 characters of the session ID for uniqueness
+  const shortId = sessionId.slice(-8).toUpperCase()
+  const date = new Date()
+  const year = date.getFullYear().toString().slice(-2) // Last 2 digits of year
+  const month = (date.getMonth() + 1).toString().padStart(2, '0')
+  const day = date.getDate().toString().padStart(2, '0')
+  
+  return `CD${year}${month}${day}-${shortId}`
+}
+
 // SendPulse email function for order confirmations
 async function sendOrderEmail(
   toEmail: string,
@@ -69,7 +81,7 @@ async function sendOrderEmail(
 
 // Generate order confirmation email for customer
 function generateCustomerEmail(session: Stripe.Checkout.Session) {
-  const orderNumber = session.id
+  const orderNumber = generateOrderNumber(session.id)
   const total = session.amount_total ? (session.amount_total / 100).toFixed(2) : '0.00'
   const currency = session.currency?.toUpperCase() || 'CAD'
   
@@ -192,7 +204,7 @@ Thank you for choosing Caddi AI!
 function generateOwnerEmail(session: Stripe.Checkout.Session) {
   const customerName = session.customer_details?.name || 'Unknown Customer'
   const customerEmail = session.customer_details?.email || 'No email provided'
-  const orderNumber = session.id
+  const orderNumber = generateOrderNumber(session.id)
   const total = session.amount_total ? (session.amount_total / 100).toFixed(2) : '0.00'
   const currency = session.currency?.toUpperCase() || 'CAD'
   
@@ -326,9 +338,14 @@ export async function POST(request: NextRequest) {
     // Handle the event
     switch (event.type) {
       case 'checkout.session.completed':
-        const session = event.data.object as Stripe.Checkout.Session
+        const sessionId = event.data.object.id
         
-        console.log('Processing completed checkout session:', session.id)
+        console.log('Processing completed checkout session:', sessionId)
+        
+        // Retrieve the full session with line items expanded
+        const session = await stripe.checkout.sessions.retrieve(sessionId, {
+          expand: ['line_items', 'line_items.data.price.product']
+        })
         
         // Send customer confirmation email
         if (session.customer_details?.email) {
