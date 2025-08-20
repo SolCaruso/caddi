@@ -11,7 +11,6 @@ export default function Home() {
       <HeroCards />
       <VerticalCards />
       <ForeCaddi />
-      {/* <Instagram /> */}
     </main>
   );
 }
