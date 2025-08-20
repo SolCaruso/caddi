@@ -69,7 +69,6 @@ async function sendOrderEmail(
 
 // Generate order confirmation email for customer
 function generateCustomerEmail(session: Stripe.Checkout.Session) {
-  const customerName = session.customer_details?.name || 'Valued Customer'
   const orderNumber = session.id
   const total = session.amount_total ? (session.amount_total / 100).toFixed(2) : '0.00'
   const currency = session.currency?.toUpperCase() || 'CAD'
@@ -84,7 +83,19 @@ function generateCustomerEmail(session: Stripe.Checkout.Session) {
   }) || []
 
   // Handle shipping details safely
-  const shippingDetails = session as any
+  const shippingDetails = session as Stripe.Checkout.Session & {
+    shipping_details?: {
+      name?: string
+      address?: {
+        line1?: string
+        line2?: string
+        city?: string
+        state?: string
+        postal_code?: string
+        country?: string
+      }
+    }
+  }
   const hasShippingDetails = shippingDetails.shipping_details && shippingDetails.shipping_details.address
 
   const htmlContent = `
@@ -195,7 +206,19 @@ function generateOwnerEmail(session: Stripe.Checkout.Session) {
   }) || []
 
   // Handle shipping details safely
-  const shippingDetails = session as any
+  const shippingDetails = session as Stripe.Checkout.Session & {
+    shipping_details?: {
+      name?: string
+      address?: {
+        line1?: string
+        line2?: string
+        city?: string
+        state?: string
+        postal_code?: string
+        country?: string
+      }
+    }
+  }
   const hasShippingDetails = shippingDetails.shipping_details && shippingDetails.shipping_details.address
 
   const htmlContent = `
