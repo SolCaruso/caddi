@@ -66,12 +66,12 @@ export interface Size {
   name: string
 }
 
-export const products: Product[] = productsData
-export const categories: Category[] = categoriesData
-export const productVariants: ProductVariant[] = productVariantsData
-export const images: Image[] = imagesData
-export const colors: Color[] = colorsData
-export const sizes: Size[] = sizesData
+export const products: Product[] = productsData as Product[]
+export const categories: Category[] = categoriesData as Category[]
+export const productVariants: ProductVariant[] = productVariantsData as ProductVariant[]
+export const images: Image[] = imagesData as Image[]
+export const colors: Color[] = colorsData as Color[]
+export const sizes: Size[] = sizesData as Size[]
 
 export function getProductById(id: number): Product | undefined {
   return products.find(product => product.id === id)
