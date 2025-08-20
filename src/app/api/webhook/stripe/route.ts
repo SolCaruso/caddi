@@ -131,14 +131,14 @@ function generateCustomerEmail(session: Stripe.Checkout.Session) {
         <div style="background-color: #f8fafc; padding: 20px; border-radius: 8px; margin: 20px 0;">
           <h3 style="color: #374151; margin-top: 0;">Shipping Information</h3>
           ${hasShippingDetails ? `
-            <p><strong>Name:</strong> ${shippingDetails.shipping_details.name}</p>
+            <p><strong>Name:</strong> ${shippingDetails.shipping_details?.name || 'Not provided'}</p>
             <p><strong>Address:</strong></p>
-            <p style="margin: 5px 0;">${shippingDetails.shipping_details.address?.line1 || ''}</p>
-            ${shippingDetails.shipping_details.address?.line2 ? `<p style="margin: 5px 0;">${shippingDetails.shipping_details.address.line2}</p>` : ''}
+            <p style="margin: 5px 0;">${shippingDetails.shipping_details?.address?.line1 || ''}</p>
+            ${shippingDetails.shipping_details?.address?.line2 ? `<p style="margin: 5px 0;">${shippingDetails.shipping_details.address.line2}</p>` : ''}
             <p style="margin: 5px 0;">
-              ${shippingDetails.shipping_details.address?.city || ''}, ${shippingDetails.shipping_details.address?.state || ''} ${shippingDetails.shipping_details.address?.postal_code || ''}
+              ${shippingDetails.shipping_details?.address?.city || ''}, ${shippingDetails.shipping_details?.address?.state || ''} ${shippingDetails.shipping_details?.address?.postal_code || ''}
             </p>
-            <p style="margin: 5px 0;">${shippingDetails.shipping_details.address?.country || ''}</p>
+            <p style="margin: 5px 0;">${shippingDetails.shipping_details?.address?.country || ''}</p>
           ` : '<p>Shipping details not provided</p>'}
         </div>
         
@@ -172,10 +172,10 @@ ${items.map(item => `- ${item.name} (Qty: ${item.quantity}) - ${currency} ${item
 
 Shipping Information:
 ${hasShippingDetails ? `
-Name: ${shippingDetails.shipping_details.name}
-Address: ${shippingDetails.shipping_details.address?.line1 || ''}
-${shippingDetails.shipping_details.address?.line2 ? shippingDetails.shipping_details.address.line2 + '\n' : ''}${shippingDetails.shipping_details.address?.city || ''}, ${shippingDetails.shipping_details.address?.state || ''} ${shippingDetails.shipping_details.address?.postal_code || ''}
-${shippingDetails.shipping_details.address?.country || ''}
+Name: ${shippingDetails.shipping_details?.name || 'Not provided'}
+Address: ${shippingDetails.shipping_details?.address?.line1 || ''}
+${shippingDetails.shipping_details?.address?.line2 ? shippingDetails.shipping_details.address.line2 + '\n' : ''}${shippingDetails.shipping_details?.address?.city || ''}, ${shippingDetails.shipping_details?.address?.state || ''} ${shippingDetails.shipping_details?.address?.postal_code || ''}
+${shippingDetails.shipping_details?.address?.country || ''}
 ` : 'Shipping details not provided'}
 
 We'll send you a shipping confirmation email once your order ships.
@@ -256,14 +256,14 @@ function generateOwnerEmail(session: Stripe.Checkout.Session) {
         <div style="background-color: #f8fafc; padding: 20px; border-radius: 8px; margin: 20px 0;">
           <h3 style="color: #374151; margin-top: 0;">Shipping Information</h3>
           ${hasShippingDetails ? `
-            <p><strong>Name:</strong> ${shippingDetails.shipping_details.name}</p>
+            <p><strong>Name:</strong> ${shippingDetails.shipping_details?.name || 'Not provided'}</p>
             <p><strong>Address:</strong></p>
-            <p style="margin: 5px 0;">${shippingDetails.shipping_details.address?.line1 || ''}</p>
-            ${shippingDetails.shipping_details.address?.line2 ? `<p style="margin: 5px 0;">${shippingDetails.shipping_details.address.line2}</p>` : ''}
+            <p style="margin: 5px 0;">${shippingDetails.shipping_details?.address?.line1 || ''}</p>
+            ${shippingDetails.shipping_details?.address?.line2 ? `<p style="margin: 5px 0;">${shippingDetails.shipping_details.address.line2}</p>` : ''}
             <p style="margin: 5px 0;">
-              ${shippingDetails.shipping_details.address?.city || ''}, ${shippingDetails.shipping_details.address?.state || ''} ${shippingDetails.shipping_details.address?.postal_code || ''}
+              ${shippingDetails.shipping_details?.address?.city || ''}, ${shippingDetails.shipping_details?.address?.state || ''} ${shippingDetails.shipping_details?.address?.postal_code || ''}
             </p>
-            <p style="margin: 5px 0;">${shippingDetails.shipping_details.address?.country || ''}</p>
+            <p style="margin: 5px 0;">${shippingDetails.shipping_details?.address?.country || ''}</p>
           ` : '<p>Shipping details not provided</p>'}
         </div>
         
@@ -289,10 +289,10 @@ ${items.map(item => `- ${item.name} (Qty: ${item.quantity}) - ${currency} ${item
 
 Shipping Information:
 ${hasShippingDetails ? `
-Name: ${shippingDetails.shipping_details.name}
-Address: ${shippingDetails.shipping_details.address?.line1 || ''}
-${shippingDetails.shipping_details.address?.line2 ? shippingDetails.shipping_details.address.line2 + '\n' : ''}${shippingDetails.shipping_details.address?.city || ''}, ${shippingDetails.shipping_details.address?.state || ''} ${shippingDetails.shipping_details.address?.postal_code || ''}
-${shippingDetails.shipping_details.address?.country || ''}
+Name: ${shippingDetails.shipping_details?.name || 'Not provided'}
+Address: ${shippingDetails.shipping_details?.address?.line1 || ''}
+${shippingDetails.shipping_details?.address?.line2 ? shippingDetails.shipping_details.address.line2 + '\n' : ''}${shippingDetails.shipping_details?.address?.city || ''}, ${shippingDetails.shipping_details?.address?.state || ''} ${shippingDetails.shipping_details?.address?.postal_code || ''}
+${shippingDetails.shipping_details?.address?.country || ''}
 ` : 'Shipping details not provided'}
 
 Please process this order and update the customer on shipping status.
