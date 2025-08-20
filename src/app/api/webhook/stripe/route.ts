@@ -178,7 +178,7 @@ function generateCustomerEmail(session: Stripe.Checkout.Session) {
           </div>
 
           <!-- Items -->
-          <div style="margin-bottom: 30px;">
+          <div style="margin-bottom: 30px;"> 
             <h2 style="color: #1f2937; margin: 0 0 20px 0; font-size: 20px; font-weight: 600;">Items Ordered</h2>
             ${items.map(item => `
               <div style="display: flex; justify-content: space-between; align-items: center; padding: 20px 0; border-bottom: 1px solid #e5e7eb;">
