@@ -74,8 +74,8 @@ function generateCustomerEmail(session: Stripe.Checkout.Session) {
     }
   }) || []
 
-  // Handle shipping details safely - access shipping_details with proper typing
-  const shippingInfo = (session as Stripe.Checkout.Session & {
+  // Handle shipping details safely - try multiple sources
+  const sessionWithShipping = session as Stripe.Checkout.Session & {
     shipping_details?: {
       name?: string
       address?: {
@@ -87,10 +87,39 @@ function generateCustomerEmail(session: Stripe.Checkout.Session) {
         country?: string
       }
     }
-  }).shipping_details
+    shipping_cost?: {
+      shipping_address?: any
+    }
+  }
+  
+  // Try different sources for shipping information
+  let shippingInfo = sessionWithShipping.shipping_details
+  
+  // If shipping_details is null, try shipping_cost.shipping_address
+  if (!shippingInfo && sessionWithShipping.shipping_cost?.shipping_address) {
+    shippingInfo = sessionWithShipping.shipping_cost.shipping_address
+  }
+  
+  // If still no shipping info, try to construct from customer_details
+  if (!shippingInfo && session.customer_details?.address) {
+    const customerAddress = session.customer_details.address
+    shippingInfo = {
+      name: session.customer_details.name || undefined,
+      address: {
+        line1: customerAddress.line1 || undefined,
+        line2: customerAddress.line2 || undefined,
+        city: customerAddress.city || undefined,
+        state: customerAddress.state || undefined,
+        postal_code: customerAddress.postal_code || undefined,
+        country: customerAddress.country || undefined,
+      }
+    }
+  }
+  
   const hasShippingDetails = shippingInfo && shippingInfo.address
   
-  console.log('Customer email - Shipping details:', JSON.stringify(shippingInfo, null, 2))
+  console.log('Customer email - Final shipping info used:', JSON.stringify(shippingInfo, null, 2))
+  console.log('Customer email - Has shipping details:', hasShippingDetails)
 
   // Modern email template with better styling
   const htmlContent = `
@@ -246,8 +275,8 @@ function generateOwnerEmail(session: Stripe.Checkout.Session) {
     }
   }) || []
 
-  // Handle shipping details safely - access shipping_details with proper typing
-  const shippingInfo = (session as Stripe.Checkout.Session & {
+  // Handle shipping details safely - try multiple sources (same as customer email)
+  const sessionWithShipping = session as Stripe.Checkout.Session & {
     shipping_details?: {
       name?: string
       address?: {
@@ -259,10 +288,39 @@ function generateOwnerEmail(session: Stripe.Checkout.Session) {
         country?: string
       }
     }
-  }).shipping_details
+    shipping_cost?: {
+      shipping_address?: any
+    }
+  }
+  
+  // Try different sources for shipping information
+  let shippingInfo = sessionWithShipping.shipping_details
+  
+  // If shipping_details is null, try shipping_cost.shipping_address
+  if (!shippingInfo && sessionWithShipping.shipping_cost?.shipping_address) {
+    shippingInfo = sessionWithShipping.shipping_cost.shipping_address
+  }
+  
+  // If still no shipping info, try to construct from customer_details
+  if (!shippingInfo && session.customer_details?.address) {
+    const customerAddress = session.customer_details.address
+    shippingInfo = {
+      name: session.customer_details.name || undefined,
+      address: {
+        line1: customerAddress.line1 || undefined,
+        line2: customerAddress.line2 || undefined,
+        city: customerAddress.city || undefined,
+        state: customerAddress.state || undefined,
+        postal_code: customerAddress.postal_code || undefined,
+        country: customerAddress.country || undefined,
+      }
+    }
+  }
+  
   const hasShippingDetails = shippingInfo && shippingInfo.address
   
-  console.log('Owner email - Shipping details:', JSON.stringify(shippingInfo, null, 2))
+  console.log('Owner email - Final shipping info used:', JSON.stringify(shippingInfo, null, 2))
+  console.log('Owner email - Has shipping details:', hasShippingDetails)
 
   const htmlContent = `
     <!DOCTYPE html>
@@ -439,6 +497,12 @@ export async function POST(request: NextRequest) {
         const session = await stripe.checkout.sessions.retrieve(sessionId, {
           expand: ['line_items', 'line_items.data.price.product']
         })
+        
+        // Debug: Log the entire session object to see what shipping data is available
+        console.log('Full session object keys:', Object.keys(session))
+        console.log('Session shipping_details:', JSON.stringify((session as any).shipping_details, null, 2))
+        console.log('Session shipping_cost:', JSON.stringify((session as any).shipping_cost, null, 2))
+        console.log('Session customer_details:', JSON.stringify(session.customer_details, null, 2))
         
         // Send customer confirmation email
         if (session.customer_details?.email) {

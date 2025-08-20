@@ -118,6 +118,8 @@ export async function POST(request: NextRequest) {
       shipping_address_collection: {
         allowed_countries: ['CA', 'US'], // Canada and US for now, can expand
       },
+      // Explicitly collect customer details including address
+      customer_creation: 'always',
       shipping_options: [
         // Canadian shipping rates
         {
