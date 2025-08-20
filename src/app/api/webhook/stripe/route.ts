@@ -433,9 +433,10 @@ export async function POST(request: NextRequest) {
         
         console.log('Processing completed checkout session:', sessionId)
         
-        // Retrieve the full session with line items and shipping details expanded
+        // Retrieve the full session with line items expanded
+        // Note: shipping_details cannot be expanded, but is available directly
         const session = await stripe.checkout.sessions.retrieve(sessionId, {
-          expand: ['line_items', 'line_items.data.price.product', 'shipping_details']
+          expand: ['line_items', 'line_items.data.price.product']
         })
         
         // Send customer confirmation email
