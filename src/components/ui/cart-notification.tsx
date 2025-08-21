@@ -8,6 +8,7 @@ import { useCart } from "@/lib/cart"
 import { CheckCircle, X, Plus, Minus, Trash2 } from "lucide-react"
 import { useMediaQuery } from "@/hooks/use-media-query"
 import { Button } from "@/components/ui/button"
+import { getProductById, getVariantStock } from "@/lib/data"
 import {
   Dialog,
   DialogContent,
@@ -222,14 +223,34 @@ export function DrawerDialogDemo({
                       {recentItem.quantity}
                     </span>
                     
-                    {/* Always show plus button */}
-                    <button
-                      onClick={() => handleQuantityChange(recentItem.quantity + 1)}
-                      className="text-gray-500 hover:text-caddi-brown transition-colors cursor-pointer"
-                      aria-label="Increase quantity"
-                    >
-                      <Plus className="h-4 w-4" />
-                    </button>
+                    {/* Plus button - check stock limit */}
+                    {(() => {
+                      const product = getProductById(recentItem.id)
+                      let availableStock = product?.stock || 0
+                      
+                      // If it's a variant, check variant stock instead
+                      if (recentItem.variantId) {
+                        const variantStock = getVariantStock(recentItem.variantId)
+                        availableStock = variantStock !== null ? variantStock : product?.stock || 0
+                      }
+                      
+                      const isAtStockLimit = recentItem.quantity >= availableStock
+                      
+                      return (
+                        <button
+                          onClick={() => handleQuantityChange(recentItem.quantity + 1)}
+                          disabled={isAtStockLimit}
+                          className={`transition-colors ${
+                            isAtStockLimit 
+                              ? 'text-gray-300 cursor-not-allowed' 
+                              : 'text-gray-500 hover:text-caddi-brown cursor-pointer'
+                          }`}
+                          aria-label="Increase quantity"
+                        >
+                          <Plus className="h-4 w-4" />
+                        </button>
+                      )
+                    })()}
                   </div>
                 </div>
               )}
@@ -339,14 +360,34 @@ export function DrawerDialogDemo({
                     {recentItem.quantity}
                   </span>
                   
-                  {/* Always show plus button */}
-                  <button
-                    onClick={() => handleQuantityChange(recentItem.quantity + 1)}
-                    className="text-gray-500 hover:text-caddi-brown transition-colors cursor-pointer"
-                    aria-label="Increase quantity"
-                  >
-                    <Plus className="h-4 w-4" />
-                  </button>
+                  {/* Plus button - check stock limit */}
+                  {(() => {
+                    const product = getProductById(recentItem.id)
+                    let availableStock = product?.stock || 0
+                    
+                    // If it's a variant, check variant stock instead
+                    if (recentItem.variantId) {
+                      const variantStock = getVariantStock(recentItem.variantId)
+                      availableStock = variantStock !== null ? variantStock : product?.stock || 0
+                    }
+                    
+                    const isAtStockLimit = recentItem.quantity >= availableStock
+                    
+                    return (
+                      <button
+                        onClick={() => handleQuantityChange(recentItem.quantity + 1)}
+                        disabled={isAtStockLimit}
+                        className={`transition-colors ${
+                          isAtStockLimit 
+                            ? 'text-gray-300 cursor-not-allowed' 
+                            : 'text-gray-500 hover:text-caddi-brown cursor-pointer'
+                        }`}
+                        aria-label="Increase quantity"
+                      >
+                        <Plus className="h-4 w-4" />
+                      </button>
+                    )
+                  })()}
                 </div>
               </div>
             )}

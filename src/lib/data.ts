@@ -99,6 +99,15 @@ export function getProductsByCategory(categoryId: number): Product[] {
   return products.filter(product => product.category_id === categoryId)
 }
 
+export function getVariantById(variantId: number): ProductVariant | undefined {
+  return productVariants.find(variant => variant.id === variantId)
+}
+
+export function getVariantStock(variantId: number): number | null {
+  const variant = getVariantById(variantId)
+  return variant?.stock || null
+}
+
 export function getAllProducts(): Product[] {
   return products.sort((a, b) => {
     const dateA = new Date(a.created_at);

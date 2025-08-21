@@ -1,7 +1,7 @@
 "use client"
 
 import { useCart, CartProvider } from "@/lib/cart"
-import { ProductVariant } from "@/lib/data"
+import { ProductVariant, getVariantStock } from "@/lib/data"
 import { DrawerDialogDemo } from "@/components/ui/cart-notification"
 import { useCallback } from "react"
 
@@ -24,6 +24,8 @@ interface AddToBagButtonProps {
   size?: string
   type?: string
   disabled?: boolean
+  // Stock information
+  productStock?: number | null
   children: React.ReactNode
 }
 
@@ -44,9 +46,10 @@ function AddToBagButtonInner({
   size,
   type,
   disabled = false,
+  productStock,
   children
 }: AddToBagButtonProps) {
-  const { addItem } = useCart()
+  const { addItem, state } = useCart()
 
   const handleAddToBag = useCallback(() => {
     if (hasVariants && isDivotTool && selectedType && variants) {
@@ -109,8 +112,39 @@ function AddToBagButtonInner({
     }
   }, [addItem, productId, productName, productPrice, productImage, variants, selectedColor, selectedSize, selectedType, hasVariants, isDivotTool, variantId, color, size, type])
 
+  // Check if adding one more would exceed stock
+  const checkStockLimit = () => {
+    if (hasVariants && isDivotTool && selectedType && variants) {
+      const selectedVariant = variants.find(v => v.types?.name === selectedType)
+      if (selectedVariant) {
+        const variantStock = getVariantStock(selectedVariant.id)
+        const currentInCart = state.items.find(item => item.variantId === selectedVariant.id)?.quantity || 0
+        return variantStock !== null && currentInCart >= variantStock
+      }
+    } else if (hasVariants && !isDivotTool && selectedColor && selectedSize && variants) {
+      const selectedVariant = variants.find(v => v.colors?.name === selectedColor && v.sizes?.name === selectedSize)
+      if (selectedVariant) {
+        const variantStock = getVariantStock(selectedVariant.id)
+        const currentInCart = state.items.find(item => item.variantId === selectedVariant.id)?.quantity || 0
+        return variantStock !== null && currentInCart >= variantStock
+      }
+    } else if (variantId) {
+      const variantStock = getVariantStock(variantId)
+      const currentInCart = state.items.find(item => item.variantId === variantId)?.quantity || 0
+      return variantStock !== null && currentInCart >= variantStock
+    } else {
+      // For non-variant products, check product stock
+      if (productStock !== null && productStock !== undefined) {
+        const currentInCart = state.items.find(item => item.id === productId && !item.variantId)?.quantity || 0
+        return currentInCart >= productStock
+      }
+      return false
+    }
+    return false
+  }
+
   // Determine if button should be disabled
-  const isDisabled = disabled || isOutOfStock ||
+  const isDisabled = disabled || isOutOfStock || checkStockLimit() ||
     (hasVariants && isDivotTool && !selectedType) ||
     (hasVariants && !isDivotTool && (!selectedColor || !selectedSize))
 

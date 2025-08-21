@@ -5,7 +5,7 @@ import { getStripe } from "@/lib/stripe"
 import Image from "next/image"
 import Link from "next/link"
 import { useState, useEffect } from "react"
-import { getAllProducts, getProductById } from "@/lib/data"
+import { getAllProducts, getProductById, getVariantStock } from "@/lib/data"
 import { normalizeImageUrl } from "@/lib/utils"
 import RelatedProducts from "@/components/pages/shop/RelatedProducts"
 
@@ -281,15 +281,37 @@ export default function CartPageClient() {
                           {item.quantity}
                         </span>
                         
-                        {/* Always show plus button */}
-                        <button
-                          onClick={() => updateQuantity(item.id, item.variantId, item.quantity + 1)}
-                          className="text-gray-500 hover:text-caddi-brown transition-colors cursor-pointer"
-                        >
-                          <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                          </svg>
-                        </button>
+                        {/* Plus button - check stock limit */}
+                        {(() => {
+                          const product = getProductById(item.id)
+                          let availableStock = product?.stock || 0
+                          
+                          // If it's a variant, check variant stock instead
+                          if (item.variantId) {
+                            const variantStock = getVariantStock(item.variantId)
+                            availableStock = variantStock !== null ? variantStock : product?.stock || 0
+                          }
+                          
+
+                          
+                          const isAtStockLimit = item.quantity >= availableStock
+                          
+                          return (
+                            <button
+                              onClick={() => updateQuantity(item.id, item.variantId, item.quantity + 1)}
+                              disabled={isAtStockLimit}
+                              className={`transition-colors ${
+                                isAtStockLimit 
+                                  ? 'text-gray-300 cursor-not-allowed' 
+                                  : 'text-gray-500 hover:text-caddi-brown cursor-pointer'
+                              }`}
+                            >
+                              <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                              </svg>
+                            </button>
+                          )
+                        })()}
                       </div>
                     </div>
                   </div>

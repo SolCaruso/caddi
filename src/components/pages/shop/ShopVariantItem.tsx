@@ -489,6 +489,7 @@ export default function ShopVariantItem({ product, variants, productImages, rela
                   hasVariants={hasVariants}
                   isDivotTool={isDivotTool}
                   isOutOfStock={isOutOfStock}
+                  productStock={product.stock}
                 >
                   {isOutOfStock
                     ? "Out of Stock"
