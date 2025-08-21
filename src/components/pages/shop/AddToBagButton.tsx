@@ -14,11 +14,14 @@ interface AddToBagButtonProps {
   variants?: ProductVariant[]
   selectedColor?: string | null
   selectedSize?: string | null
+  selectedType?: string | null
   hasVariants?: boolean
+  isDivotTool?: boolean
   // Optional props for direct variant info
   variantId?: number
   color?: string
   size?: string
+  type?: string
   disabled?: boolean
   children: React.ReactNode
 }
@@ -31,18 +34,38 @@ function AddToBagButtonInner({
   variants,
   selectedColor,
   selectedSize,
+  selectedType,
   hasVariants = false,
+  isDivotTool = false,
   variantId,
   color,
   size,
+  type,
   disabled = false,
   children
 }: AddToBagButtonProps) {
   const { addItem } = useCart()
 
   const handleAddToBag = useCallback(() => {
-    if (hasVariants && selectedColor && selectedSize && variants) {
-      // Handle products with variants that need color/size selection
+    if (hasVariants && isDivotTool && selectedType && variants) {
+      // Handle divot tools with type selection
+      const selectedVariant = variants.find(v => 
+        v.types?.name === selectedType
+      )
+      
+      if (selectedVariant) {
+        addItem({
+          id: productId,
+          name: productName,
+          price: productPrice,
+          quantity: 1,
+          image: productImage,
+          variantId: selectedVariant.id,
+          type: selectedType
+        })
+      }
+    } else if (hasVariants && !isDivotTool && selectedColor && selectedSize && variants) {
+      // Handle clothing with color/size selection
       const selectedVariant = variants.find(v => 
         v.colors?.name === selectedColor && v.sizes?.name === selectedSize
       )
@@ -59,7 +82,7 @@ function AddToBagButtonInner({
           size: selectedSize
         })
       }
-    } else if (variantId && (color || size)) {
+    } else if (variantId && (color || size || type)) {
       // Handle products with direct variant info
       addItem({
         id: productId,
@@ -69,7 +92,8 @@ function AddToBagButtonInner({
         image: productImage,
         variantId,
         color,
-        size
+        size,
+        type
       })
     } else {
       // Handle simple products without variants
@@ -81,10 +105,12 @@ function AddToBagButtonInner({
         image: productImage
       })
     }
-  }, [addItem, productId, productName, productPrice, productImage, variants, selectedColor, selectedSize, hasVariants, variantId, color, size])
+  }, [addItem, productId, productName, productPrice, productImage, variants, selectedColor, selectedSize, selectedType, hasVariants, isDivotTool, variantId, color, size, type])
 
   // Determine if button should be disabled
-  const isDisabled = disabled || (hasVariants && (!selectedColor || !selectedSize))
+  const isDisabled = disabled || 
+    (hasVariants && isDivotTool && !selectedType) ||
+    (hasVariants && !isDivotTool && (!selectedColor || !selectedSize))
 
   return (
     <DrawerDialogDemo
@@ -93,6 +119,7 @@ function AddToBagButtonInner({
       productImage={productImage}
       selectedColor={selectedColor}
       selectedSize={selectedSize}
+      selectedType={selectedType}
       disabled={isDisabled}
       onButtonClick={handleAddToBag}
     >

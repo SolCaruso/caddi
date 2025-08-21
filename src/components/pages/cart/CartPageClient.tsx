@@ -236,6 +236,9 @@ export default function CartPageClient() {
                     {item.size && (
                       <p className="text-sm text-gray-500">Size: {item.size}</p>
                     )}
+                    {item.type && (
+                      <p className="text-sm text-gray-500">{item.type}</p>
+                    )}
                     {(() => {
                       const product = getProductById(item.id)
                       const hasVariants = item.variantId !== undefined

@@ -46,11 +46,18 @@ export default function ShopGrid({ onFilterChange, selectedFilters }: ShopGridPr
       const category = categories.find(cat => cat.id === product.category_id);
       if (!category) return false;
 
-      // Check if the product's category matches any selected filter
+      // Check if the product matches any selected filter
       return selectedFilters.some(filter => {
+        // Divot tool filtering
         if (filter === "divot-tools-all" && category.name === "Divot Tool") {
           return true;
         }
+        if (filter.startsWith("divot-tool-") && category.name === "Divot Tool") {
+          const tagFilter = filter.replace("divot-tool-", "").replace(/-/g, " ");
+          return product.tag?.toLowerCase() === tagFilter;
+        }
+        
+        // Clothing filtering
         if (filter === "t-shirts" && category.name === "T-Shirt") {
           return true;
         }
@@ -161,20 +168,31 @@ export default function ShopGrid({ onFilterChange, selectedFilters }: ShopGridPr
                   {(() => {
                     // Check if product has variants
                     const hasVariants = productVariants.length > 0
+                    const category = categories.find(cat => cat.id === product.category_id)
                     
                     if (product.subtitle) {
                       return product.subtitle
-                    } else if (hasVariants) {
-                      // Count unique colors for variant products
-                      const uniqueColors = new Set()
-                      productVariants.forEach(v => {
-                        if (v.colors?.name) uniqueColors.add(v.colors.name)
-                      })
-                      const colorCount = uniqueColors.size
-                      return `${colorCount} ${colorCount === 1 ? 'Colour' : 'Colours'}`
+                    } else if (hasVariants && category) {
+                      // Category-based variant counting
+                      if (category.name === "Divot Tool") {
+                        // For divot tools, count unique types
+                        const uniqueTypes = new Set()
+                        productVariants.forEach(v => {
+                          if (v.types?.name) uniqueTypes.add(v.types.name)
+                        })
+                        const typeCount = uniqueTypes.size
+                        return typeCount > 0 ? `${typeCount} ${typeCount === 1 ? 'Type' : 'Types'}` : "0 Types"
+                      } else {
+                        // For clothing (T-Shirt, Hoodie), count unique colors
+                        const uniqueColors = new Set()
+                        productVariants.forEach(v => {
+                          if (v.colors?.name) uniqueColors.add(v.colors.name)
+                        })
+                        const colorCount = uniqueColors.size
+                        return colorCount > 0 ? `${colorCount} ${colorCount === 1 ? 'Colour' : 'Colours'}` : "0 Colours"
+                      }
                     } else {
                       // For non-variant products, show "Category - Tag" or just "Category"
-                      const category = categories.find(cat => cat.id === product.category_id)
                       if (category) {
                         return product.tag ? `${category.name} - ${product.tag}` : category.name
                       }

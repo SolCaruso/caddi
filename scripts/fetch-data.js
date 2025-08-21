@@ -42,13 +42,14 @@ async function fetchData() {
       return
     }
 
-    // Fetch product variants with colors and sizes
+    // Fetch product variants with colors, sizes, and types
     const { data: productVariants, error: variantsError } = await supabase
       .from('product_variants')
       .select(`
         *,
         colors(name),
-        sizes(name)
+        sizes(name),
+        types(name)
       `)
 
     if (variantsError) {
@@ -86,7 +87,25 @@ async function fetchData() {
       return
     }
 
+    // Fetch types (wood types)
+    const { data: types, error: typesError } = await supabase
+      .from('types')
+      .select('*')
 
+    if (typesError) {
+      console.error('Error fetching types:', typesError)
+      return
+    }
+
+    // Fetch tags
+    const { data: tags, error: tagsError } = await supabase
+      .from('tags')
+      .select('*')
+
+    if (tagsError) {
+      console.error('Error fetching tags:', tagsError)
+      return
+    }
 
     // Create data directory if it doesn't exist
     const dataDir = path.join(process.cwd(), 'src', 'data')
@@ -125,12 +144,24 @@ async function fetchData() {
       JSON.stringify(sizes, null, 2)
     )
 
+    fs.writeFileSync(
+      path.join(dataDir, 'types.json'),
+      JSON.stringify(types, null, 2)
+    )
+
+    fs.writeFileSync(
+      path.join(dataDir, 'tags.json'),
+      JSON.stringify(tags, null, 2)
+    )
+
     console.log(`✅ Fetched ${products?.length || 0} products`)
     console.log(`✅ Fetched ${categories?.length || 0} categories`)
     console.log(`✅ Fetched ${productVariants?.length || 0} product variants`)
     console.log(`✅ Fetched ${images?.length || 0} images`)
     console.log(`✅ Fetched ${colors?.length || 0} colors`)
     console.log(`✅ Fetched ${sizes?.length || 0} sizes`)
+    console.log(`✅ Fetched ${types?.length || 0} types`)
+    console.log(`✅ Fetched ${tags?.length || 0} tags`)
     console.log('Data files generated successfully!')
 
   } catch (error) {

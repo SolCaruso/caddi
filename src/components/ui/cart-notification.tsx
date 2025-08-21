@@ -31,6 +31,7 @@ interface DrawerDialogDemoProps {
   productImage: string
   selectedColor?: string | null
   selectedSize?: string | null
+  selectedType?: string | null
   disabled?: boolean
   children: React.ReactNode
   onButtonClick?: () => void
@@ -42,6 +43,7 @@ export function DrawerDialogDemo({
   productImage,
   selectedColor,
   selectedSize,
+  selectedType,
   disabled = false,
   children,
   onButtonClick
@@ -183,6 +185,11 @@ export function DrawerDialogDemo({
                   Size {selectedSize}
                 </p>
               )}
+              {selectedType && (
+                <p className="text-xs text-gray-600">
+                  {selectedType}
+                </p>
+              )}
               <p className="text-sm font-medium text-gray-900 mt-1">
                 ${productPrice}
               </p>
@@ -293,6 +300,11 @@ export function DrawerDialogDemo({
             {selectedSize && (
               <p className="text-xs text-gray-600">
                 Size {selectedSize}
+              </p>
+            )}
+            {selectedType && (
+              <p className="text-xs text-gray-600">
+                {selectedType}
               </p>
             )}
             <p className="text-sm font-medium text-gray-900 mt-1">

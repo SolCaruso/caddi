@@ -4,6 +4,8 @@ import productVariantsData from '../data/product-variants.json'
 import imagesData from '../data/images.json'
 import colorsData from '../data/colors.json'
 import sizesData from '../data/sizes.json'
+import typesData from '../data/types.json'
+import tagsData from '../data/tags.json'
 
 export interface Product {
   id: number
@@ -32,8 +34,9 @@ export interface Category {
 export interface ProductVariant {
   id: number
   product_id: number
-  size_id: number
-  color_id: number
+  size_id: number | null
+  color_id: number | null
+  type_id: number | null
   sku: string | null
   price: number | null
   stock: number | null
@@ -41,10 +44,13 @@ export interface ProductVariant {
   "Item Description (for database)"?: string | null
   colors?: {
     name: string
-  }
+  } | null
   sizes?: {
     name: string
-  }
+  } | null
+  types?: {
+    name: string
+  } | null
 }
 
 export interface Image {
@@ -66,12 +72,24 @@ export interface Size {
   name: string
 }
 
+export interface Type {
+  id: number
+  name: string
+}
+
+export interface Tag {
+  id: number
+  name: string
+}
+
 export const products: Product[] = productsData as Product[]
 export const categories: Category[] = categoriesData as Category[]
 export const productVariants: ProductVariant[] = productVariantsData as ProductVariant[]
 export const images: Image[] = imagesData as Image[]
 export const colors: Color[] = colorsData as Color[]
 export const sizes: Size[] = sizesData as Size[]
+export const types: Type[] = typesData as Type[]
+export const tags: Tag[] = tagsData as Tag[]
 
 export function getProductById(id: number): Product | undefined {
   return products.find(product => product.id === id)
@@ -91,6 +109,14 @@ export function getAllProducts(): Product[] {
 
 export function getAllCategories(): Category[] {
   return categories
+}
+
+export function getAllTypes(): Type[] {
+  return types
+}
+
+export function getAllTags(): Tag[] {
+  return tags
 }
 
 export function getProductVariants(productId: number): ProductVariant[] {

@@ -7,7 +7,7 @@ import {
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import ShopHeader from "./ShopHeader";
-import { filterSections } from "./ShopFilter";
+import { getFilterSections } from "./ShopFilter";
 import Link from "next/link";
 
 interface ShopSidebarProps {
@@ -16,6 +16,8 @@ interface ShopSidebarProps {
 }
 
 export default function ShopSidebar({ onFilterChange, selectedFilters }: ShopSidebarProps) {
+  const filterSections = getFilterSections();
+  
   return (
     <div className="lg:w-1/5 hidden lg:block">
       <div className="mb-8">

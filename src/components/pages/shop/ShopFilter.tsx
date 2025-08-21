@@ -13,24 +13,44 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import Link from "next/link";
+import { getAllProducts, getAllCategories } from "@/lib/data";
 
-export const filterSections = [
-  {
-    value: "divot-tools",
-    label: "Divot Tools",
-    options: [
-      { id: "divot-tools-all", label: "Hardwood Divot Tools" },
-    ],
-  },
-  {
-    value: "clothes",
-    label: "Clothes",
-    options: [
-      { id: "t-shirts", label: "T-Shirts" },
-      { id: "hoodies", label: "Hoodies" },
-    ],
-  },
-];
+// Generate filter sections dynamically based on data
+export function getFilterSections() {
+  const products = getAllProducts();
+  const categories = getAllCategories();
+  
+  // Get unique tags from divot tool products
+  const divotToolTags = new Set<string>();
+  products.forEach(product => {
+    const category = categories.find(cat => cat.id === product.category_id);
+    if (category?.name === "Divot Tool" && product.tag) {
+      divotToolTags.add(product.tag);
+    }
+  });
+  
+  return [
+    {
+      value: "divot-tools",
+      label: "Divot Tools",
+      options: [
+        { id: "divot-tools-all", label: "All Divot Tools" },
+        ...Array.from(divotToolTags).map(tag => ({
+          id: `divot-tool-${tag.toLowerCase().replace(/\s+/g, '-')}`,
+          label: tag
+        }))
+      ],
+    },
+    {
+      value: "clothes",
+      label: "Clothes",
+      options: [
+        { id: "t-shirts", label: "T-Shirts" },
+        { id: "hoodies", label: "Hoodies" },
+      ],
+    },
+  ];
+}
 
 interface ShopFilterProps {
   onFilterChange: (filterId: string, isChecked: boolean) => void;
@@ -38,6 +58,8 @@ interface ShopFilterProps {
 }
 
 export default function ShopFilter({ onFilterChange, selectedFilters }: ShopFilterProps) {
+  const filterSections = getFilterSections();
+  
   return (
     <Popover>
       <PopoverTrigger asChild>

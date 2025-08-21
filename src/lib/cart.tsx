@@ -11,6 +11,7 @@ export interface CartItem {
   variantId?: number
   color?: string
   size?: string
+  type?: string
   // Custom build data
   customBuildData?: {
     woodType: string
