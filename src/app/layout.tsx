@@ -6,8 +6,57 @@ import { Toaster } from '@/components/ui/sonner'
 import { CookieConsent } from '@/components/ui/cookie-consent'
 
 export const metadata: Metadata = {
-  title: "Caddi AI Inc.",
-  description: "Download the Forecaddie App Now!",
+  title: {
+    default: "Caddi AI Inc. - Premium Golf Divot Tools & App",
+    template: "%s | Caddi AI Inc."
+  },
+  description: "Premium golf divot tools crafted from exotic hardwoods. Download the Forecaddie app for advanced golf course management and scoring.",
+  keywords: ["golf divot tools", "exotic hardwood", "golf accessories", "forecaddie app", "golf course management", "premium golf tools"],
+  authors: [{ name: "Caddi AI Inc." }],
+  creator: "Caddi AI Inc.",
+  publisher: "Caddi AI Inc.",
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
+  metadataBase: new URL('https://caddi.ai'),
+  alternates: {
+    canonical: '/',
+  },
+  openGraph: {
+    type: 'website',
+    locale: 'en_US',
+    url: 'https://caddi.ai',
+    title: 'Caddi AI Inc. - Premium Golf Divot Tools & App',
+    description: 'Premium golf divot tools crafted from exotic hardwoods. Download the Forecaddie app for advanced golf course management and scoring.',
+    siteName: 'Caddi AI Inc.',
+    images: [
+      {
+        url: '/og-image.jpg',
+        width: 1200,
+        height: 630,
+        alt: 'Caddi AI Inc. - Premium Golf Divot Tools',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Caddi AI Inc. - Premium Golf Divot Tools & App',
+    description: 'Premium golf divot tools crafted from exotic hardwoods. Download the Forecaddie app for advanced golf course management and scoring.',
+    images: ['/og-image.jpg'],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
 };
 
 export default function RootLayout({

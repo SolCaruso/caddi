@@ -2,8 +2,18 @@ import { Metadata } from 'next'
 import Link from 'next/link'
 
 export const metadata: Metadata = {
-  title: 'Terms of Use - CaDDi AI',
-  description: 'Terms of Use for CaDDi AI Inc.',
+  title: 'Terms of Use',
+  description: 'Terms of Use for Caddi AI Inc. Read our terms and conditions for using our golf divot tools and Forecaddie app services.',
+  keywords: ["terms of use", "terms and conditions", "caddi ai terms", "golf app terms", "service agreement"],
+  robots: {
+    index: true,
+    follow: true,
+  },
+  openGraph: {
+    title: 'Terms of Use',
+    description: 'Terms of Use for Caddi AI Inc. Read our terms and conditions for using our golf divot tools and Forecaddie app services.',
+    url: 'https://caddi.ai/terms-and-conditions',
+  },
 }
 
 export default function TermsAndConditionsPage() {

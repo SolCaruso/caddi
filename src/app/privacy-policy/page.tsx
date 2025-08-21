@@ -2,8 +2,18 @@ import { Metadata } from 'next'
 import Link from 'next/link'
 
 export const metadata: Metadata = {
-  title: 'Privacy Policy - CaDDi AI',
-  description: 'Privacy Policy for CaDDi AI Inc.',
+  title: 'Privacy Policy',
+  description: 'Privacy Policy for Caddi AI Inc. Learn how we collect, use, and protect your personal information when using our golf divot tools and Forecaddie app.',
+  keywords: ["privacy policy", "data protection", "personal information", "caddi ai privacy", "golf app privacy"],
+  robots: {
+    index: true,
+    follow: true,
+  },
+  openGraph: {
+    title: 'Privacy Policy',
+    description: 'Privacy Policy for Caddi AI Inc. Learn how we collect, use, and protect your personal information when using our golf divot tools and Forecaddie app.',
+    url: 'https://caddi.ai/privacy-policy',
+  },
 }
 
 export default function TermsOfServicePage() {

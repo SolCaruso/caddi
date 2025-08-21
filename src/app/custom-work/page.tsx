@@ -4,8 +4,18 @@ import { Metadata } from 'next'
 import ContinuousCarousel from '@/components/ui/continuous-carousel'
 
 export const metadata: Metadata = {
-  title: 'Custom Work & Wholesale - Caddi',
-  description: 'Custom hardwood divot tools, tournament trophies, pro shop accents, and wholesale products. Handcrafted with precision and sustainability.',
+  title: 'Custom Work & Wholesale',
+  description: 'Custom hardwood divot tools, tournament trophies, pro shop accents, and wholesale products. Handcrafted with precision and sustainability for golf courses and events.',
+  keywords: ["custom golf divot tools", "wholesale golf accessories", "tournament trophies", "pro shop merchandise", "corporate golf gifts", "custom golf accessories"],
+  openGraph: {
+    title: 'Custom Work & Wholesale',
+    description: 'Custom hardwood divot tools, tournament trophies, pro shop accents, and wholesale products. Handcrafted with precision and sustainability for golf courses and events.',
+    url: 'https://caddi.ai/custom-work',
+  },
+  twitter: {
+    title: 'Custom Work & Wholesale',
+    description: 'Custom hardwood divot tools, tournament trophies, pro shop accents, and wholesale products. Handcrafted with precision and sustainability for golf courses and events.',
+  },
 }
 
 const includedFeatures = [

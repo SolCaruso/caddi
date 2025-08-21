@@ -2,8 +2,18 @@ import { Metadata } from 'next'
 import Link from 'next/link'
 
 export const metadata: Metadata = {
-  title: 'Cookie Policy - CaDDi AI',
-  description: 'Cookie Policy for CaDDi AI Inc.',
+  title: 'Cookie Policy',
+  description: 'Cookie Policy for Caddi AI Inc. Learn how we use cookies and similar technologies on our website and golf app.',
+  keywords: ["cookie policy", "cookies", "website cookies", "caddi ai cookies", "golf app cookies", "privacy cookies"],
+  robots: {
+    index: true,
+    follow: true,
+  },
+  openGraph: {
+    title: 'Cookie Policy',
+    description: 'Cookie Policy for Caddi AI Inc. Learn how we use cookies and similar technologies on our website and golf app.',
+    url: 'https://caddi.ai/cookie-policy',
+  },
 }
 
 export default function CookiePolicyPage() {

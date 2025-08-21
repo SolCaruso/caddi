@@ -1,4 +1,20 @@
+import type { Metadata } from 'next'
 import Image from "next/image"
+
+export const metadata: Metadata = {
+  title: "About Caddi AI Inc. - Our Story",
+  description: "Meet Simon, founder of Caddi AI Inc. Learn about our journey from a passion project to creating premium golf divot tools and the Forecaddie app to make golf easier and more enjoyable.",
+  keywords: ["about caddi ai", "simon founder", "golf app development", "forecaddie app", "golf divot tools", "golf passion project"],
+  openGraph: {
+    title: "About Caddi AI Inc. - Our Story",
+    description: "Meet Simon, founder of Caddi AI Inc. Learn about our journey from a passion project to creating premium golf divot tools and the Forecaddie app to make golf easier and more enjoyable.",
+    url: 'https://caddi.ai/about',
+  },
+  twitter: {
+    title: "About Caddi AI Inc. - Our Story",
+    description: "Meet Simon, founder of Caddi AI Inc. Learn about our journey from a passion project to creating premium golf divot tools and the Forecaddie app to make golf easier and more enjoyable.",
+  },
+}
 
 export default function AboutPage() {
   const stats = [
@@ -39,7 +55,7 @@ export default function AboutPage() {
         <div className="md:hidden xl:mx-auto xl:max-w-7xl xl:px-8 pt-18">
           <Image
             alt="Simon, founder of Caddi AI"
-            src="/jpg/zolas-59.jpg"
+            src="/webp/zolas-59.webp"
             width={800}
             height={600}
             className="aspect-[9/4] w-full object-cover outline-1 -outline-offset-1 outline-black/5"

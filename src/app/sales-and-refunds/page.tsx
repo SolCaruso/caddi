@@ -2,8 +2,18 @@ import { Metadata } from 'next'
 import Link from 'next/link'
 
 export const metadata: Metadata = {
-  title: 'Sales and Refunds Policy - CaDDi AI',
-  description: 'Sales and Refunds Policy for CaDDi AI Inc.',
+  title: 'Sales and Refunds Policy',
+  description: 'Sales and Refunds Policy for Caddi AI Inc. Learn about our return policy, refund process, and customer service for golf divot tools and accessories.',
+  keywords: ["sales policy", "refund policy", "return policy", "golf divot tools returns", "customer service", "caddi ai returns"],
+  robots: {
+    index: true,
+    follow: true,
+  },
+  openGraph: {
+    title: 'Sales and Refunds Policy',
+    description: 'Sales and Refunds Policy for Caddi AI Inc. Learn about our return policy, refund process, and customer service for golf divot tools and accessories.',
+    url: 'https://caddi.ai/sales-and-refunds',
+  },
 }
 
 export default function SalesAndRefundsPage() {
