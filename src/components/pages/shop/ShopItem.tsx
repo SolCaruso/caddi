@@ -70,6 +70,11 @@ export default function ShopItem({ productId }: ShopItemProps) {
   const firstImage = productImages[0]
   const mainImageSrc = normalizeImageUrl(firstImage?.path || "/placeholder.svg?height=600&width=600")
 
+  // Get stock information for non-variant products
+  const displayStock = product.stock
+  const isLowStock = displayStock !== null && displayStock !== undefined && displayStock > 0 && displayStock <= 2
+  const isOutOfStock = displayStock !== null && displayStock !== undefined && displayStock === 0
+
   return (
     <main>
               <Container className="mx-auto px-4 3xl:!max-w-8xl">
@@ -90,6 +95,20 @@ export default function ShopItem({ productId }: ShopItemProps) {
 
                   {/* Price */}
                   <p className="text-xl font-medium text-black/50">${product.price}</p>
+                  
+                  {/* Low Stock Warning */}
+                  {isLowStock && (
+                    <p className="text-sm text-caddi-brown font-medium mt-1">
+                      Only {displayStock} left!
+                    </p>
+                  )}
+                  
+                  {/* Out of Stock Warning */}
+                  {isOutOfStock && (
+                    <p className="text-sm text-red-600 font-medium mt-1">
+                      Out of Stock
+                    </p>
+                  )}
                 </div>
 
                 {/* Back to Shop Button - Right Aligned */}
@@ -146,8 +165,9 @@ export default function ShopItem({ productId }: ShopItemProps) {
                   productName={product.name}
                   productPrice={product.price}
                   productImage={mainImageSrc}
+                  disabled={isOutOfStock}
                 >
-                  Add to Bag
+                  {isOutOfStock ? "Out of Stock" : "Add to Bag"}
                 </AddToBagButton>
               </div>
             </div>
@@ -203,6 +223,20 @@ export default function ShopItem({ productId }: ShopItemProps) {
 
               {/* Price */}
               <p className="text-xl font-medium text-black/50">${product.price}</p>
+              
+              {/* Low Stock Warning */}
+              {isLowStock && (
+                <p className="text-sm text-caddi-brown font-medium mt-1">
+                  Only {displayStock} left!
+                </p>
+              )}
+              
+              {/* Out of Stock Warning */}
+              {isOutOfStock && (
+                <p className="text-sm text-red-600 font-medium mt-1">
+                  Out of Stock
+                </p>
+              )}
 
               {/* Description */}
               <div className="space-y-4">
@@ -229,8 +263,9 @@ export default function ShopItem({ productId }: ShopItemProps) {
                   productName={product.name}
                   productPrice={product.price}
                   productImage={mainImageSrc}
+                  disabled={isOutOfStock}
                 >
-                  Add to Bag
+                  {isOutOfStock ? "Out of Stock" : "Add to Bag"}
                 </AddToBagButton>
               </div>
             </div>

@@ -5,12 +5,39 @@ import { useEffect } from "react"
 
 export function CheckoutSuccessClient() {
   useEffect(() => {
-    // Clear the cart on successful checkout
-    if (typeof window !== 'undefined') {
-      localStorage.removeItem('cart')
-      // Also clear any cart state if you're using a state management solution
-      // You might need to dispatch a clear cart action here
+    const updateStock = async () => {
+      try {
+        // Get cart items from localStorage before clearing
+        const cartItems = localStorage.getItem('cart')
+        if (cartItems) {
+          const items = JSON.parse(cartItems)
+          
+          // Call the stock update API
+          const response = await fetch('/api/update-stock', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ items }),
+          })
+
+          const result = await response.json()
+          
+          if (result.success) {
+            console.log('Stock updated successfully:', result)
+          } else {
+            console.error('Some stock updates failed:', result)
+          }
+        }
+      } catch (error) {
+        console.error('Error updating stock:', error)
+      } finally {
+        // Clear the cart after attempting stock update
+        localStorage.removeItem('cart')
+      }
     }
+
+    updateStock()
   }, [])
 
   return (

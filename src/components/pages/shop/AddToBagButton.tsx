@@ -17,6 +17,7 @@ interface AddToBagButtonProps {
   selectedType?: string | null
   hasVariants?: boolean
   isDivotTool?: boolean
+  isOutOfStock?: boolean
   // Optional props for direct variant info
   variantId?: number
   color?: string
@@ -37,6 +38,7 @@ function AddToBagButtonInner({
   selectedType,
   hasVariants = false,
   isDivotTool = false,
+  isOutOfStock = false,
   variantId,
   color,
   size,
@@ -108,7 +110,7 @@ function AddToBagButtonInner({
   }, [addItem, productId, productName, productPrice, productImage, variants, selectedColor, selectedSize, selectedType, hasVariants, isDivotTool, variantId, color, size, type])
 
   // Determine if button should be disabled
-  const isDisabled = disabled || 
+  const isDisabled = disabled || isOutOfStock ||
     (hasVariants && isDivotTool && !selectedType) ||
     (hasVariants && !isDivotTool && (!selectedColor || !selectedSize))
 

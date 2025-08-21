@@ -109,6 +109,37 @@ export default function ShopVariantItem({ product, variants, productImages, rela
   // Get the appropriate image for the current selection
   const mainImageSrc = normalizeImageUrl(getImageForVariant())
 
+  // Get the current variant and its price/stock
+  const getCurrentVariant = () => {
+    if (!hasVariants) return null
+    
+    if (isDivotTool) {
+      return selectedType 
+        ? variants.find(v => v.types?.name === selectedType)
+        : variants[0]
+    } else {
+      return selectedColor && selectedSize
+        ? variants.find(v => v.colors?.name === selectedColor && v.sizes?.name === selectedSize)
+        : variants[0]
+    }
+  }
+
+  const currentVariant = getCurrentVariant()
+  
+  // Dynamic pricing: variant price overrides product price if available
+  const displayPrice = currentVariant?.price !== null && currentVariant?.price !== undefined
+    ? currentVariant.price
+    : product.price
+
+  // Get stock information
+  const displayStock = currentVariant?.stock !== null && currentVariant?.stock !== undefined
+    ? currentVariant.stock
+    : product.stock
+
+  // Check if stock is low (1 or 2 items)
+  const isLowStock = displayStock !== null && displayStock !== undefined && displayStock > 0 && displayStock <= 2
+  const isOutOfStock = displayStock !== null && displayStock !== undefined && displayStock === 0
+
   return (
     <main>
               <Container className=" mx-auto px-4 3xl:!max-w-8xl">
@@ -136,8 +167,22 @@ export default function ShopVariantItem({ product, variants, productImages, rela
                                 {/* Product Title */}
               <h1 className="text-4xl font-semibold text-caddi-blue uppercase font-family-proxima-nova-extra-condensed">{product.name}</h1>
 
-              {/* Price */}
-              <p className="text-xl font-medium text-black/50">${product.price}</p>
+                                {/* Price */}
+                  <p className="text-xl font-medium text-black/50">${displayPrice}</p>
+                  
+                  {/* Low Stock Warning */}
+                  {isLowStock && (
+                    <p className="text-sm text-caddi-brown font-medium mt-1">
+                      Only {displayStock} left!
+                    </p>
+                  )}
+                  
+                  {/* Out of Stock Warning */}
+                  {isOutOfStock && (
+                    <p className="text-sm text-red-600 font-medium mt-1">
+                      Out of Stock
+                    </p>
+                  )}
                 </div>
 
                 {/* Back to Shop Button - Right Aligned */}
@@ -258,7 +303,7 @@ export default function ShopVariantItem({ product, variants, productImages, rela
                 <AddToBagButton
                   productId={product.id}
                   productName={product.name}
-                  productPrice={product.price}
+                  productPrice={displayPrice}
                   productImage={mainImageSrc}
                   variants={variants}
                   selectedColor={selectedColor}
@@ -266,8 +311,11 @@ export default function ShopVariantItem({ product, variants, productImages, rela
                   selectedType={selectedType}
                   hasVariants={hasVariants}
                   isDivotTool={isDivotTool}
+                  isOutOfStock={isOutOfStock}
                 >
-                  {hasVariants && isDivotTool && !selectedType
+                  {isOutOfStock
+                    ? "Out of Stock"
+                    : hasVariants && isDivotTool && !selectedType
                     ? "Select Wood Type"
                     : hasVariants && !isDivotTool && (!selectedColor || !selectedSize)
                     ? "Select Color & Size" 
@@ -327,7 +375,21 @@ export default function ShopVariantItem({ product, variants, productImages, rela
               <h1 className="text-6xl font-semibold text-caddi-blue uppercase font-family-proxima-nova-extra-condensed">{product.name}</h1>
 
               {/* Price */}
-              <p className="text-xl font-medium text-black/50">${product.price}</p>
+              <p className="text-xl font-medium text-black/50">${displayPrice}</p>
+              
+              {/* Low Stock Warning */}
+              {isLowStock && (
+                <p className="text-sm text-caddi-brown font-medium mt-1">
+                  Only {displayStock} left!
+                </p>
+              )}
+              
+              {/* Out of Stock Warning */}
+              {isOutOfStock && (
+                <p className="text-sm text-red-600 font-medium mt-1">
+                  Out of Stock
+                </p>
+              )}
 
               {/* Type Selection for Divot Tools */}
               {isDivotTool && hasVariants && availableTypes.length > 0 && (
@@ -418,7 +480,7 @@ export default function ShopVariantItem({ product, variants, productImages, rela
                 <AddToBagButton
                   productId={product.id}
                   productName={product.name}
-                  productPrice={product.price}
+                  productPrice={displayPrice}
                   productImage={mainImageSrc}
                   variants={variants}
                   selectedColor={selectedColor}
@@ -426,8 +488,11 @@ export default function ShopVariantItem({ product, variants, productImages, rela
                   selectedType={selectedType}
                   hasVariants={hasVariants}
                   isDivotTool={isDivotTool}
+                  isOutOfStock={isOutOfStock}
                 >
-                  {hasVariants && isDivotTool && !selectedType
+                  {isOutOfStock
+                    ? "Out of Stock"
+                    : hasVariants && isDivotTool && !selectedType
                     ? "Select Wood Type"
                     : hasVariants && !isDivotTool && (!selectedColor || !selectedSize)
                     ? "Select Color & Size" 
