@@ -65,10 +65,10 @@ export default function BuildYourOwnClient({ modelPath, initialSettings }: Build
     // },
     {
       id: 'white-oak',
-      name: 'Quarter-Sawn White Oak',
+      name: 'White Oak',
       texture: '/textures/white-oak.webp',
       price: 15.99,
-      description: 'Classic light wood with prominent grain'
+      description: 'Quarter-Sawn White Oak - Classic light wood with prominent grain'
     },
     {
       id: 'wenge',
