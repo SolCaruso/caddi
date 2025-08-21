@@ -72,6 +72,10 @@ export default function RootLayout({
         <link rel="preconnect" href="https://use.typekit.net" />
         <link rel="preconnect" href="https://p.typekit.net" crossOrigin="" />
         
+        {/* Preconnect to Supabase for faster image loading */}
+        <link rel="preconnect" href="https://zcvltuokjgqfjpqynyrg.supabase.co" />
+        <link rel="dns-prefetch" href="https://js.stripe.com" />
+        
         {/* Preload font stylesheet for faster loading */}
         <link rel="preload" as="style" href="https://use.typekit.net/eaa4cih.css" />
         <link rel="stylesheet" href="https://use.typekit.net/eaa4cih.css" />

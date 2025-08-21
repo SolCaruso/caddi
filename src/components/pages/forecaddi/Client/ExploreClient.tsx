@@ -120,6 +120,7 @@ export default function ForeCaddiContent({ slides }: ForeCaddiContentProps) {
               >
                 <source src={slide.video.webm} type="video/webm" />
                 <source src={slide.video.mp4} type="video/mp4" />
+                <track kind="captions" src={`/captions/${slide.key}.vtt`} label="English" default />
                 Your browser does not support the video tag.
               </video>
             ) : (

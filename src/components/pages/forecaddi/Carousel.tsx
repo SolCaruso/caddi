@@ -102,13 +102,14 @@ export default function CarouselComponent() {
                           loop
                           muted
                           playsInline
-                          preload={Math.abs(index - current) <= 2 ? "auto" : "metadata"} // Preload full video for nearby slides, metadata only for distant ones
+                          preload={Math.abs(index - current) <= 1 ? "auto" : "none"} // Only preload current and adjacent slides
                           className="absolute inset-0 w-full h-full object-contain"
                           draggable={false}
                           aria-label={item.alt}
                         >
                           <source src={item.video?.webm} type="video/webm" />
                           <source src={item.video?.mp4} type="video/mp4" />
+                          <track kind="captions" src="/captions/gps-map-view.vtt" label="English" default />
                           Your browser does not support the video tag.
                         </video>
                       ) : (
@@ -116,9 +117,10 @@ export default function CarouselComponent() {
                           src={item.src!}
                           alt={item.alt}
                           fill
-                          sizes="370px"
+                          sizes="(max-width: 640px) 135px, (max-width: 1024px) 270px, 370px"
                           className="object-contain"
                           priority={Math.abs(index - current) <= 2}
+                          quality={75}
                           draggable={false}
                         />
                       )}
@@ -131,11 +133,11 @@ export default function CarouselComponent() {
           </div>
           
           {/* Mobile: Pagination Dots */}
-          <div className="absolute sm:bottom-6 left-1/2 transform -translate-x-1/2 flex lg:hidden justify-center items-center gap-2">
+          <div className="absolute sm:bottom-6 left-1/2 transform -translate-x-1/2 flex lg:hidden justify-center items-center gap-3">
             {carouselItems.map((item, idx) => (
               <button
                 key={idx}
-                className={`w-[9.25px] h-[9.25px] rounded-full transition-all duration-200 ${
+                className={`w-4 h-4 rounded-full transition-all duration-200 ${
                   ((current - 2 + carouselItems.length) % carouselItems.length) === idx 
                     ? "bg-[#D9D9D9] opacity-96" 
                     : "bg-[#D9D9D9] opacity-24"
@@ -148,11 +150,11 @@ export default function CarouselComponent() {
           </div>
           
           {/* Desktop: Pagination Dots */}
-          <div className="hidden lg:flex absolute bottom-6 3xl:-bottom-6 left-1/2 transform -translate-x-1/2 justify-center items-center gap-2">
+          <div className="hidden lg:flex absolute bottom-6 3xl:-bottom-6 left-1/2 transform -translate-x-1/2 justify-center items-center gap-3">
             {carouselItems.map((item, idx) => (
               <button
                 key={idx}
-                className={`w-[11.25px] h-[11.25px] rounded-full transition-all duration-200 ${
+                className={`w-5 h-5 rounded-full transition-all duration-200 ${
                   ((current - 2 + carouselItems.length) % carouselItems.length) === idx 
                     ? "bg-[#D9D9D9] opacity-96" 
                     : "bg-[#D9D9D9] opacity-24"

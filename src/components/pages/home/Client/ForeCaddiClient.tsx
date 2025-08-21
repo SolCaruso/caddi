@@ -122,9 +122,10 @@ export default function ForeCaddiContent({ slides }: ForeCaddiContentProps) {
               src={slide.image}
               alt={`${slide.label} - ${slide.heading}`}
               fill
-              sizes="(max-width: 768px) 100vw, 50vw"
+              sizes="(max-width: 640px) 240px, (max-width: 768px) 400px, 500px"
               className="object-contain transition-opacity duration-300 ease-in-out min-[2200px]:hidden"
               priority
+              quality={75}
               draggable={false}
             />
             {/* Large image for 2200px+ screens */}
@@ -132,9 +133,10 @@ export default function ForeCaddiContent({ slides }: ForeCaddiContentProps) {
               src={slide.imageLarge}
               alt={`${slide.label} - ${slide.heading} (large view)`}
               fill
-              sizes="(max-width: 768px) 100vw, 50vw"
+              sizes="(max-width: 640px) 240px, (max-width: 768px) 400px, 500px"
               className="object-contain transition-opacity duration-300 ease-in-out hidden min-[2200px]:block"
               priority
+              quality={75}
               draggable={false}
             />
           </div>
@@ -163,11 +165,11 @@ export default function ForeCaddiContent({ slides }: ForeCaddiContentProps) {
         </div>
         
         {/* Mobile: Pagination Dots */}
-        <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex justify-center items-center gap-2">
+        <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex justify-center items-center gap-3">
           {slides.map((slide, idx) => (
             <button
               key={idx}
-              className={`w-[9.25px] h-[9.25px] rounded-full transition-all duration-200 ${
+              className={`w-4 h-4 rounded-full transition-all duration-200 ${
                 activeIdx === idx 
                   ? "bg-[#D9D9D9] opacity-96" 
                   : "bg-[#D9D9D9] opacity-24"
@@ -234,31 +236,33 @@ export default function ForeCaddiContent({ slides }: ForeCaddiContentProps) {
               src={slide.image}
               alt={`${slide.label} - ${slide.heading}`}
               fill
-              sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 680px"
+              sizes="(max-width: 768px) 340px, (max-width: 1024px) 400px, (max-width: 1280px) 440px, 680px"
               className="object-contain min-[2200px]:hidden"
               draggable={false}
               priority
+              quality={75}
             />
             {/* Large image for 2200px+ screens */}
             <Image
               src={slide.imageLarge}
               alt={`${slide.label} - ${slide.heading} (large view)`}
               fill
-              sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 680px"
+              sizes="(max-width: 768px) 340px, (max-width: 1024px) 400px, (max-width: 1280px) 440px, 680px"
               className="object-contain hidden min-[2200px]:block"
               draggable={false}
               priority
+              quality={75}
             />
           </div>
         </div>
       </div>
       
       {/* Desktop: Pagination Dots */}
-      <div className="hidden lg:flex absolute bottom-10 left-1/2 transform -translate-x-1/2 justify-center items-center gap-2">
+      <div className="hidden lg:flex absolute bottom-10 left-1/2 transform -translate-x-1/2 justify-center items-center gap-3">
         {slides.map((slide, idx) => (
           <button
             key={idx}
-            className={`w-[11.25px] h-[11.25px] rounded-full transition-all duration-200 ${
+            className={`w-5 h-5 rounded-full transition-all duration-200 ${
               activeIdx === idx 
                 ? "bg-[#D9D9D9] opacity-96" 
                 : "bg-[#D9D9D9] opacity-24"

@@ -24,6 +24,8 @@ export default function Info() {
                                     fill
                                     sizes="(max-width: 768px) 125px, 250px"
                                     className="object-contain"
+                                    quality={75}
+                                    loading="lazy"
                                 />
                             </div>
                             <div className="relative w-[125px] h-[250px] md:w-[250px] md:h-[500px]">
@@ -33,6 +35,8 @@ export default function Info() {
                                     fill
                                     sizes="(max-width: 768px) 125px, 250px"
                                     className="object-contain"
+                                    quality={75}
+                                    loading="lazy"
                                 />
                             </div>
                         </div>

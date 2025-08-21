@@ -16,6 +16,7 @@ export default function Hero() {
                 className="absolute inset-0 w-full h-full object-cover"
                 style={{ objectPosition: "center center" }}
                 sizes="100vw"
+                quality={85}
                 draggable={false}
             />
             <div className="absolute inset-0 bg-gradient-to-r from-black/70 to-transparent" />
