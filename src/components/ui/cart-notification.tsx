@@ -225,6 +225,19 @@ export function DrawerDialogDemo({
                     
                     {/* Plus button - check stock limit */}
                     {(() => {
+                      // Custom build items don't have stock limits (made to order)
+                      if (recentItem.customBuildData) {
+                        return (
+                          <button
+                            onClick={() => handleQuantityChange(recentItem.quantity + 1)}
+                            className="text-gray-500 hover:text-caddi-brown cursor-pointer transition-colors"
+                            aria-label="Increase quantity"
+                          >
+                            <Plus className="h-4 w-4" />
+                          </button>
+                        )
+                      }
+                      
                       const product = getProductById(recentItem.id)
                       let availableStock = product?.stock || 0
                       
@@ -362,6 +375,19 @@ export function DrawerDialogDemo({
                   
                   {/* Plus button - check stock limit */}
                   {(() => {
+                    // Custom build items don't have stock limits (made to order)
+                    if (recentItem.customBuildData) {
+                      return (
+                        <button
+                          onClick={() => handleQuantityChange(recentItem.quantity + 1)}
+                          className="text-gray-500 hover:text-caddi-brown cursor-pointer transition-colors"
+                          aria-label="Increase quantity"
+                        >
+                          <Plus className="h-4 w-4" />
+                        </button>
+                      )
+                    }
+                    
                     const product = getProductById(recentItem.id)
                     let availableStock = product?.stock || 0
                     

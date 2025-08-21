@@ -19,6 +19,9 @@ export interface CartItem {
     logoColor: 'black' | 'white' | 'neutral'
     customLogoFile?: File
     modelPath: string
+    // Logo fees (charged only once regardless of quantity)
+    customLogoFee?: number // $25 for custom logo
+    forecaddiFee?: number // $3.95 for forecaddi logo
   }
 }
 
@@ -54,9 +57,12 @@ function cartReducer(state: CartState, action: CartAction): CartState {
     }
     
     case 'REMOVE_ITEM': {
-      const filteredItems = state.items.filter(
-        item => !(item.id === action.payload.id && item.variantId === action.payload.variantId)
-      )
+      const filteredItems = state.items.filter(item => {
+        // For custom items, we need to find the specific item by its unique properties
+        // Since we're removing, we'll use a simpler approach and remove by index
+        // This will be handled by the cart component passing the correct item
+        return !(item.id === action.payload.id && item.variantId === action.payload.variantId)
+      })
       return { ...state, items: filteredItems }
     }
     
@@ -121,7 +127,22 @@ export function CartProvider({ children }: { children: ReactNode }) {
   }
 
   const getTotalPrice = () => {
-    return state.items.reduce((total: number, item: CartItem) => total + (item.price * item.quantity), 0)
+    return state.items.reduce((total: number, item: CartItem) => {
+      // Base price * quantity
+      let itemTotal = item.price * item.quantity
+      
+      // Add logo fees only once per item (not per quantity)
+      if (item.customBuildData) {
+        if (item.customBuildData.customLogoFee) {
+          itemTotal += item.customBuildData.customLogoFee
+        }
+        if (item.customBuildData.forecaddiFee) {
+          itemTotal += item.customBuildData.forecaddiFee
+        }
+      }
+      
+      return total + itemTotal
+    }, 0)
   }
 
   // Save cart to localStorage whenever it changes

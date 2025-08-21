@@ -283,6 +283,21 @@ export default function CartPageClient() {
                         
                         {/* Plus button - check stock limit */}
                         {(() => {
+                          // Custom build items don't have stock limits (made to order)
+                          if (item.customBuildData) {
+                            return (
+                              <button
+                                onClick={() => updateQuantity(item.id, item.variantId, item.quantity + 1)}
+                                className="text-gray-500 hover:text-caddi-brown cursor-pointer transition-colors"
+                              >
+                                <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                                </svg>
+                              </button>
+                            )
+                          }
+                          
+                          // For regular products, check stock
                           const product = getProductById(item.id)
                           let availableStock = product?.stock || 0
                           
@@ -291,8 +306,6 @@ export default function CartPageClient() {
                             const variantStock = getVariantStock(item.variantId)
                             availableStock = variantStock !== null ? variantStock : product?.stock || 0
                           }
-                          
-
                           
                           const isAtStockLimit = item.quantity >= availableStock
                           
@@ -318,7 +331,24 @@ export default function CartPageClient() {
 
                   {/* Price */}
                   <div className="text-right">
-                    <p className="text-lg font-medium text-gray-900">${(item.price * item.quantity).toFixed(2)}</p>
+                    {(() => {
+                      // Calculate total for this item including logo fees
+                      let itemTotal = item.price * item.quantity
+                      
+                      // Add logo fees only once per item (not per quantity)
+                      if (item.customBuildData) {
+                        if (item.customBuildData.customLogoFee) {
+                          itemTotal += item.customBuildData.customLogoFee
+                        }
+                        if (item.customBuildData.forecaddiFee) {
+                          itemTotal += item.customBuildData.forecaddiFee
+                        }
+                      }
+                      
+                      return (
+                        <p className="text-lg font-medium text-gray-900">${itemTotal.toFixed(2)}</p>
+                      )
+                    })()}
                   </div>
                 </div>
               ))}

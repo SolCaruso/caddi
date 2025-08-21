@@ -77,20 +77,20 @@ export default function BuildYourOwnClient({ modelPath, initialSettings }: Build
       price: 19.99,
       description: 'Dark chocolate brown with fine grain'
     },
-    {
-      id: 'rosewood',
-      name: ' Bolivian Rosewood',
-      texture: '/textures/rosewood.webp',
-      price: 22.99,
-      description: 'Rich reddish-brown with elegant patterns'
-    },
-    {
-      id: 'tigerwood',
-      name: 'Tigerwood',
-      texture: '/textures/tigerwood.webp',
-      price: 19.99,
-      description: 'Orange base with dark streaking stripes'
-    },
+    // {
+    //   id: 'rosewood',
+    //   name: ' Bolivian Rosewood',
+    //   texture: '/textures/rosewood.webp',
+    //   price: 22.99,
+    //   description: 'Rich reddish-brown with elegant patterns'
+    // },
+    // {
+    //   id: 'tigerwood',
+    //   name: 'Tigerwood',
+    //   texture: '/textures/tigerwood.webp',
+    //   price: 19.99,
+    //   description: 'Orange base with dark streaking stripes'
+    // },
     {
       id: 'paduk',
       name: 'Paduk',
@@ -218,11 +218,17 @@ export default function BuildYourOwnClient({ modelPath, initialSettings }: Build
   }
 
   const handleAddToBag = () => {
+    // Create a hash ID based on the configuration
+    const configString = `${selectedTexture.id}-${showForecaddiLogo ? '1' : '0'}-${logoFile ? '1' : '0'}-${logoColor}`
+    const configId = Math.abs(configString.split('').reduce((hash, char) => {
+      return ((hash << 5) - hash) + char.charCodeAt(0) | 0
+    }, 0))
+    
     // Create a custom product for the bag
     const customProduct: CartItem = {
-      id: Date.now(), // Use timestamp as unique number ID
+      id: configId, // Use hash-based ID for consistent combining
       name: `Custom Divot Tool - ${selectedTexture.name}`,
-      price: Math.round((selectedTexture.price + (logoFile ? 25 : 0) + (showForecaddiLogo ? 3.95 : 0)) * 100) / 100, // Add $25 for custom logo, $3.95 for Forecaddi logo
+      price: selectedTexture.price, // Only the base wood price
       image: selectedTexture.texture, // Use the wood texture as the product image
       quantity: 1,
       // Add custom build data
@@ -231,7 +237,10 @@ export default function BuildYourOwnClient({ modelPath, initialSettings }: Build
         showForecaddiLogo,
         logoColor,
         customLogoFile: logoFile || undefined,
-        modelPath
+        modelPath,
+        // Logo fees (charged only once regardless of quantity)
+        customLogoFee: logoFile ? 25 : undefined,
+        forecaddiFee: showForecaddiLogo ? 3.95 : undefined
       }
     }
 

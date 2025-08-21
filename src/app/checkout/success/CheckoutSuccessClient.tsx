@@ -2,8 +2,11 @@
 
 import Link from "next/link"
 import { useEffect } from "react"
+import { useCart } from "@/lib/cart"
 
 export function CheckoutSuccessClient() {
+  const { clearCart } = useCart()
+  
   useEffect(() => {
     const updateStock = async () => {
       try {
@@ -33,12 +36,12 @@ export function CheckoutSuccessClient() {
         console.error('Error updating stock:', error)
       } finally {
         // Clear the cart after attempting stock update
-        localStorage.removeItem('cart')
+        clearCart() // This will update both the context state and localStorage
       }
     }
 
     updateStock()
-  }, [])
+  }, [clearCart])
 
   return (
     <div className="max-w-md mx-auto py-24">
