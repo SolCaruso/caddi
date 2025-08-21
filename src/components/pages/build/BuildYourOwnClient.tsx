@@ -548,7 +548,7 @@ export default function BuildYourOwnClient({ modelPath, initialSettings }: Build
                   onClick={() => setSelectedTexture(texture)}
                   className={`relative pb-4 rounded-lg border transition-all text-left overflow-hidden cursor-pointer ${
                     selectedTexture.id === texture.id
-                      ? "border-caddi-brown/50 text-caddi-blue bg-[#FDFCFC]"
+                      ? "border-caddi-blue text-caddi-blue bg-[#FDFCFC]"
                       : "border-gray-300 hover:border-gray-400 text-black/50 bg-gray-100"
                   }`}
                   style={{
