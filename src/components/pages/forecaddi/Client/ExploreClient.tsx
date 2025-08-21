@@ -106,23 +106,22 @@ export default function ForeCaddiContent({ slides }: ForeCaddiContentProps) {
         {/* Right: Image/Video */}
           <div className="hidden md:block relative w-[260px] h-[560px]">
             {slide.video ? (
-              <video
-                key={`${slide.key}-desktop-${videoKey}`}
-                ref={desktopVideoRef}
-                data-video={`${slide.key}-desktop`}
-                className="w-full h-full object-contain"
-                autoPlay={!slide.video.playOnce}
-                loop={!slide.video.playOnce}
-                muted
-                playsInline
-                preload="metadata"
-                aria-label={`${slide.label} demonstration video`}
-              >
-                <source src={slide.video.webm} type="video/webm" />
-                <source src={slide.video.mp4} type="video/mp4" />
-                <track kind="captions" src={`/captions/${slide.key}.vtt`} label="English" default />
-                Your browser does not support the video tag.
-              </video>
+                                    <video
+                        key={`${slide.key}-desktop-${videoKey}`}
+                        ref={desktopVideoRef}
+                        data-video={`${slide.key}-desktop`}
+                        className="w-full h-full object-contain"
+                        autoPlay={!slide.video.playOnce}
+                        loop={!slide.video.playOnce}
+                        muted
+                        playsInline
+                        preload="metadata"
+                        aria-label={`${slide.label} demonstration video`}
+                      >
+                        <source src={slide.video.webm} type="video/webm" />
+                        <source src={slide.video.mp4} type="video/mp4" />
+                        Your browser does not support the video tag.
+                      </video>
             ) : (
               <Image
                 src={slide.image}

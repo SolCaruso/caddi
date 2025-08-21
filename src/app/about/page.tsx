@@ -98,7 +98,7 @@ export default function AboutPage() {
         <div className="hidden md:block mt-32 sm:mt-40 xl:mx-auto xl:max-w-7xl xl:px-8">
           <Image
             alt="Simon, founder of Caddi AI"
-            src="/jpg/zolas-59.jpg"
+            src="/webp/zolas-59.webp"
             width={800}
             height={600}
             className="aspect-[9/4] w-full object-cover outline-1 -outline-offset-1 outline-black/5 xl:rounded-3xl"

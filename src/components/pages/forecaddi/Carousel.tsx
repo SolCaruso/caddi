@@ -109,7 +109,6 @@ export default function CarouselComponent() {
                         >
                           <source src={item.video?.webm} type="video/webm" />
                           <source src={item.video?.mp4} type="video/mp4" />
-                          <track kind="captions" src="/captions/gps-map-view.vtt" label="English" default />
                           Your browser does not support the video tag.
                         </video>
                       ) : (
@@ -133,11 +132,11 @@ export default function CarouselComponent() {
           </div>
           
           {/* Mobile: Pagination Dots */}
-          <div className="absolute sm:bottom-6 left-1/2 transform -translate-x-1/2 flex lg:hidden justify-center items-center gap-3">
+          <div className="absolute sm:bottom-6 left-1/2 transform -translate-x-1/2 flex lg:hidden justify-center items-center gap-2">
             {carouselItems.map((item, idx) => (
               <button
                 key={idx}
-                className={`w-4 h-4 rounded-full transition-all duration-200 ${
+                className={`w-2 h-2 rounded-full transition-all duration-200 ${
                   ((current - 2 + carouselItems.length) % carouselItems.length) === idx 
                     ? "bg-[#D9D9D9] opacity-96" 
                     : "bg-[#D9D9D9] opacity-24"
@@ -154,7 +153,7 @@ export default function CarouselComponent() {
             {carouselItems.map((item, idx) => (
               <button
                 key={idx}
-                className={`w-5 h-5 rounded-full transition-all duration-200 ${
+                className={`w-3 h-3 rounded-full transition-all duration-200 ${
                   ((current - 2 + carouselItems.length) % carouselItems.length) === idx 
                     ? "bg-[#D9D9D9] opacity-96" 
                     : "bg-[#D9D9D9] opacity-24"
