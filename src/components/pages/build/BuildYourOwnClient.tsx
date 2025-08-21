@@ -56,13 +56,13 @@ export default function BuildYourOwnClient({ modelPath, initialSettings }: Build
       price: 17.99,
       description: 'Rich golden yellow with subtle grain'
     },
-    {
-      id: 'zebrawood',
-      name: 'Zebrawood',
-      texture: '/textures/zebrawood.webp',
-      price: 21.99,
-      description: 'Bold striped pattern with dramatic contrast'
-    },
+    // {
+    //   id: 'zebrawood',
+    //   name: 'Zebrawood',
+    //   texture: '/textures/zebrawood.webp',
+    //   price: 21.99,
+    //   description: 'Bold striped pattern with dramatic contrast'
+    // },
     {
       id: 'white-oak',
       name: 'Quarter-Sawn White Oak',
