@@ -24,7 +24,7 @@ export default function Info() {
                                     fill
                                     sizes="(max-width: 768px) 125px, 250px"
                                     className="object-contain"
-                                    quality={75}
+                                    quality={80}
                                     loading="lazy"
                                 />
                             </div>
@@ -35,7 +35,7 @@ export default function Info() {
                                     fill
                                     sizes="(max-width: 768px) 125px, 250px"
                                     className="object-contain"
-                                    quality={75}
+                                    quality={80}
                                     loading="lazy"
                                 />
                             </div>

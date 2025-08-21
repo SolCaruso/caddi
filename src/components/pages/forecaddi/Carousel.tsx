@@ -102,7 +102,7 @@ export default function CarouselComponent() {
                           loop
                           muted
                           playsInline
-                          preload={Math.abs(index - current) <= 1 ? "auto" : "none"} // Only preload current and adjacent slides
+                          preload="metadata"
                           className="absolute inset-0 w-full h-full object-contain"
                           draggable={false}
                           aria-label={item.alt}
@@ -119,7 +119,7 @@ export default function CarouselComponent() {
                           sizes="(max-width: 640px) 135px, (max-width: 1024px) 270px, 370px"
                           className="object-contain"
                           priority={Math.abs(index - current) <= 2}
-                          quality={75}
+                          quality={80}
                           draggable={false}
                         />
                       )}

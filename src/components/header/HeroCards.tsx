@@ -17,7 +17,7 @@ export default function HeroCards() {
                     className="absolute inset-0 object-cover"
                     style={{ objectPosition: "center center" }}
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                    quality={80}
+                    quality={85}
                     draggable={false}
                 />
 
@@ -60,7 +60,7 @@ export default function HeroCards() {
                     className="absolute inset-0 object-cover"
                     style={{ objectPosition: "center center" }}
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                    quality={80}
+                    quality={85}
                     draggable={false}
                 />
 

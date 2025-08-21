@@ -153,7 +153,7 @@ export default function VerticalCardsContent({ cardData }: VerticalCardsContentP
                   muted
                   playsInline
                   poster={card.poster}
-                  preload="metadata"
+                  preload="none"
                   className="absolute inset-0 w-full h-full object-cover object-center scale-105 select-none pointer-events-none"
                   aria-label={`${card.label} video`}
                 >
@@ -169,7 +169,7 @@ export default function VerticalCardsContent({ cardData }: VerticalCardsContentP
                   sizes="(max-width: 640px) 95vw, (max-width: 768px) 65vw, (max-width: 1024px) 45vw, (max-width: 1280px) 320px, (max-width: 1536px) 380px, 580px"
                   className="object-cover object-center scale-105 select-none pointer-events-none"
                   priority={idx < 2}
-                  quality={75}
+                  quality={80}
                   draggable={false}
                 />
               )}

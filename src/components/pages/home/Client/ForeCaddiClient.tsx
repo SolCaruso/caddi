@@ -125,7 +125,7 @@ export default function ForeCaddiContent({ slides }: ForeCaddiContentProps) {
               sizes="(max-width: 640px) 240px, (max-width: 768px) 400px, 500px"
               className="object-contain transition-opacity duration-300 ease-in-out min-[2200px]:hidden"
               priority
-              quality={75}
+              quality={80}
               draggable={false}
             />
             {/* Large image for 2200px+ screens */}
@@ -136,7 +136,7 @@ export default function ForeCaddiContent({ slides }: ForeCaddiContentProps) {
               sizes="(max-width: 640px) 240px, (max-width: 768px) 400px, 500px"
               className="object-contain transition-opacity duration-300 ease-in-out hidden min-[2200px]:block"
               priority
-              quality={75}
+              quality={80}
               draggable={false}
             />
           </div>
@@ -240,7 +240,7 @@ export default function ForeCaddiContent({ slides }: ForeCaddiContentProps) {
               className="object-contain min-[2200px]:hidden"
               draggable={false}
               priority
-              quality={75}
+              quality={80}
             />
             {/* Large image for 2200px+ screens */}
             <Image
@@ -251,7 +251,7 @@ export default function ForeCaddiContent({ slides }: ForeCaddiContentProps) {
               className="object-contain hidden min-[2200px]:block"
               draggable={false}
               priority
-              quality={75}
+              quality={80}
             />
           </div>
         </div>
