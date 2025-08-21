@@ -102,7 +102,7 @@ export default function CarouselComponent() {
                           loop
                           muted
                           playsInline
-                          preload="metadata"
+                          preload={Math.abs(index - current) <= 2 ? "auto" : "metadata"}
                           className="absolute inset-0 w-full h-full object-contain"
                           draggable={false}
                           aria-label={item.alt}

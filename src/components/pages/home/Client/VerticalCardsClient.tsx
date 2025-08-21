@@ -153,7 +153,7 @@ export default function VerticalCardsContent({ cardData }: VerticalCardsContentP
                   muted
                   playsInline
                   poster={card.poster}
-                  preload="none"
+                  preload="metadata"
                   className="absolute inset-0 w-full h-full object-cover object-center scale-105 select-none pointer-events-none"
                   aria-label={`${card.label} video`}
                 >
