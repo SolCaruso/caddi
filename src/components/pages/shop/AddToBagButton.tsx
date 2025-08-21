@@ -119,25 +119,29 @@ function AddToBagButtonInner({
       if (selectedVariant) {
         const variantStock = getVariantStock(selectedVariant.id)
         const currentInCart = state.items.find(item => item.variantId === selectedVariant.id)?.quantity || 0
-        return variantStock !== null && currentInCart >= variantStock
+        // Only limit if stock is not null (null means unlimited)
+        return variantStock !== null && variantStock > 0 && currentInCart >= variantStock
       }
     } else if (hasVariants && !isDivotTool && selectedColor && selectedSize && variants) {
       const selectedVariant = variants.find(v => v.colors?.name === selectedColor && v.sizes?.name === selectedSize)
       if (selectedVariant) {
         const variantStock = getVariantStock(selectedVariant.id)
         const currentInCart = state.items.find(item => item.variantId === selectedVariant.id)?.quantity || 0
-        return variantStock !== null && currentInCart >= variantStock
+        // Only limit if stock is not null (null means unlimited)
+        return variantStock !== null && variantStock > 0 && currentInCart >= variantStock
       }
     } else if (variantId) {
       const variantStock = getVariantStock(variantId)
       const currentInCart = state.items.find(item => item.variantId === variantId)?.quantity || 0
-      return variantStock !== null && currentInCart >= variantStock
+      // Only limit if stock is not null (null means unlimited)
+      return variantStock !== null && variantStock > 0 && currentInCart >= variantStock
     } else {
       // For non-variant products, check product stock
-      if (productStock !== null && productStock !== undefined) {
+      if (productStock !== null && productStock !== undefined && productStock > 0) {
         const currentInCart = state.items.find(item => item.id === productId && !item.variantId)?.quantity || 0
         return currentInCart >= productStock
       }
+      // If stock is null or 0, allow unlimited quantity
       return false
     }
     return false

@@ -297,17 +297,18 @@ export default function CartPageClient() {
                             )
                           }
                           
-                          // For regular products, check stock
-                          const product = getProductById(item.id)
-                          let availableStock = product?.stock || 0
-                          
-                          // If it's a variant, check variant stock instead
-                          if (item.variantId) {
-                            const variantStock = getVariantStock(item.variantId)
-                            availableStock = variantStock !== null ? variantStock : product?.stock || 0
-                          }
-                          
-                          const isAtStockLimit = item.quantity >= availableStock
+                                   // For regular products, check stock
+         const product = getProductById(item.id)
+         let availableStock = product?.stock || 0
+         
+         // If it's a variant, check variant stock instead
+         if (item.variantId) {
+           const variantStock = getVariantStock(item.variantId)
+           availableStock = variantStock !== null ? variantStock : product?.stock || 0
+         }
+         
+         // Only limit if stock is greater than 0 (null or 0 means unlimited)
+         const isAtStockLimit = availableStock > 0 && item.quantity >= availableStock
                           
                           return (
                             <button

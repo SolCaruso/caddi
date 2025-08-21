@@ -247,7 +247,8 @@ export function DrawerDialogDemo({
                         availableStock = variantStock !== null ? variantStock : product?.stock || 0
                       }
                       
-                      const isAtStockLimit = recentItem.quantity >= availableStock
+                      // Only limit if stock is greater than 0 (null or 0 means unlimited)
+                      const isAtStockLimit = availableStock > 0 && recentItem.quantity >= availableStock
                       
                       return (
                         <button
@@ -398,7 +399,8 @@ export function DrawerDialogDemo({
                       availableStock = variantStock !== null ? variantStock : product?.stock || 0
                     }
                     
-                    const isAtStockLimit = recentItem.quantity >= availableStock
+                    // Only limit if stock is greater than 0 (null or 0 means unlimited)
+                    const isAtStockLimit = availableStock > 0 && recentItem.quantity >= availableStock
                     
                     return (
                       <button
