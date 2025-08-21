@@ -12,7 +12,7 @@ export default function HeroCards() {
                 <Image
                     src={img8}
                     placeholder="blur"
-                    alt="Custom Golf Course Materials & Trophies"
+                    alt="Custom golf course materials and trophies showcase"
                     fill
                     className="absolute inset-0 object-cover"
                     style={{ objectPosition: "center center" }}
@@ -54,7 +54,7 @@ export default function HeroCards() {
                 <Image
                     src={img36}
                     placeholder="blur"
-                    alt="Forecaddie Golf App on IOS and Android"
+                    alt="Forecaddie golf app interface on mobile devices"
                     fill
                     className="absolute inset-0 object-cover"
                     style={{ objectPosition: "center center" }}

@@ -51,6 +51,7 @@ export default function CartButton() {
     <Link 
       href="/cart"
       className="cart-trigger transition-all cursor-pointer duration-100 group ease-in-out-quad -mr-1.5 relative"
+      aria-label={`Shopping cart with ${itemCount} items`}
     >
       <div className="relative">
         <ShoppingBag className="h-10 w-10 md:h-9 md:w-9 text-caddi-blue group-hover:text-caddi-brown transition-all duration-100 ease-in-out-quad" />

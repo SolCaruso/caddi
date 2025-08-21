@@ -274,8 +274,8 @@ export default function BuildYourOwnClient({ modelPath, initialSettings }: Build
 
             {/* Back Button - Match Shop Page Style */}
             <div className="flex-shrink-0">
-              <Link href="/shop" className="flex items-center gap-2 text-black/50 font-medium text-sm border rounded-full px-4 py-1.75 cursor-pointer hover:text-black/70 group">
-                <svg className="h-4 w-4 text-black/50 group-hover:text-black/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <Link href="/shop" className="flex items-center gap-2 text-black/50 font-medium text-sm border rounded-full px-4 py-1.75 cursor-pointer hover:text-black/70 group" aria-label="Back to Shop">
+                <svg className="h-4 w-4 text-black/50 group-hover:text-black/70" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
                 </svg>
                 Shop
@@ -319,11 +319,14 @@ export default function BuildYourOwnClient({ modelPath, initialSettings }: Build
                   style={{
                     opacity: selectedTexture.id === texture.id ? 1 : 0.8
                   }}
+                  aria-label={`Select ${texture.name} wood type for $${texture.price}`}
+                  aria-pressed={selectedTexture.id === texture.id}
                 >
                   {/* Texture Preview */}
                   <div 
                     className="w-full h-20 rounded-t mb-3 bg-cover bg-center"
                     style={{ backgroundImage: `url(${texture.texture})` }}
+                    aria-hidden="true"
                   />
                   <div className="font-medium text-lg px-4">
                     {texture.name}
@@ -358,7 +361,7 @@ export default function BuildYourOwnClient({ modelPath, initialSettings }: Build
                     }`}
                   >
                     {showForecaddiLogo && (
-                      <svg className="w-2.5 h-2.5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                      <svg className="w-2.5 h-2.5 text-white" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
                         <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                       </svg>
                     )}
@@ -383,6 +386,8 @@ export default function BuildYourOwnClient({ modelPath, initialSettings }: Build
                       ? 'border-caddi-blue text-caddi-blue'
                       : 'border-gray-300 text-black/50 hover:border-gray-400'
                   }`}
+                  aria-label="Select neutral logo color"
+                  aria-pressed={logoColor === 'neutral'}
                 >
                   Neutral
                 </button>
@@ -393,6 +398,8 @@ export default function BuildYourOwnClient({ modelPath, initialSettings }: Build
                       ? 'border-caddi-blue text-caddi-blue'
                       : 'border-gray-300 text-black/50 hover:border-gray-400'
                   }`}
+                  aria-label="Select black logo color"
+                  aria-pressed={logoColor === 'black'}
                 >
                   Black
                 </button>
@@ -403,6 +410,8 @@ export default function BuildYourOwnClient({ modelPath, initialSettings }: Build
                       ? 'border-caddi-blue text-caddi-blue'
                       : 'border-gray-300 text-black/50 hover:border-gray-400'
                   }`}
+                  aria-label="Select white logo color"
+                  aria-pressed={logoColor === 'white'}
                 >
                   White
                 </button>
@@ -418,8 +427,9 @@ export default function BuildYourOwnClient({ modelPath, initialSettings }: Build
                 <button
                   onClick={() => fileInputRef.current?.click()}
                   className="flex items-center gap-3 px-4 py-3 border-2 border-dashed border-gray-300 rounded-lg hover:border-caddi-blue transition-colors w-full group relative cursor-pointer"
+                  aria-label={logoFile ? `Change current logo file: ${logoFile.name}` : "Upload custom logo file (PNG/WebP, 500x500px max, 2MB)"}
                 >
-                  <Upload className="w-5 h-5 text-gray-400 group-hover:text-caddi-blue transition-colors" />
+                  <Upload className="w-5 h-5 text-gray-400 group-hover:text-caddi-blue transition-colors" aria-hidden="true" />
                   <span className="text-gray-600 group-hover:text-caddi-blue transition-colors">
                     {logoFile ? (
                       <>
@@ -429,16 +439,17 @@ export default function BuildYourOwnClient({ modelPath, initialSettings }: Build
                     ) : "Upload Logo (PNG/WebP, 500x500px max, 2MB)"}
                   </span>
                   {logoFile && (
-                    <div
+                    <button
                       onClick={(e) => {
                         e.stopPropagation()
                         handleRemoveLogo()
                       }}
                       className="absolute right-2 top-1/2 -translate-y-1/2 w-6 h-6 flex items-center justify-center rounded-sm hover:bg-gray-200 transition-colors cursor-pointer group"
-                      title="Remove logo"
+                      aria-label="Remove uploaded logo"
+                      type="button"
                     >
-                      <X className="w-4 h-4 text-gray-400 group-hover:text-caddi-blue" />
-                    </div>
+                      <X className="w-4 h-4 text-gray-400 group-hover:text-caddi-blue" aria-hidden="true" />
+                    </button>
                   )}
                 </button>
               </div>
@@ -448,6 +459,8 @@ export default function BuildYourOwnClient({ modelPath, initialSettings }: Build
                 accept="image/png,image/webp"
                 onChange={handleLogoUpload}
                 className="hidden"
+                id="custom-logo-upload"
+                aria-label="Upload custom logo file"
               />
               {logoFile && (
                 <div className="text-sm text-gray-600">
@@ -459,7 +472,7 @@ export default function BuildYourOwnClient({ modelPath, initialSettings }: Build
               {uploadError && (
                 <div className="mt-4 p-4 bg-red-50 border border-red-200 rounded-lg">
                   <div className="flex items-center gap-2">
-                    <AlertCircle className="h-4 w-4 text-red-500" />
+                    <AlertCircle className="h-4 w-4 text-red-500" aria-hidden="true" />
                     <h5 className="font-medium text-red-800">Upload Error</h5>
                   </div>
                   <p className="text-sm text-red-700 mt-1">{uploadError}</p>
@@ -541,11 +554,14 @@ export default function BuildYourOwnClient({ modelPath, initialSettings }: Build
                   style={{
                     opacity: selectedTexture.id === texture.id ? 1 : 0.8
                   }}
+                  aria-label={`Select ${texture.name} wood type for $${texture.price}`}
+                  aria-pressed={selectedTexture.id === texture.id}
                 >
                   {/* Texture Preview */}
                   <div 
                     className="w-full h-20 rounded-t mb-3 bg-cover bg-center"
                     style={{ backgroundImage: `url(${texture.texture})` }}
+                    aria-hidden="true"
                   />
                   <div className="font-medium text-lg px-4">
                     {texture.name}
@@ -588,7 +604,7 @@ export default function BuildYourOwnClient({ modelPath, initialSettings }: Build
                     }`}
                   >
                     {showForecaddiLogo && (
-                      <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                      <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
                         <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                       </svg>
                     )}
@@ -613,6 +629,8 @@ export default function BuildYourOwnClient({ modelPath, initialSettings }: Build
                       ? 'border-caddi-blue text-caddi-blue'
                       : 'border-gray-300 text-black/50 hover:border-gray-400'
                   }`}
+                  aria-label="Select neutral logo color"
+                  aria-pressed={logoColor === 'neutral'}
                 >
                   Neutral
                 </button>
@@ -623,6 +641,8 @@ export default function BuildYourOwnClient({ modelPath, initialSettings }: Build
                       ? 'border-caddi-blue text-caddi-blue'
                       : 'border-gray-300 text-black/50 hover:border-gray-400'
                   }`}
+                  aria-label="Select black logo color"
+                  aria-pressed={logoColor === 'black'}
                 >
                   Black
                 </button>
@@ -633,6 +653,8 @@ export default function BuildYourOwnClient({ modelPath, initialSettings }: Build
                       ? 'border-caddi-blue text-caddi-blue'
                       : 'border-gray-300 text-black/50 hover:border-gray-400'
                   }`}
+                  aria-label="Select white logo color"
+                  aria-pressed={logoColor === 'white'}
                 >
                   White
                 </button>
@@ -648,8 +670,9 @@ export default function BuildYourOwnClient({ modelPath, initialSettings }: Build
                 <button
                   onClick={() => fileInputRef.current?.click()}
                   className="flex items-center gap-4 px-6 py-4 border-2 border-dashed border-gray-300 rounded-lg hover:border-caddi-blue transition-colors w-full group relative cursor-pointer"
+                  aria-label={logoFile ? `Change current logo file: ${logoFile.name}` : "Upload custom logo file (PNG/WebP, 500x500px max, 2MB)"}
                 >
-                  <Upload className="w-6 h-6 text-gray-400 group-hover:text-caddi-blue transition-colors" />
+                  <Upload className="w-6 h-6 text-gray-400 group-hover:text-caddi-blue transition-colors" aria-hidden="true" />
                   <span className="text-gray-600 text-lg group-hover:text-caddi-blue transition-colors">
                     {logoFile ? (
                       <>
@@ -659,16 +682,17 @@ export default function BuildYourOwnClient({ modelPath, initialSettings }: Build
                     ) : "Upload Logo (PNG/WebP, 500x500px max, 2MB)"}
                   </span>
                   {logoFile && (
-                    <div
+                    <button
                       onClick={(e) => {
                         e.stopPropagation()
                         handleRemoveLogo()
                       }}
                       className="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 flex items-center justify-center rounded-sm hover:bg-gray-100 transition-colors cursor-pointer group"
-                      title="Remove logo"
+                      aria-label="Remove uploaded logo"
+                      type="button"
                     >
-                      <X className="w-5 h-5 text-gray-400 group-hover:text-caddi-blue" />
-                    </div>
+                      <X className="w-5 h-5 text-gray-400 group-hover:text-caddi-blue" aria-hidden="true" />
+                    </button>
                   )}
                 </button>
               </div>
@@ -678,6 +702,8 @@ export default function BuildYourOwnClient({ modelPath, initialSettings }: Build
                 accept="image/*"
                 onChange={handleLogoUpload}
                 className="hidden"
+                id="custom-logo-upload-desktop"
+                aria-label="Upload custom logo file"
               />
               {logoFile && (
                 <div className="text-base text-gray-600">
@@ -689,7 +715,7 @@ export default function BuildYourOwnClient({ modelPath, initialSettings }: Build
               {uploadError && (
                 <div className="mt-4 p-4 bg-red-50 border border-red-200 rounded-lg">
                   <div className="flex items-center gap-2">
-                    <AlertCircle className="h-4 w-4 text-red-500" />
+                    <AlertCircle className="h-4 w-4 text-red-500" aria-hidden="true" />
                     <h5 className="font-medium text-red-800">Upload Error</h5>
                   </div>
                   <p className="text-sm text-red-700 mt-1">{uploadError}</p>

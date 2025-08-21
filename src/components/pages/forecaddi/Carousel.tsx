@@ -105,6 +105,7 @@ export default function CarouselComponent() {
                           preload={Math.abs(index - current) <= 2 ? "auto" : "metadata"} // Preload full video for nearby slides, metadata only for distant ones
                           className="absolute inset-0 w-full h-full object-contain"
                           draggable={false}
+                          aria-label={item.alt}
                         >
                           <source src={item.video?.webm} type="video/webm" />
                           <source src={item.video?.mp4} type="video/mp4" />
@@ -131,7 +132,7 @@ export default function CarouselComponent() {
           
           {/* Mobile: Pagination Dots */}
           <div className="absolute sm:bottom-6 left-1/2 transform -translate-x-1/2 flex lg:hidden justify-center items-center gap-2">
-            {carouselItems.map((_, idx) => (
+            {carouselItems.map((item, idx) => (
               <button
                 key={idx}
                 className={`w-[9.25px] h-[9.25px] rounded-full transition-all duration-200 ${
@@ -140,13 +141,15 @@ export default function CarouselComponent() {
                     : "bg-[#D9D9D9] opacity-24"
                 }`}
                 onClick={() => emblaApi?.scrollTo(idx + 2)}
+                aria-label={`Go to ${item.alt} slide`}
+                aria-current={((current - 2 + carouselItems.length) % carouselItems.length) === idx ? "true" : "false"}
               />
             ))}
           </div>
           
           {/* Desktop: Pagination Dots */}
           <div className="hidden lg:flex absolute bottom-6 3xl:-bottom-6 left-1/2 transform -translate-x-1/2 justify-center items-center gap-2">
-            {carouselItems.map((_, idx) => (
+            {carouselItems.map((item, idx) => (
               <button
                 key={idx}
                 className={`w-[11.25px] h-[11.25px] rounded-full transition-all duration-200 ${
@@ -155,6 +158,8 @@ export default function CarouselComponent() {
                     : "bg-[#D9D9D9] opacity-24"
                 }`}
                 onClick={() => emblaApi?.scrollTo(idx + 2)}
+                aria-label={`Go to ${item.alt} slide`}
+                aria-current={((current - 2 + carouselItems.length) % carouselItems.length) === idx ? "true" : "false"}
               />
             ))}
           </div>

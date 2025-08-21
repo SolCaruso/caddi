@@ -299,6 +299,7 @@ export function DrawerDialogDemo({
           disabled={disabled} 
           onClick={handleButtonClick}
           className="bg-[#FDFCFC] text-lg border border-caddi-blue text-caddi-black font-medium py-8 px-38 rounded-full hover:bg-caddi-blue hover:text-white transition-all duration-100 ease-in-out cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed w-full"
+          aria-label="Add item to cart and view notification"
         >
           {children}
         </Button>

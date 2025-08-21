@@ -10,7 +10,7 @@ export default function Hero() {
             <Image
                 src={heroImg}
                 placeholder="blur"
-                alt="Hero background"
+                alt="Golf course background with premium divot tools"
                 fill
                 priority
                 className="absolute inset-0 w-full h-full object-cover"

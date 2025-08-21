@@ -3,13 +3,14 @@ import { SVGProps } from "react"
 import Link from 'next/link'
 
 const SvgComponent = ({ className, ...props }: SVGProps<SVGSVGElement>) => (
-  <Link href="/">
+  <Link href="/" aria-label="Caddi AI Inc. - Home">
     <svg
       className={className}
       xmlns="http://www.w3.org/2000/svg"
       width={922.73}
       height={304.8}
       viewBox="0 0 692.05 228.6"
+      aria-hidden="true"
       {...props}
     >
       <path

@@ -28,6 +28,7 @@ export default function Forecaddi() {
             <Suspense fallback={null}>
                 <ScrollHandler />
             </Suspense>
+            <h1 className="sr-only">Forecaddie Golf App - Your Personal Golf Caddie</h1>
             <Carousel />
             <Explore />
             <Info />

@@ -81,6 +81,8 @@ export default function ForeCaddiContent({ slides }: ForeCaddiContentProps) {
                     : "text-caddi-blue"
                 }`}
                 onClick={() => setActiveIdx(idx)}
+                aria-label={`Go to ${label} section`}
+                aria-current={activeIdx === idx ? "true" : "false"}
               >
                 {label}
               </button>
@@ -114,6 +116,7 @@ export default function ForeCaddiContent({ slides }: ForeCaddiContentProps) {
                 muted
                 playsInline
                 preload="metadata"
+                aria-label={`${slide.label} demonstration video`}
               >
                 <source src={slide.video.webm} type="video/webm" />
                 <source src={slide.video.mp4} type="video/mp4" />
@@ -122,7 +125,7 @@ export default function ForeCaddiContent({ slides }: ForeCaddiContentProps) {
             ) : (
               <Image
                 src={slide.image}
-                alt={slide.label}
+                alt={`${slide.label} - ${slide.content.title}`}
                 fill
                 sizes="(max-width: 768px) 100vw, 50vw"
                 className="object-contain"

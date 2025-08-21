@@ -53,9 +53,9 @@ function CarouselNavigation() {
               ? 'bg-gray-200/50 hover:bg-gray-200 cursor-pointer' 
               : 'bg-gray-200/50'
           }`}
-          aria-label="Scroll left"
+          aria-label="Scroll to previous cards"
         >
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
             <path d="M10 12L6 8L10 4" stroke={canScrollPrev ? "#666" : "#ccc"} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
           </svg>
         </button>
@@ -70,9 +70,9 @@ function CarouselNavigation() {
               ? 'bg-gray-200/50 hover:bg-gray-200 cursor-pointer' 
               : 'bg-gray-200/50'
           }`}
-          aria-label="Scroll right"
+          aria-label="Scroll to next cards"
         >
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
             <path d="M6 4L10 8L6 12" stroke={canScrollNext ? "#666" : "#ccc"} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
           </svg>
         </button>
@@ -154,6 +154,7 @@ export default function VerticalCardsContent({ cardData }: VerticalCardsContentP
                   playsInline
                   poster={card.poster}
                   className="absolute inset-0 w-full h-full object-cover object-center scale-105 select-none pointer-events-none"
+                  aria-label={`${card.label} video`}
                 >
                   <source src={card.bg} type={card.bg.endsWith('.webm') ? 'video/webm' : card.bg.endsWith('.mp4') ? 'video/mp4' : 'video/quicktime'} />
                   <source src={card.bg.replace('/webm/', '/mp4/').replace('.webm', '.mp4')} type="video/mp4" />
@@ -162,7 +163,7 @@ export default function VerticalCardsContent({ cardData }: VerticalCardsContentP
               ) : (
                 <Image
                   src={card.bg || "/placeholder.svg"}
-                  alt="Divot tool background"
+                  alt={`${card.label} - ${card.linkText}`}
                   fill
                   sizes="(max-width: 768px) 100vw, 50vw"
                   className="object-cover object-center scale-105 select-none pointer-events-none"
@@ -222,8 +223,9 @@ export default function VerticalCardsContent({ cardData }: VerticalCardsContentP
                             repeatDelay: 0.8,
                           },
                   }}
+                  aria-hidden="true"
                 >
-                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                     <path d="M10 5V15" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
                     <path d="M5 10H15" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
                   </svg>

@@ -120,7 +120,7 @@ export default function ForeCaddiContent({ slides }: ForeCaddiContentProps) {
             {/* Regular image for screens below 2200px */}
             <Image
               src={slide.image}
-              alt={slide.label}
+              alt={`${slide.label} - ${slide.heading}`}
               fill
               sizes="(max-width: 768px) 100vw, 50vw"
               className="object-contain transition-opacity duration-300 ease-in-out min-[2200px]:hidden"
@@ -130,7 +130,7 @@ export default function ForeCaddiContent({ slides }: ForeCaddiContentProps) {
             {/* Large image for 2200px+ screens */}
             <Image
               src={slide.imageLarge}
-              alt={slide.label}
+              alt={`${slide.label} - ${slide.heading} (large view)`}
               fill
               sizes="(max-width: 768px) 100vw, 50vw"
               className="object-contain transition-opacity duration-300 ease-in-out hidden min-[2200px]:block"
@@ -164,7 +164,7 @@ export default function ForeCaddiContent({ slides }: ForeCaddiContentProps) {
         
         {/* Mobile: Pagination Dots */}
         <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex justify-center items-center gap-2">
-          {slides.map((_, idx) => (
+          {slides.map((slide, idx) => (
             <button
               key={idx}
               className={`w-[9.25px] h-[9.25px] rounded-full transition-all duration-200 ${
@@ -173,6 +173,8 @@ export default function ForeCaddiContent({ slides }: ForeCaddiContentProps) {
                   : "bg-[#D9D9D9] opacity-24"
               }`}
               onClick={() => setActiveIdx(idx)}
+              aria-label={`Go to ${slide.label} section`}
+              aria-current={activeIdx === idx ? "true" : "false"}
             />
           ))}
         </div>
@@ -230,7 +232,7 @@ export default function ForeCaddiContent({ slides }: ForeCaddiContentProps) {
             {/* Regular image for screens below 2200px */}
             <Image
               src={slide.image}
-              alt={slide.label}
+              alt={`${slide.label} - ${slide.heading}`}
               fill
               sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 680px"
               className="object-contain min-[2200px]:hidden"
@@ -240,7 +242,7 @@ export default function ForeCaddiContent({ slides }: ForeCaddiContentProps) {
             {/* Large image for 2200px+ screens */}
             <Image
               src={slide.imageLarge}
-              alt={slide.label}
+              alt={`${slide.label} - ${slide.heading} (large view)`}
               fill
               sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 680px"
               className="object-contain hidden min-[2200px]:block"
@@ -253,7 +255,7 @@ export default function ForeCaddiContent({ slides }: ForeCaddiContentProps) {
       
       {/* Desktop: Pagination Dots */}
       <div className="hidden lg:flex absolute bottom-10 left-1/2 transform -translate-x-1/2 justify-center items-center gap-2">
-        {slides.map((_, idx) => (
+        {slides.map((slide, idx) => (
           <button
             key={idx}
             className={`w-[11.25px] h-[11.25px] rounded-full transition-all duration-200 ${
@@ -262,6 +264,8 @@ export default function ForeCaddiContent({ slides }: ForeCaddiContentProps) {
                 : "bg-[#D9D9D9] opacity-24"
             }`}
             onClick={() => setActiveIdx(idx)}
+            aria-label={`Go to ${slide.label} section`}
+            aria-current={activeIdx === idx ? "true" : "false"}
           />
         ))}
       </div>
